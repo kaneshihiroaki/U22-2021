@@ -3,7 +3,7 @@
 #include "enemy.h"
 #include "Camera.h"
 
-class PLAYER
+class PLAYER:public CAMERA
 {
 public:
 	PLAYER();
@@ -25,7 +25,7 @@ private:
 	const float c_movespeed = 10.0f;	//プレイヤー移動スピード
 
 	ENEMY* c_enemyCol = new ENEMY();		//敵の座標を取得するために取得
-	CAMERA* c_cameraAng = new CAMERA();		//カメラの角度を取得するために取得
+	CAMERA c_cameraAng = CAMERA();		//カメラの角度を取得するために取得
 };
 
 

@@ -21,7 +21,7 @@ CAMERA::~CAMERA()
 
 void CAMERA::Camera_Control(VECTOR PlayerPos) {
 
-	// カメラ移動
+	// カメラ左右移動
 	if (CheckHitKey(KEY_INPUT_C) == 1)
 	{
 		c_CameraHAngle += c_CameraSpeed;
@@ -30,7 +30,6 @@ void CAMERA::Camera_Control(VECTOR PlayerPos) {
 			c_CameraHAngle -= 360.0f;
 		}
 	}
-
 	if (CheckHitKey(KEY_INPUT_Z) == 1)
 	{
 		c_CameraHAngle -= c_CameraSpeed;
@@ -40,6 +39,7 @@ void CAMERA::Camera_Control(VECTOR PlayerPos) {
 		}
 	}
 
+	//カメラの上下移動
 	if (CheckHitKey(KEY_INPUT_S) == 1)
 	{
 		c_CameraVAngle += c_CameraSpeed;
@@ -48,7 +48,6 @@ void CAMERA::Camera_Control(VECTOR PlayerPos) {
 			c_CameraVAngle = 80.0f;
 		}
 	}
-
 	if (CheckHitKey(KEY_INPUT_X) == 1)
 	{
 		c_CameraVAngle -= c_CameraSpeed;
@@ -58,6 +57,7 @@ void CAMERA::Camera_Control(VECTOR PlayerPos) {
 		}
 	}
 
+	//カメラとプレイヤーの距離
 	if (CheckHitKey(KEY_INPUT_A) == 1)
 	{
 		if (c_CameraPosDist >= 350.0f)
@@ -65,7 +65,6 @@ void CAMERA::Camera_Control(VECTOR PlayerPos) {
 			c_CameraPosDist -= 10.0f;
 		}
 	}
-
 	if (CheckHitKey(KEY_INPUT_D) == 1)
 	{
 		if (c_CameraPosDist <= 4000.0f)
@@ -74,19 +73,23 @@ void CAMERA::Camera_Control(VECTOR PlayerPos) {
 		}
 	}
 
+	//カメラの計算のための変数宣言
 	VECTOR TempPosition1;
 	VECTOR TempPosition2;
 	VECTOR CameraPosition;
 	VECTOR CameraLookAtPosition;
 	CameraLookAtPosition = PlayerPos;
 	//CameraLookAtPosition.y += c_CameraPosHeight;
+	//printfDx("%lf \n", c_CameraHAngle);
 
+	//カメラの上下移動
 	c_SinParam = sin(c_CameraVAngle / 180.0f * DX_PI_F);
 	c_CosParam = cos(c_CameraVAngle / 180.0f * DX_PI_F);
 	TempPosition1.x = 0.0f;
 	TempPosition1.y = c_SinParam * c_CameraPosDist;
 	TempPosition1.z = -c_CosParam * c_CameraPosDist;
 
+	//カメラの左右移動
 	c_SinParam = sin(c_CameraHAngle / 180.0f * DX_PI_F);
 	c_CosParam = cos(c_CameraHAngle / 180.0f * DX_PI_F);
 	TempPosition2.x = c_CosParam * TempPosition1.x - c_SinParam * TempPosition1.z;

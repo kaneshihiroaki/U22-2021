@@ -14,9 +14,12 @@ int g_NowKey;
 int g_OldKey;
 char key[256];
 
+float  CameraHAngle;		//カメラの角度を取得するため
+float  CameraVAngle;		//カメラの角度を取得するため
+
 MAIN::MAIN()
 {
-
+	GameState = 0;
 }
 
 MAIN::~MAIN()

@@ -10,12 +10,11 @@ public:
 	float  c_SinParam;
 	float  c_CosParam;
 
-	float  c_CameraHAngle;		//Šp“x
-	float  c_CameraVAngle;		//Šp“x
-
 	void Camera_Control(VECTOR PlayerPos);
 
 protected:
+	float  c_CameraHAngle;		//Šp“x
+	float  c_CameraVAngle;		//Šp“x
 
 private:
 	const float c_CameraPosHeight = 0.0f;			//ƒJƒƒ‰‚Ì‰Šú‚‚³
