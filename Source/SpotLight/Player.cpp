@@ -1,44 +1,3 @@
-//#include "DxLib.h"
-//#include <math.h>
-//#include <list>
-//#include"camera.h"
-//
-//#define MOVESPEED					10.0f
-//
-//#define CAMERA_ANGLE_SPEED			3.0f
-//// カメラの注視点の高さ
-//#define CAMERA_LOOK_AT_HEIGHT		0.0f
-//// カメラと注視点の距離
-//#define CAMERA_LOOK_AT_DISTANCE		350.0f
-//
-//// プレイヤーとオブジェクトのあたり判定
-//bool Collision_Cube(VECTOR PlayerCol, VECTOR ObjCol, float MyScale) {
-//	// 各座標を取得する
-//	VECTOR pos = PlayerCol;
-//	VECTOR posObj = ObjCol;
-//
-//	//当たってたら止める
-//	if ((pos.x > posObj.x - MyScale &&
-//		pos.z > posObj.z) &&
-//		(pos.x <= posObj.x + (MyScale * 2) &&
-//			pos.z <= posObj.z + (MyScale * 2))) {
-//		return true;
-//	}
-//
-//	return false;
-//}
-//bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float MyScale, float YourScale) {
-//	// 各座標を取得する
-//	VECTOR pos = PlayerCol;
-//	VECTOR posObj = ObjCol;
-//
-//	//当たったら止める(今回はy座標いらない）
-//	if (HitCheck_Sphere_Sphere(pos, MyScale, posObj, YourScale)) {
-//		return true;
-//	}
-//	return false;
-//}
-
 #include <DxLib.h>
 #include "Player.h"
 #include <math.h>
@@ -56,6 +15,10 @@ PLAYER::PLAYER()
 
 	// ３Ｄモデルの読み込み
 	c_PlayerModel = MV1LoadModel("Model/MyPlayer.mv1");
+
+	//カメラの起動の取得
+	Sin = 0.0f;
+	Cos = 0.0f;
 }
 
 PLAYER::~PLAYER()
@@ -64,6 +27,34 @@ PLAYER::~PLAYER()
 
 void PLAYER::Player_Creat() {
 
+}
+
+// プレイヤーとオブジェクトのあたり判定
+bool Collision_Cube(VECTOR PlayerCol, VECTOR ObjCol, float MyScale) {
+	// 各座標を取得する
+	VECTOR pos = PlayerCol;
+	VECTOR posObj = ObjCol;
+
+	//当たってたら止める
+	if ((pos.x > posObj.x - MyScale &&
+		pos.z > posObj.z) &&
+		(pos.x <= posObj.x + (MyScale * 2) &&
+			pos.z <= posObj.z + (MyScale * 2))) {
+		return true;
+	}
+
+	return false;
+}
+bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float MyScale, float YourScale) {
+	// 各座標を取得する
+	VECTOR pos = PlayerCol;
+	VECTOR posObj = ObjCol;
+
+	//当たったら止める(今回はy座標いらない）
+	if (HitCheck_Sphere_Sphere(pos, MyScale, posObj, YourScale)) {
+		return true;
+	}
+	return false;
 }
 
 void PLAYER::Player_Move()
@@ -113,24 +104,24 @@ void PLAYER::Player_Move()
 		//移動場所の確認
 		VECTOR TempMoveVector;
 
-		//SinParam = sin(CameraHAngle / 180.0f * DX_PI_F);
-		//CosParam = cos(CameraHAngle / 180.0f * DX_PI_F);
+		c_cameraAng->c_SinParam = sin(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
+		c_cameraAng->c_CosParam = cos(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
 
-		TempMoveVector.x = c_MoveVector.x;
-		TempMoveVector.y = 0.0f;
-		TempMoveVector.z = c_MoveVector.z;
-
-		//printfDx("%lf \n", c_MoveVector.x * c_camera->c_CosParam - MoveVector.z * c_camera->c_SinParam);
-
-		//TempMoveVector.x = c_MoveVector.x * CosParam - MoveVector.z * SinParam;
+		//TempMoveVector.x = c_MoveVector.x;
 		//TempMoveVector.y = 0.0f;
-		//TempMoveVector.z = c_MoveVector.x * SinParam + MoveVector.z * CosParam;
+		//TempMoveVector.z = c_MoveVector.z;
+
+		printfDx("%lf \n", c_MoveVector.x * c_cameraAng->c_CosParam - c_MoveVector.z * c_cameraAng->c_SinParam);
+
+		TempMoveVector.x = c_MoveVector.x * c_cameraAng->c_CosParam - c_MoveVector.z * c_cameraAng->c_SinParam;
+		TempMoveVector.y = 0.0f;
+		TempMoveVector.z = c_MoveVector.x * c_cameraAng->c_SinParam + c_MoveVector.z * c_cameraAng->c_CosParam;
 
 		//当たり判定の確認
-		//if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ObjPos[0], 50, 32 * 2) == false &&
-		//	Collision_Cube(VAdd(c_Position, TempMoveVector), ObjPos[1], 50) == false &&
-		//	Collision_Cube(VAdd(c_Position, TempMoveVector), ObjPos[2], 50) == false) {
+		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[0], 50, 32 * 2) == false &&
+			Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[1], 50) == false &&
+			Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[2], 50) == false) {
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
-		//}
+		}
 	}
 }

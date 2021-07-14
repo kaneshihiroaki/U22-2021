@@ -6,34 +6,6 @@
 #include "Stage.h"
 #include "enemy.h"
 #include "Main.h"
-
-// プレイヤーとオブジェクトのあたり判定
-bool Collision_Cube(VECTOR PlayerCol, VECTOR ObjCol, float MyScale) {
-	// 各座標を取得する
-	VECTOR pos = PlayerCol;
-	VECTOR posObj = ObjCol;
-
-	//当たってたら止める
-	if ((pos.x > posObj.x - MyScale &&
-		pos.z > posObj.z) &&
-		(pos.x <= posObj.x + (MyScale * 2) &&
-			pos.z <= posObj.z + (MyScale * 2))) {
-		return true;
-	}
-
-	return false;
-}
-bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float MyScale, float YourScale) {
-	// 各座標を取得する
-	VECTOR pos = PlayerCol;
-	VECTOR posObj = ObjCol;
-
-	//当たったら止める(今回はy座標いらない）
-	if (HitCheck_Sphere_Sphere(pos, MyScale, posObj, YourScale)) {
-		return true;
-	}
-	return false;
-}
 //ゲームの状態
 int GameState = 0;
 
@@ -112,11 +84,9 @@ void MAIN::Game_Main() {
 
 	c_player->Player_Move();
 
-	printfDx("%lf \n", c_player->c_Position.x);
-	printfDx("%lf \n", c_player->c_Position.y);
-	printfDx("%lf \n", c_player->c_Position.z);
-
 	c_camera->Camera_Control(c_player->c_Position);
+
+
 
 	MV1DrawModel(c_player->c_PlayerModel);
 }

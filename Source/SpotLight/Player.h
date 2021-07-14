@@ -1,38 +1,7 @@
 //#pragma once
 #include "DxLib.h"
-
-extern void PlayerMove();
-extern void GameInit();
-
-
-struct Player {
-
-	//縦移動
-	float x = 0.0f;
-
-	//横移動
-	float z = 0.0f;
-
-	//スピード
-	float speed = 3.0f;
-
-	
-};
-
-extern VECTOR player1;
-extern VECTOR player2;
-extern VECTOR player3;
-extern VECTOR player4;
-//敵
-extern VECTOR enemy1;
-extern VECTOR enemy2;
-
-//半径
-extern float Cap1R;
-//半径
-extern float Cap2R;
-
-
+#include "enemy.h"
+#include "Camera.h"
 
 class PLAYER
 {
@@ -49,10 +18,14 @@ public:
 
 private:
 	int    c_MoveFlag;	//プレイヤーが移動しているのか判定
-
+	float Sin;		//カメラの方向に移動するよう角度を取得
+	float Cos;		//カメラの方向に移動するよう角度を取得
 	VECTOR c_MoveVector;	//移動変数
 
 	const float c_movespeed = 10.0f;	//プレイヤー移動スピード
+
+	ENEMY* c_enemyCol = new ENEMY();		//敵の座標を取得するために取得
+	CAMERA* c_cameraAng = new CAMERA();		//カメラの角度を取得するために取得
 };
 
 
