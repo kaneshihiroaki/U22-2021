@@ -73,16 +73,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	MAIN *c_main = new MAIN();
 
-	//CAMERA* c_camera = new CAMERA();
-	//PLAYER* c_player = new PLAYER();
-	//STAGE* c_stage = new STAGE();
-	//ENEMY* c_enemy = new ENEMY();
-
-
-
 	// メインループ(何かキーが押されたらループを抜ける)
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
+		// 画面のクリア
+		ClearDrawScreen();
+
 		//入力キー取得
 		g_OldKey = g_NowKey;
 		g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
@@ -110,10 +106,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 
 void MAIN::Game_Main() {
-	// 画面のクリア
-	ClearDrawScreen();
-
-
 	c_stage->Stage_Make();
 
 	c_enemy->Enemy_Creat();
