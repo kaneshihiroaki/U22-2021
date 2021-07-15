@@ -1,6 +1,6 @@
 #include "DxLib.h"
 #include <math.h>
-#include"camera.h"
+#include"Camera.h"
 
 CAMERA::CAMERA()
 {
@@ -9,8 +9,6 @@ CAMERA::CAMERA()
 	c_CameraVAngle = 30.0f;
 
 	// Œü‚«‚ğ‰Šú‰»
-	//c_Angle = 0.0f;
-
 	c_SinParam = 0.0f;
 	c_CosParam = 0.0f;
 }

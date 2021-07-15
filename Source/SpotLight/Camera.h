@@ -3,21 +3,24 @@
 //#include<math.h>
 class CAMERA
 {
+private:
+	const float c_CameraPosHeight = 0.0f;			//カメラの初期高さ
+	float c_CameraPosDist = 350.0f;					//プレイヤーとカメラの初期距離
+	const float c_CameraSpeed = 3.0f;				//カメラの移動速さ
+
+protected:
+	//float getCameraAngle() { return c_CameraHAngle; };
+
+
 public:
 	CAMERA();
 	~CAMERA();
 
 	float  c_SinParam;
 	float  c_CosParam;
-
-	void Camera_Control(VECTOR PlayerPos);
-
-protected:
 	float  c_CameraHAngle;		//角度
 	float  c_CameraVAngle;		//角度
 
-private:
-	const float c_CameraPosHeight = 0.0f;			//カメラの初期高さ
-	float c_CameraPosDist = 350.0f;					//プレイヤーとカメラの初期距離
-	const float c_CameraSpeed = 3.0f;				//カメラの移動速さ
+	void Camera_Control(VECTOR PlayerPos);
+
 };

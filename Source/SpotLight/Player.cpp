@@ -71,28 +71,24 @@ void PLAYER::Player_Move()
 	// プレイヤー移動
 	if (CheckHitKey(KEY_INPUT_LEFT) == 1)
 	{
-		//FrontAngle = 90.0f - CameraHAngle;
 		c_MoveFlag = TRUE;
 		c_MoveVector.x = -c_movespeed;
 	}
 
 	if (CheckHitKey(KEY_INPUT_RIGHT) == 1)
 	{
-		//FrontAngle = -90.0f - CameraHAngle;
 		c_MoveFlag = TRUE;
 		c_MoveVector.x = c_movespeed;
 	}
 
 	if (CheckHitKey(KEY_INPUT_DOWN) == 1)
 	{
-		//FrontAngle = 0.0f - CameraHAngle;
 		c_MoveFlag = TRUE;
 		c_MoveVector.z = -c_movespeed;
 	}
 
 	if (CheckHitKey(KEY_INPUT_UP) == 1)
 	{
-		//FrontAngle = 180.0f - CameraHAngle;
 		c_MoveFlag = TRUE;
 		c_MoveVector.z = c_movespeed;
 	}
@@ -104,18 +100,18 @@ void PLAYER::Player_Move()
 		//移動場所の確認
 		VECTOR TempMoveVector;
 
-		c_cameraAng.c_SinParam = sin(c_CameraHAngle / 180.0f * DX_PI_F);
-		c_cameraAng.c_CosParam = cos(c_CameraHAngle / 180.0f * DX_PI_F);
+		c_cameraAng->c_SinParam = sin(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
+		c_cameraAng->c_CosParam = cos(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
 
 		//TempMoveVector.x = c_MoveVector.x;
 		//TempMoveVector.y = 0.0f;
 		//TempMoveVector.z = c_MoveVector.z;
 
-		printfDx("%lf \n", c_CameraHAngle);
+		//printfDx("%lf \n", c_cameraAng->c_CameraHAngle);
 
-		TempMoveVector.x = c_MoveVector.x * c_cameraAng.c_CosParam - c_MoveVector.z * c_cameraAng.c_SinParam;
+		TempMoveVector.x = c_MoveVector.x * c_cameraAng->c_CosParam - c_MoveVector.z * c_cameraAng->c_SinParam;
 		TempMoveVector.y = 0.0f;
-		TempMoveVector.z = c_MoveVector.x * c_cameraAng.c_SinParam + c_MoveVector.z * c_cameraAng.c_CosParam;
+		TempMoveVector.z = c_MoveVector.x * c_cameraAng->c_SinParam + c_MoveVector.z * c_cameraAng->c_CosParam;
 
 		//当たり判定の確認
 		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[0], 50, 32 * 2) == false &&
