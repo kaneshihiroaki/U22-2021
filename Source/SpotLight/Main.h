@@ -23,6 +23,6 @@ private:
 
 };
 
-extern int g_NowKey;
+//extern int g_NowKey;
 
 extern char key[256];

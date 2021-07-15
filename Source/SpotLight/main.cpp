@@ -6,6 +6,7 @@
 #include "Stage.h"
 #include "enemy.h"
 #include "Main.h"
+#include "Debug.h"
 //ゲームの状態
 int GameState = 0;
 
@@ -59,6 +60,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 		g_KeyFlg = g_NowKey & ~g_OldKey;
 
+		if (((g_NowKey & PAD_INPUT_7) != 0) && ((g_NowKey & g_OldKey) == 0)) {
+			if (DebugMode) {
+				DebugMode = false;
+				DebugNum = 1;
+			}
+			else {
+				DebugMode = true;
+			}
+
+		}
+
 		switch (c_main->GameState)
 		{
 		case 0:
@@ -69,6 +81,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		} 
 
+		//デバックコマンド表示
+		if (DebugCom() == -1) {
+			//デバックするなら入る
+		}
+
+		// 裏画面の内容を表画面に反映する
 		ScreenFlip();
 	}
 	// キー入力待ちをする
