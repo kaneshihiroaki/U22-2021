@@ -2,6 +2,7 @@
 #include "Player.h"
 #include <math.h>
 
+
 PLAYER::PLAYER()
 {
 	// プレイヤー座標初期化
@@ -16,9 +17,10 @@ PLAYER::PLAYER()
 	// ３Ｄモデルの読み込み
 	c_PlayerModel = MV1LoadModel("Model/MyPlayer.mv1");
 
-	//カメラの起動の取得
-	Sin = 0.0f;
-	Cos = 0.0f;
+	////カメラの起動の取得
+	//Sin = c_cameraAng->c_SinParam;
+	//Cos = c_cameraAng->c_CosParam;
+
 }
 
 PLAYER::~PLAYER()
@@ -57,7 +59,7 @@ bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float MyScale, float Your
 	return false;
 }
 
-void PLAYER::Player_Move()
+void PLAYER::Player_Move(float Sin,float Cos)
 {
 	//プレイヤー
 // 画面に映る位置に３Ｄモデルを移動
@@ -100,18 +102,18 @@ void PLAYER::Player_Move()
 		//移動場所の確認
 		VECTOR TempMoveVector;
 
-		c_cameraAng->c_SinParam = sin(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
-		c_cameraAng->c_CosParam = cos(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
+		//Sin = sin(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
+		//Cos = cos(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
 
 		//TempMoveVector.x = c_MoveVector.x;
 		//TempMoveVector.y = 0.0f;
 		//TempMoveVector.z = c_MoveVector.z;
 
-		//printfDx("%lf \n", c_cameraAng->c_CameraHAngle);
+		//printfDx("%lf \n", Cos);
 
-		TempMoveVector.x = c_MoveVector.x * c_cameraAng->c_CosParam - c_MoveVector.z * c_cameraAng->c_SinParam;
+		TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
 		TempMoveVector.y = 0.0f;
-		TempMoveVector.z = c_MoveVector.x * c_cameraAng->c_SinParam + c_MoveVector.z * c_cameraAng->c_CosParam;
+		TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
 		//当たり判定の確認
 		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[0], 50, 32 * 2) == false &&

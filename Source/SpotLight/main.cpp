@@ -15,8 +15,6 @@ int g_NowKey;
 int g_OldKey;
 char key[256];
 
-float  CameraHAngle;		//ƒJƒƒ‰‚ÌŠp“x‚ðŽæ“¾‚·‚é‚½‚ß
-float  CameraVAngle;		//ƒJƒƒ‰‚ÌŠp“x‚ðŽæ“¾‚·‚é‚½‚ß
 
 MAIN::MAIN()
 {
@@ -103,8 +101,8 @@ void MAIN::Game_Main() {
 
 	c_enemy->Enemy_Creat();
 
-	c_player->Player_Move();
-
+	c_player->Player_Move(c_camera->c_SinParam,c_camera->c_CosParam);
+	
 	c_camera->Camera_Control(c_player->c_Position);
 
 

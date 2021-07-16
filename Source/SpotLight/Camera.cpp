@@ -78,7 +78,7 @@ void CAMERA::Camera_Control(VECTOR PlayerPos) {
 	VECTOR CameraLookAtPosition;
 	CameraLookAtPosition = PlayerPos;
 	//CameraLookAtPosition.y += c_CameraPosHeight;
-	//printfDx("%lf \n", c_CameraHAngle);
+	printfDx("%lf \n", c_SinParam);
 
 	//ƒJƒƒ‰‚Ìã‰ºˆÚ“®
 	c_SinParam = sin(c_CameraVAngle / 180.0f * DX_PI_F);
