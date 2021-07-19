@@ -3,6 +3,10 @@
 #include "enemy.h"
 #include "Camera.h"
 
+#define CHAR_SIZE_X		55.0f		// キャラのサイズ
+#define CHAR_SIZE_Y		55.0f		// キャラのサイズ
+#define CHAR_SIZE_Z		55.0f		// キャラのサイズ
+
 class PLAYER
 {
 public:
@@ -27,6 +31,8 @@ private:
 
 	ENEMY* c_enemyCol = new ENEMY();		//敵の座標を取得するために取得;
 	CAMERA* c_cameraAng = new CAMERA();		//カメラの角度を取得するために取得;;
+
+	void Collision_Draw();//デバックモードで使用
 };
 
 

@@ -99,13 +99,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 void MAIN::Game_Main() {
 	c_stage->Stage_Make();
 
-	c_enemy->Enemy_Creat();
-
+	if (!Collision_Player) {
+		c_enemy->Enemy_Creat();
+	}
+	
 	c_player->Player_Move(c_camera->c_SinParam,c_camera->c_CosParam);
 	
 	c_camera->Camera_Control(c_player->c_Position);
 
 
-
-	MV1DrawModel(c_player->c_PlayerModel);
+	if (!Collision_Player) {
+		MV1DrawModel(c_player->c_PlayerModel);
+	}
+	
 }

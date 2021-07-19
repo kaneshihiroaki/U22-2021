@@ -2,6 +2,8 @@
 #include "Player.h"
 #include <math.h>
 
+#include "Debug.h"
+
 
 PLAYER::PLAYER()
 {
@@ -37,11 +39,11 @@ bool Collision_Cube(VECTOR PlayerCol, VECTOR ObjCol, float MyScale) {
 	VECTOR pos = PlayerCol;
 	VECTOR posObj = ObjCol;
 
-	//当たってたら止める
-	if ((pos.x > posObj.x - MyScale &&
-		pos.z > posObj.z) &&
-		(pos.x <= posObj.x + (MyScale * 2) &&
-			pos.z <= posObj.z + (MyScale * 2))) {
+	//当たったらfalse
+	if ((pos.x + CHAR_SIZE_X > posObj.x &&
+		pos.z + CHAR_SIZE_Z > posObj.z) &&
+		(pos.x - CHAR_SIZE_X < posObj.x + MyScale &&
+			pos.z - CHAR_SIZE_Z < posObj.z + MyScale)) {
 		return true;
 	}
 
@@ -71,25 +73,25 @@ void PLAYER::Player_Move(float Sin,float Cos)
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
 	// プレイヤー移動
-	if (CheckHitKey(KEY_INPUT_LEFT) == 1)
+	if (((g_NowKey & PAD_INPUT_LEFT) != 0))
 	{
 		c_MoveFlag = TRUE;
 		c_MoveVector.x = -c_movespeed;
 	}
 
-	if (CheckHitKey(KEY_INPUT_RIGHT) == 1)
+	if (((g_NowKey & PAD_INPUT_RIGHT) != 0))
 	{
 		c_MoveFlag = TRUE;
 		c_MoveVector.x = c_movespeed;
 	}
 
-	if (CheckHitKey(KEY_INPUT_DOWN) == 1)
+	if (((g_NowKey & PAD_INPUT_DOWN) != 0))
 	{
 		c_MoveFlag = TRUE;
 		c_MoveVector.z = -c_movespeed;
 	}
 
-	if (CheckHitKey(KEY_INPUT_UP) == 1)
+	if (((g_NowKey & PAD_INPUT_UP) != 0))
 	{
 		c_MoveFlag = TRUE;
 		c_MoveVector.z = c_movespeed;
@@ -122,4 +124,49 @@ void PLAYER::Player_Move(float Sin,float Cos)
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
 		}
 	}
+
+	if (Collision_Player) {
+		Collision_Draw();//デバック用
+	}
+}
+
+void PLAYER::Collision_Draw() {
+
+	VECTOR Copy_Vect1;//オブジェクトのコピー
+	VECTOR Copy_Vect2;//オブジェクトのコピー
+	VECTOR Copy_Vect3;//オブジェクトのコピー
+
+	//プレイヤーのコリジョン
+	Copy_Vect1 = c_Position; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
+	Copy_Vect2 = c_Position; Copy_Vect2.x += CHAR_SIZE_X; Copy_Vect2.z -= CHAR_SIZE_Z;
+	DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
+	Copy_Vect1 = c_Position; Copy_Vect1.x -= CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
+	Copy_Vect2 = c_Position; Copy_Vect2.x -= CHAR_SIZE_X; Copy_Vect2.z -= CHAR_SIZE_Z;
+	DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
+	Copy_Vect1 = c_Position; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z -= CHAR_SIZE_Z;
+	Copy_Vect2 = c_Position; Copy_Vect2.x -= CHAR_SIZE_X; Copy_Vect2.z -= CHAR_SIZE_Z;
+	DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
+	Copy_Vect1 = c_Position; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
+	Copy_Vect2 = c_Position; Copy_Vect2.x -= CHAR_SIZE_X; Copy_Vect2.z += CHAR_SIZE_Z;
+	DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
+
+	
+	
+
+	
+	//オブジェクトのコリジョン
+	for (int i = 0; i < 3; i++) {
+		Copy_Vect1 = c_enemyCol->c_ObjPos[i];
+		Copy_Vect1.x += 50;
+		Copy_Vect2 = c_enemyCol->c_ObjPos[i];
+		Copy_Vect2.z += 50;
+		Copy_Vect3 = c_enemyCol->c_ObjPos[i];
+		Copy_Vect3.x += 50;
+		Copy_Vect3.z += 50;
+		DrawLine3D(c_enemyCol->c_ObjPos[i], Copy_Vect1, 0xffffff);
+		DrawLine3D(c_enemyCol->c_ObjPos[i], Copy_Vect2, 0xffffff);
+		DrawLine3D(Copy_Vect1, Copy_Vect3, 0xffffff);
+		DrawLine3D(Copy_Vect2, Copy_Vect3, 0xffffff);
+	}
+	
 }

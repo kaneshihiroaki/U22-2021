@@ -38,6 +38,9 @@ int DebugCom() {
 		case 1:
 			CameraFree();
 			break;
+		case 2:
+			Collision_player();
+			break;
 		default:
 			break;
 		}
@@ -57,6 +60,7 @@ void DebugDrawing() {
 
 	// •¶Žš—ñ‚Ì•`‰æ
 	DrawString(50, 21, "FreeCamera", GetColor(0x00, 0xff, 0xff));
+	DrawString(50, 41, "Player_collision", GetColor(0x00, 0xff, 0xff));
 	
 }
 
@@ -97,4 +101,15 @@ void Build_Time() {
 		data[0], data[1], data[2],
 		data[4], data[5],
 		time);
+}
+
+void Collision_player() {
+	if (Collision_Player) {
+		Collision_Player = false;
+	}
+	else {
+		Collision_Player = true;
+	}
+
+	DebugMode = false;
 }
