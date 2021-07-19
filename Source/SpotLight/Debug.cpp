@@ -5,6 +5,10 @@
 int DebugNum = 1;
 bool DebugMode = false;
 
+//ビルド時の日付や時間
+const char data[] = __DATE__;
+const char time[] = __TIME__;
+
 //ローカル変数（private変数）
 
 
@@ -59,4 +63,38 @@ void DebugDrawing() {
 
 void CameraFree() {
 	DebugMode = false;
+}
+
+void Build_Time() {
+
+	static int month = 0;	//月
+	switch (data[0]) {
+	case 'J':
+		if (data[2] == 'a') month = 1;
+		if (data[2] == 'u') {
+			if (data[3] == 'n') month = 6;
+			if (data[3] == 'l') month = 7;
+		}
+		break;
+	case 'F': month = 2; break;
+	case 'M':
+		if (data[2] == 'r') month = 2;
+		if (data[2] == 'y') month = 5;
+		break;
+	case 'A':
+		if (data[2] == 'r') month = 4;
+		if (data[2] == 'g') month = 8;
+		break;
+	case 'S': month = 9; break;
+	case 'O': month = 10; break;
+	case 'N': month = 11; break;
+	case 'D': month = 12; break;
+	}
+
+	SetFontSize(18);
+	DrawFormatString(500, 10, 0x000000, "最終ビルド日時\n %c%c%c%c %c%c%c %c%c\n  %s",
+		data[7], data[8], data[9], data[10],
+		data[0], data[1], data[2],
+		data[4], data[5],
+		time);
 }

@@ -15,6 +15,8 @@ extern int DebugCom();
 extern void DebugDrawing();;
 extern void CameraFree();
 
+extern void Build_Time();//ビルドスタンプ関数
+
 
 
 
