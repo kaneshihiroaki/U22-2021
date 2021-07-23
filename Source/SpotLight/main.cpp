@@ -115,5 +115,5 @@ void MAIN::Game_Main() {
 	if (!Collision_Player) {
 		MV1DrawModel(c_player->c_PlayerModel);
 	}
-	
+	Build_Time();
 }
