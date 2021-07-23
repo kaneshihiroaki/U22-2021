@@ -34,16 +34,16 @@ void PLAYER::Player_Creat() {
 }
 
 // プレイヤーとオブジェクトのあたり判定
-bool Collision_Cube(VECTOR PlayerCol, VECTOR ObjCol, float MyScale) {
+bool Collision_Cube(VECTOR PlayerCol, VECTOR ObjCol, float EnemyScale) {
 	// 各座標を取得する
 	VECTOR pos = PlayerCol;
 	VECTOR posObj = ObjCol;
 
-	//当たったらfalse
-	if ((pos.x + CHAR_SIZE_X > posObj.x &&
-		pos.z + CHAR_SIZE_Z > posObj.z) &&
-		(pos.x - CHAR_SIZE_X < posObj.x + MyScale &&
-			pos.z - CHAR_SIZE_Z < posObj.z + MyScale)) {
+	//当たったらtrue
+	if ((pos.x + CHAR_SIZE_X > posObj.x - EnemyScale &&
+		pos.z + CHAR_SIZE_Z > posObj.z - EnemyScale) &&
+		(pos.x - CHAR_SIZE_X < posObj.x + EnemyScale &&
+			pos.z - CHAR_SIZE_Z < posObj.z + EnemyScale)) {
 		return true;
 	}
 
@@ -119,8 +119,8 @@ void PLAYER::Player_Move(float Sin,float Cos)
 
 		//当たり判定の確認
 		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[0], 50, 32 * 2) == false &&
-			Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[1], 50) == false &&
-			Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[2], 50) == false) {
+			Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[1], 55) == false &&
+			Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[2], 55) == false) {
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
 		}
 	}
@@ -156,17 +156,26 @@ void PLAYER::Collision_Draw() {
 	
 	//オブジェクトのコリジョン
 	for (int i = 0; i < 3; i++) {
-		Copy_Vect1 = c_enemyCol->c_ObjPos[i];
-		Copy_Vect1.x += 50;
-		Copy_Vect2 = c_enemyCol->c_ObjPos[i];
-		Copy_Vect2.z += 50;
-		Copy_Vect3 = c_enemyCol->c_ObjPos[i];
-		Copy_Vect3.x += 50;
-		Copy_Vect3.z += 50;
+		Copy_Vect1 = c_enemyCol->c_ObjPos[i]; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
+		Copy_Vect2 = c_enemyCol->c_ObjPos[i]; Copy_Vect2.x += CHAR_SIZE_X; Copy_Vect2.z -= CHAR_SIZE_Z;
+		DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
+		Copy_Vect1 = c_enemyCol->c_ObjPos[i]; Copy_Vect1.x -= CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
+		Copy_Vect2 = c_enemyCol->c_ObjPos[i]; Copy_Vect2.x -= CHAR_SIZE_X; Copy_Vect2.z -= CHAR_SIZE_Z;
+		DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
+		Copy_Vect1 = c_enemyCol->c_ObjPos[i]; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z -= CHAR_SIZE_Z;
+		Copy_Vect2 = c_enemyCol->c_ObjPos[i]; Copy_Vect2.x -= CHAR_SIZE_X; Copy_Vect2.z -= CHAR_SIZE_Z;
+		DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
+		Copy_Vect1 = c_enemyCol->c_ObjPos[i]; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
+		Copy_Vect2 = c_enemyCol->c_ObjPos[i]; Copy_Vect2.x -= CHAR_SIZE_X; Copy_Vect2.z += CHAR_SIZE_Z;
+		DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
+
+		/*Copy_Vect1 = c_enemyCol->c_ObjPos[i];	Copy_Vect1.x += 55.0f;
+		Copy_Vect2 = c_enemyCol->c_ObjPos[i];	Copy_Vect2.z += 55.0f;
+		Copy_Vect3 = c_enemyCol->c_ObjPos[i];	Copy_Vect3.x += 55.0f;	Copy_Vect3.z += 55.0f;
 		DrawLine3D(c_enemyCol->c_ObjPos[i], Copy_Vect1, 0xffffff);
 		DrawLine3D(c_enemyCol->c_ObjPos[i], Copy_Vect2, 0xffffff);
 		DrawLine3D(Copy_Vect1, Copy_Vect3, 0xffffff);
-		DrawLine3D(Copy_Vect2, Copy_Vect3, 0xffffff);
+		DrawLine3D(Copy_Vect2, Copy_Vect3, 0xffffff);*/
 	}
 	
 }
