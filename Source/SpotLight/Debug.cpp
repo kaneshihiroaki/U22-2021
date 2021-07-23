@@ -4,6 +4,8 @@
 //extern•Ï”
 int DebugNum = 1;
 bool DebugMode = false;
+bool Collision_Player = false;
+
 
 //ƒrƒ‹ƒh‚Ì“ú•t‚âŠÔ
 const char data[] = __DATE__;
