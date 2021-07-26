@@ -55,21 +55,21 @@ void CAMERA::Camera_Control(VECTOR PlayerPos) {
 		}
 	}
 
-	//カメラとプレイヤーの距離
-	if (CheckHitKey(KEY_INPUT_A) == 1)
-	{
-		if (c_CameraPosDist >= 350.0f)
-		{
-			c_CameraPosDist -= 10.0f;
-		}
-	}
-	if (CheckHitKey(KEY_INPUT_D) == 1)
-	{
-		if (c_CameraPosDist <= 4000.0f)
-		{
-			c_CameraPosDist += 10.0f;
-		}
-	}
+	////カメラとプレイヤーの距離
+	//if (CheckHitKey(KEY_INPUT_A) == 1)
+	//{
+	//	if (c_CameraPosDist >= 350.0f)
+	//	{
+	//		c_CameraPosDist -= 10.0f;
+	//	}
+	//}
+	//if (CheckHitKey(KEY_INPUT_D) == 1)
+	//{
+	//	if (c_CameraPosDist <= 4000.0f)
+	//	{
+	//		c_CameraPosDist += 10.0f;
+	//	}
+	//}
 
 	//カメラの計算のための変数宣言
 	VECTOR TempPosition1;
