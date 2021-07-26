@@ -17,7 +17,7 @@ PLAYER::PLAYER()
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
 	// ‚R‚cƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
-	c_PlayerModel = MV1LoadModel("Model/MyPlayer.mv1");
+	c_PlayerModel = MV1LoadModel("D:/SchoolApry/U-22-2021/Source/SpotLight/Model/MyPlayer.mv1");
 
 	////ƒJƒƒ‰‚Ì‹N“®‚ÌŽæ“¾
 	//Sin = c_cameraAng->c_SinParam;
