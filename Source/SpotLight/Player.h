@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include "enemy.h"
 #include "Camera.h"
+#include "Math.h"
 
 #define CHAR_SIZE_X		55.0f		// キャラのサイズ
 #define CHAR_SIZE_Y		55.0f		// キャラのサイズ

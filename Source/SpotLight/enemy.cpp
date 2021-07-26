@@ -10,7 +10,7 @@ ENEMY::ENEMY()
 
 	// ３Ｄモデルの読み込み
 	for (int i = 0; i < ENEMY_MAX; i++) {
-		c_EnemyModel[i] = MV1LoadModel("Model/MyPlayer.mv1");
+		c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
 	}

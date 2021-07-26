@@ -49,15 +49,39 @@ bool Collision_Cube(VECTOR PlayerCol, VECTOR ObjCol, float EnemyScale) {
 
 	return false;
 }
-bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float MyScale, float YourScale) {
+bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float EnemyScale) {
 	// 各座標を取得する
 	VECTOR pos = PlayerCol;
 	VECTOR posObj = ObjCol;
 
-	//当たったら止める(今回はy座標いらない）
-	if (HitCheck_Sphere_Sphere(pos, MyScale, posObj, YourScale)) {
+	
+	//当たったらtrue。領域A、ｙ部分
+	if ((pos.x + CHAR_SIZE_X > posObj.x &&
+		pos.z + CHAR_SIZE_Z > posObj.z - EnemyScale) &&
+		(pos.x - CHAR_SIZE_X < posObj.x &&
+			pos.z - CHAR_SIZE_Z < posObj.z + EnemyScale)) {
 		return true;
 	}
+
+	//当たったらtrue。領域B、ｘ部分
+	if ((pos.x + CHAR_SIZE_X > posObj.x - EnemyScale &&
+		pos.z + CHAR_SIZE_Z > posObj.z) &&
+		(pos.x - CHAR_SIZE_X < posObj.x + EnemyScale &&
+			pos.z - CHAR_SIZE_Z < posObj.z)) {
+		return true;
+	}
+	//当たったらtrue。領域CDEF、円部分
+	if (pow((pos.x + CHAR_SIZE_X - posObj.x), 2) + pow((pos.z + CHAR_SIZE_Z - posObj.z), 2) < pow(EnemyScale, 2) ||
+		pow((pos.x + CHAR_SIZE_X - posObj.x), 2) + pow((pos.z - CHAR_SIZE_Z - posObj.z), 2) < pow(EnemyScale, 2) ||
+		pow((pos.x - CHAR_SIZE_X - posObj.x), 2) + pow((pos.z + CHAR_SIZE_Z - posObj.z), 2) < pow(EnemyScale, 2) ||
+		pow((pos.x - CHAR_SIZE_X - posObj.x), 2) + pow((pos.z - CHAR_SIZE_Z - posObj.z), 2) < pow(EnemyScale, 2)) {
+		return true;
+	}
+
+	////当たったら止める(今回はy座標いらない）
+	//if (HitCheck_Sphere_Sphere(pos, MyScale, posObj, YourScale)) {
+	//	return true;
+	//}
 	return false;
 }
 
@@ -118,7 +142,7 @@ void PLAYER::Player_Move(float Sin,float Cos)
 		TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
 		//当たり判定の確認
-		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[0], 50, 32 * 2) == false &&
+		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[0], 55) == false &&
 			Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[1], 55) == false &&
 			Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[2], 55) == false) {
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
@@ -155,7 +179,7 @@ void PLAYER::Collision_Draw() {
 
 	
 	//オブジェクトのコリジョン
-	for (int i = 0; i < 3; i++) {
+	for (int i = 1; i < 3; i++) {
 		Copy_Vect1 = c_enemyCol->c_ObjPos[i]; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
 		Copy_Vect2 = c_enemyCol->c_ObjPos[i]; Copy_Vect2.x += CHAR_SIZE_X; Copy_Vect2.z -= CHAR_SIZE_Z;
 		DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
@@ -177,5 +201,8 @@ void PLAYER::Collision_Draw() {
 		DrawLine3D(Copy_Vect1, Copy_Vect3, 0xffffff);
 		DrawLine3D(Copy_Vect2, Copy_Vect3, 0xffffff);*/
 	}
-	
+
+	//半径を５５に統一している
+	DrawSphere3D(c_enemyCol->c_ObjPos[0], 55.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
 }
