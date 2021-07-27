@@ -30,7 +30,7 @@ void PLAYER::Player_Controller(float Sin, float Cos) {
 	MV1SetPosition(c_PlayerModel, c_Position);
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 
-	DrawFormatString(10, 450, 0xFFFFFF, "スタミナ：%d / %d", Stamina.s_Count,Stamina.s_StaminaMax);
+	DrawFormatString(10, 450, 0xFFFFFF, "スタミナ：%d / %d", Stamina.s_Count, Stamina.s_StaminaMax);
 
 	Player_Move(Sin, Cos);
 }
@@ -56,7 +56,7 @@ bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float EnemyScale) {
 	VECTOR pos = PlayerCol;
 	VECTOR posObj = ObjCol;
 
-	
+
 	//当たったらtrue。領域A、ｙ部分
 	if ((pos.x + CHAR_SIZE_X > posObj.x &&
 		pos.z + CHAR_SIZE_Z > posObj.z - EnemyScale) &&
@@ -83,12 +83,12 @@ bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float EnemyScale) {
 	return false;
 }
 
-void PLAYER::Player_Paralyze() {	
+void PLAYER::Player_Paralyze() {
 	c_MoveFlag = false;
 
-	if (c_ParaTime++ == c_TimeParalyze) {
-		c_paralyzeKey = false;
-		c_ParaTime = 0;
+	if (Damage.s_ParaTime++ == Damage.s_MaxTimeParalyze) {
+		Damage.s_paralyzeKey = false;
+		Damage.s_ParaTime = 0;
 	}
 }
 
@@ -98,58 +98,52 @@ void PLAYER::Player_StaminaCount() {
 			Stamina.s_Count++;
 		}
 	}
-	else{
+	else {
 		if (Stamina.s_Count > 0) {
 			Stamina.s_Count--;
 		}
 	}
 }
 
-void PLAYER::Player_Move(float Sin,float Cos)
+void PLAYER::Player_Move(float Sin, float Cos)
 {
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
-	if (Stamina.s_Count >= 1) {
-		// プレイヤー移動
-		if (((g_NowKey & PAD_INPUT_LEFT) != 0))
-		{
-			c_MoveFlag = TRUE;
-			c_MoveVector.x = -c_movespeed;
-		}
-
-		if (((g_NowKey & PAD_INPUT_RIGHT) != 0))
-		{
-			c_MoveFlag = TRUE;
-			c_MoveVector.x = c_movespeed;
-		}
-
-		if (((g_NowKey & PAD_INPUT_DOWN) != 0))
-		{
-			c_MoveFlag = TRUE;
-			c_MoveVector.z = -c_movespeed;
-		}
-
-		if (((g_NowKey & PAD_INPUT_UP) != 0))
-		{
-			c_MoveFlag = TRUE;
-			c_MoveVector.z = c_movespeed;
-		}
-		Stamina.s_Key = true;
+	// プレイヤー移動
+	if (((g_NowKey & PAD_INPUT_LEFT) != 0))
+	{
+		c_MoveFlag = true;
+		if (Stamina.s_Count > 0)c_MoveVector.x = -c_movespeed;
 	}
-	else if (Stamina.s_Count <= 0) {
 
+	if (((g_NowKey & PAD_INPUT_RIGHT) != 0))
+	{
+		c_MoveFlag = true;
+		if (Stamina.s_Count > 0)c_MoveVector.x = c_movespeed;
+	}
+
+	if (((g_NowKey & PAD_INPUT_DOWN) != 0))
+	{
+		c_MoveFlag = true;
+		if (Stamina.s_Count > 0)c_MoveVector.z = -c_movespeed;
+	}
+
+	if (((g_NowKey & PAD_INPUT_UP) != 0))
+	{
+		c_MoveFlag = true;
+		if (Stamina.s_Count > 0)c_MoveVector.z = c_movespeed;
 	}
 
 	//Gキーを押したらプレイヤーが一定時間止まる
-	if (CheckHitKey(KEY_INPUT_G)) c_paralyzeKey = true;
-	if (c_paralyzeKey == true) Player_Paralyze();
+	if (CheckHitKey(KEY_INPUT_G)) Damage.s_paralyzeKey = true;
+	if (Damage.s_paralyzeKey == true) Player_Paralyze();
 
 	Player_StaminaCount();		//スタミナ管理
 
 	//移動フラグがたってたら移動
-	if (c_MoveFlag == TRUE)
+	if (c_MoveFlag == true)
 	{
 		//移動場所の確認
 		VECTOR TempMoveVector;
@@ -191,10 +185,10 @@ void PLAYER::Collision_Draw() {
 	Copy_Vect2 = c_Position; Copy_Vect2.x -= CHAR_SIZE_X; Copy_Vect2.z += CHAR_SIZE_Z;
 	DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
 
-	
-	
 
-	
+
+
+
 	//オブジェクトのコリジョン
 	for (int i = 1; i < 3; i++) {
 		Copy_Vect1 = c_enemyCol->c_ObjPos[i]; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
