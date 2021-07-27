@@ -7,6 +7,9 @@ extern int DebugNum; //デバックの数字
 extern bool DebugMode;//デバックモードのオンオフ
 
 extern bool Collision_Player;
+extern bool GamePadIn_bool;
+
+extern bool Build_bool;//ビルドを表示消すよう
 
 extern int g_KeyFlg;
 extern int g_NowKey;
@@ -17,6 +20,9 @@ extern int DebugCom();
 extern void DebugDrawing();;
 extern void CameraFree();
 extern void Collision_player();
+extern void GamePadIn();
+extern void Build_In();
+
 
 extern void Build_Time();//ビルドスタンプ関数
 

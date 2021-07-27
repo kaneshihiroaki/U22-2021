@@ -5,6 +5,10 @@
 int DebugNum = 1;
 bool DebugMode = false;
 bool Collision_Player = false;
+bool GamePadIn_bool = false;
+
+//ビルドの日付をけす用にする。
+bool Build_bool = true;
 
 
 //ビルド時の日付や時間
@@ -12,13 +16,14 @@ const char data[] = __DATE__;
 const char time[] = __TIME__;
 
 //ローカル変数（private変数）
+float version;
 
 
 
 int DebugCom() {
 	//デバックモードじゃないなら帰る
 	if (DebugMode == false) {
-		
+		GamePadIn_bool = false;
 		return 0;
 	}
 	if (((g_NowKey & PAD_INPUT_DOWN) != 0) && ((g_NowKey & g_OldKey) == 0)) {
@@ -32,7 +37,13 @@ int DebugCom() {
 		}
 	}
 
-	DebugDrawing();
+	if (GamePadIn_bool) {
+		GamePadIn();
+	}
+	else {
+		DebugDrawing();
+	}
+	
 	if (((g_NowKey & PAD_INPUT_2) != 0) && ((g_NowKey & g_OldKey) == 0)) {
 		//操作
 		switch (DebugNum)
@@ -43,10 +54,22 @@ int DebugCom() {
 		case 2:
 			Collision_player();
 			break;
+		case 3:
+			if (GamePadIn_bool) {
+				GamePadIn_bool = false;
+			}
+			else {
+				GamePadIn_bool = true;
+			}
+			break;
+		case 4:
+			Build_In();
+			break;
 		default:
 			break;
 		}
 	}
+
 	
 	return -1;
 }
@@ -63,7 +86,9 @@ void DebugDrawing() {
 	// 文字列の描画
 	DrawString(50, 21, "FreeCamera", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 41, "Player_collision", GetColor(0x00, 0xff, 0xff));
-	
+	DrawString(50, 61, "GamePad_State", GetColor(0x00, 0xff, 0xff));
+	DrawString(50, 81, "Build_Time", GetColor(0x00, 0xff, 0xff));
+
 }
 
 
@@ -103,6 +128,12 @@ void Build_Time() {
 		data[0], data[1], data[2],
 		data[4], data[5],
 		time);
+
+	version = 0.01f;		//ビルドのバージョン、金曜日がくるたびに数値を上げて更新すること
+	//printfDx("ver%.2f", version);
+
+	DrawFormatString(10, 10, 0x000000, "ver%.2f",version);
+
 }
 
 void Collision_player() {
@@ -113,5 +144,45 @@ void Collision_player() {
 		Collision_Player = true;
 	}
 
+	DebugMode = false;
+}
+
+void GamePadIn() {
+
+	DINPUT_JOYSTATE input;
+
+	// 入力状態を取得
+	GetJoypadDirectInputState(DX_INPUT_PAD1, &input);
+	int num;
+	int Color;
+
+	// 画面に構造体の中身を描画
+	Color = GetColor(0, 255, 255);
+	DrawFormatString(0, 0, Color, "X:%d Y:%d Z:%d",
+		input.X, input.Y, input.Z);
+	DrawFormatString(0, 16, Color, "Rx:%d Ry:%d Rz:%d",
+		input.Rx, input.Ry, input.Rz);
+	DrawFormatString(0, 32, Color, "Slider 0:%d 1:%d",
+		input.Slider[0], input.Slider[1]);
+	DrawFormatString(0, 48, Color, "POV 0:%d 1:%d 2:%d 3:%d",
+		input.POV[0], input.POV[1],
+		input.POV[2], input.POV[3]);
+	DrawString(0, 64, "Button", Color);
+	for (num = 0; num < 32; num++)
+	{
+		DrawFormatString(64 + num % 8 * 64, 64 + num / 8 * 16, Color,
+			"%2d:%d", num, input.Buttons[num]);
+	}
+
+	
+}
+
+void Build_In() {
+	if (Build_bool) {
+		Build_bool = false;
+	}
+	else {
+		Build_bool = true;
+	}
 	DebugMode = false;
 }

@@ -15,7 +15,6 @@ int g_NowKey;
 int g_OldKey;
 char key[256];
 
-float version;
 
 MAIN::MAIN()
 {
@@ -46,9 +45,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Ｚバッファへの書き込みを有効にする
 	SetWriteZBuffer3D(TRUE);
 
-	version = 0.01f;		//ビルドのバージョン、金曜日がくるたびに数値を上げて更新すること
-	printfDx("ver%.2f", version);
-
+	
 	MAIN *c_main = new MAIN();
 
 	// メインループ(何かキーが押されたらループを抜ける)
@@ -115,5 +112,8 @@ void MAIN::Game_Main() {
 	if (!Collision_Player) {
 		MV1DrawModel(c_player->c_PlayerModel);
 	}
-	Build_Time();
+	if (Build_bool) {
+		Build_Time();
+	}
+	
 }
