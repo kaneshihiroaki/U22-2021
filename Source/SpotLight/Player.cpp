@@ -17,20 +17,22 @@ PLAYER::PLAYER()
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
 	// ３Ｄモデルの読み込み
-	c_PlayerModel = MV1LoadModel("D:/SchoolApry/U-22-2021/Source/SpotLight/Model/MyPlayer.mv1");
-
-	////カメラの起動の取得
-	//Sin = c_cameraAng->c_SinParam;
-	//Cos = c_cameraAng->c_CosParam;
-
+	c_PlayerModel = MV1LoadModel("Model/MyPlayer.mv1");
 }
 
 PLAYER::~PLAYER()
 {
 }
 
-void PLAYER::Player_Creat() {
+void PLAYER::Player_Controller(float Sin, float Cos) {
+	//プレイヤー
+	// 画面に映る位置に３Ｄモデルを移動
+	MV1SetPosition(c_PlayerModel, c_Position);
+	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 
+	DrawFormatString(10, 450, 0xFFFFFF, "スタミナ：%d / %d", Stamina.s_Count,Stamina.s_StaminaMax);
+
+	Player_Move(Sin, Cos);
 }
 
 // プレイヤーとオブジェクトのあたり判定
@@ -78,64 +80,79 @@ bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float EnemyScale) {
 		return true;
 	}
 
-	////当たったら止める(今回はy座標いらない）
-	//if (HitCheck_Sphere_Sphere(pos, MyScale, posObj, YourScale)) {
-	//	return true;
-	//}
 	return false;
+}
+
+void PLAYER::Player_Paralyze() {	
+	c_MoveFlag = false;
+
+	if (c_ParaTime++ == c_TimeParalyze) {
+		c_paralyzeKey = false;
+		c_ParaTime = 0;
+	}
+}
+
+void PLAYER::Player_StaminaCount() {
+	if (c_MoveFlag == false) {
+		if (Stamina.s_Count < Stamina.s_StaminaMax) {
+			Stamina.s_Count++;
+		}
+	}
+	else{
+		if (Stamina.s_Count > 0) {
+			Stamina.s_Count--;
+		}
+	}
 }
 
 void PLAYER::Player_Move(float Sin,float Cos)
 {
-	//プレイヤー
-// 画面に映る位置に３Ｄモデルを移動
-	MV1SetPosition(c_PlayerModel, c_Position);
-	MV1SetScale(c_PlayerModel, c_AddPosPlay);
-
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
-	// プレイヤー移動
-	if (((g_NowKey & PAD_INPUT_LEFT) != 0))
-	{
-		c_MoveFlag = TRUE;
-		c_MoveVector.x = -c_movespeed;
+	if (Stamina.s_Count >= 1) {
+		// プレイヤー移動
+		if (((g_NowKey & PAD_INPUT_LEFT) != 0))
+		{
+			c_MoveFlag = TRUE;
+			c_MoveVector.x = -c_movespeed;
+		}
+
+		if (((g_NowKey & PAD_INPUT_RIGHT) != 0))
+		{
+			c_MoveFlag = TRUE;
+			c_MoveVector.x = c_movespeed;
+		}
+
+		if (((g_NowKey & PAD_INPUT_DOWN) != 0))
+		{
+			c_MoveFlag = TRUE;
+			c_MoveVector.z = -c_movespeed;
+		}
+
+		if (((g_NowKey & PAD_INPUT_UP) != 0))
+		{
+			c_MoveFlag = TRUE;
+			c_MoveVector.z = c_movespeed;
+		}
+		Stamina.s_Key = true;
+	}
+	else if (Stamina.s_Count <= 0) {
+
 	}
 
-	if (((g_NowKey & PAD_INPUT_RIGHT) != 0))
-	{
-		c_MoveFlag = TRUE;
-		c_MoveVector.x = c_movespeed;
-	}
+	//Gキーを押したらプレイヤーが一定時間止まる
+	if (CheckHitKey(KEY_INPUT_G)) c_paralyzeKey = true;
+	if (c_paralyzeKey == true) Player_Paralyze();
 
-	if (((g_NowKey & PAD_INPUT_DOWN) != 0))
-	{
-		c_MoveFlag = TRUE;
-		c_MoveVector.z = -c_movespeed;
-	}
-
-	if (((g_NowKey & PAD_INPUT_UP) != 0))
-	{
-		c_MoveFlag = TRUE;
-		c_MoveVector.z = c_movespeed;
-	}
-
+	Player_StaminaCount();		//スタミナ管理
 
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == TRUE)
 	{
 		//移動場所の確認
 		VECTOR TempMoveVector;
-
-		//Sin = sin(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
-		//Cos = cos(c_cameraAng->c_CameraHAngle / 180.0f * DX_PI_F);
-
-		//TempMoveVector.x = c_MoveVector.x;
-		//TempMoveVector.y = 0.0f;
-		//TempMoveVector.z = c_MoveVector.z;
-
-		//printfDx("%lf \n", Cos);
 
 		TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
 		TempMoveVector.y = 0.0f;

@@ -104,7 +104,7 @@ void MAIN::Game_Main() {
 		c_enemy->Enemy_Creat();
 	}
 	
-	c_player->Player_Move(c_camera->c_SinParam,c_camera->c_CosParam);
+	c_player->Player_Controller(c_camera->c_SinParam, c_camera->c_CosParam);
 	
 	c_camera->Camera_Control(c_player->c_Position);
 
