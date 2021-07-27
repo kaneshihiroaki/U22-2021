@@ -19,7 +19,7 @@ public:
 	void Player_Controller(float Sin, float Cos);
 
 private:
-	int c_MoveFlag;	//プレイヤーが移動しているのか判定
+	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
 	VECTOR c_MoveVector;	//移動変数
 
 	const float c_movespeed = 5.0f;	//プレイヤー移動スピード
