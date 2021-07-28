@@ -101,6 +101,10 @@ void MAIN::Game_Main() {
 	c_stage->Stage_Make();
 
 	if (!Collision_Player) {
+		for (int i = 0; i < ENEMY_MAX; i++) {
+			c_enemy->Enemy_Move(i);
+			
+		}
 		c_enemy->Enemy_Creat();
 	}
 	
