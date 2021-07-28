@@ -105,6 +105,15 @@ void PLAYER::Player_StaminaCount() {
 	}
 }
 
+void PLAYER::Player_Attack() {
+	Att.s_Rang += Att.s_AttackSpeed;
+	DrawSphere3D(c_Position, Att.s_Rang, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
+
+	if (Att.s_Rang >= Att.s_RangMax) {
+		Att.s_AttackStartKey = false;
+	}
+}
+
 void PLAYER::Player_Move(float Sin, float Cos)
 {
 	//移動してるかどうか
@@ -141,6 +150,9 @@ void PLAYER::Player_Move(float Sin, float Cos)
 	if (Damage.s_paralyzeKey == true) Player_Paralyze();
 
 	Player_StaminaCount();		//スタミナ管理
+
+	if (CheckHitKey(KEY_INPUT_A))Att.s_AttackStartKey = true;
+	if(Att.s_AttackStartKey == true) Player_Attack();
 
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
