@@ -75,7 +75,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		case 0:
 			c_main->Game_Main();
 			break;
-
+		case 1:
+			c_main->Game_Title();
+			break;
 		default:
 			break;
 		} 
@@ -119,5 +121,21 @@ void MAIN::Game_Main() {
 	if (Build_bool) {
 		Build_Time();
 	}
-	
+	if (GameJudge) {
+		DrawString(290, 10, "Judge", GetColor(0x00, 0x00, 0x00));
+		Game_Judge();
+
+		if (((g_NowKey & PAD_INPUT_1) != 0)) {
+			GameState = 1;
+		}
+	}
+}
+
+void MAIN::Game_Title() {
+	DrawFormatString(100, 100, 0x000000, "SpotLight");
+	DrawFormatString(100, 120, 0x000000, "Bボタンでゲームスタート");
+	if (((g_NowKey & PAD_INPUT_2) != 0)) {
+		GameState = 0;
+	}
+
 }

@@ -7,6 +7,11 @@ bool DebugMode = false;
 bool Collision_Player = false;
 bool GamePadIn_bool = false;
 
+//勝敗変数
+bool GameJudge = false;
+bool Win = false;
+bool Lose = false;
+
 //ビルドの日付をけす用にする。
 bool Build_bool = true;
 
@@ -65,6 +70,9 @@ int DebugCom() {
 		case 4:
 			Build_In();
 			break;
+		case 5:
+			Game_Judge_In();
+			break;
 		default:
 			break;
 		}
@@ -88,7 +96,7 @@ void DebugDrawing() {
 	DrawString(50, 41, "Player_collision", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 61, "GamePad_State", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 81, "Build_Time", GetColor(0x00, 0xff, 0xff));
-
+	DrawString(50, 101, "Game_Judge", GetColor(0x00, 0xff, 0xff));
 }
 
 
@@ -185,4 +193,37 @@ void Build_In() {
 		Build_bool = true;
 	}
 	DebugMode = false;
+}
+
+void Game_Judge_In() {
+	if (GameJudge) {
+
+		GameJudge = false;
+	}
+	else {
+
+		GameJudge = true;
+	}
+	DebugMode = false;
+}
+
+void Game_Judge() {
+
+
+	if (((g_NowKey & PAD_INPUT_4) != 0)) {
+		Win = true;
+		Lose = false;
+	}
+	if (((g_NowKey & PAD_INPUT_3) != 0)) {
+		Win = false;
+		Lose = true;
+	}
+
+	if (Win == true) {
+		DrawString(300, 40, "Win", GetColor(0xff, 0x00, 0x00));
+	}
+	if (Lose == true) {
+		DrawString(295, 40, "Lose", GetColor(0x00, 0x00, 0xff));
+	}
+
 }

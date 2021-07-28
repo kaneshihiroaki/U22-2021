@@ -13,6 +13,8 @@ public:
 	int GameState;		//ƒQ[ƒ€‚Ìó‘Ô
 
 	void Game_Main();
+	void Game_Title();
+
 
 private:
 
