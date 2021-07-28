@@ -111,6 +111,7 @@ void PLAYER::Player_Attack() {
 
 	if (Att.s_Rang >= Att.s_RangMax) {
 		Att.s_AttackStartKey = false;
+		Att.s_Rang = 0.0f;
 	}
 }
 
@@ -151,7 +152,7 @@ void PLAYER::Player_Move(float Sin, float Cos)
 
 	Player_StaminaCount();		//スタミナ管理
 
-	if (CheckHitKey(KEY_INPUT_A))Att.s_AttackStartKey = true;
+	if (CheckHitKey(KEY_INPUT_A) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
 	if(Att.s_AttackStartKey == true) Player_Attack();
 
 	//移動フラグがたってたら移動
