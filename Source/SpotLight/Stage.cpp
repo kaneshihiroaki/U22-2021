@@ -1,5 +1,6 @@
 #include "Stage.h"
 
+
 STAGE::STAGE()
 {
 	// À•W‰Šú‰»

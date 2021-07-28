@@ -45,7 +45,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Ｚバッファへの書き込みを有効にする
 	SetWriteZBuffer3D(TRUE);
 
-	
 	MAIN *c_main = new MAIN();
 
 	// メインループ(何かキーが押されたらループを抜ける)
@@ -104,13 +103,14 @@ void MAIN::Game_Main() {
 
 	if (!Collision_Player) {
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			c_enemy->Enemy_Move(i);
+			c_enemy->Enemy_Move(i,c_player->c_Position);
 			
 		}
 		c_enemy->Enemy_Creat();
 	}
 	
 	c_player->Player_Controller(c_camera->c_SinParam, c_camera->c_CosParam);
+	c_player->Player_Move(c_camera->c_SinParam, c_camera->c_CosParam, c_enemy->c_ObjPos);
 	
 	c_camera->Camera_Control(c_player->c_Position);
 

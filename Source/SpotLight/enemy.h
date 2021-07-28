@@ -16,7 +16,7 @@ public:
 	float c_SpotRadius = 30.0f;//スポットライトの半径
 
 	void Enemy_Creat();
-	void Enemy_Move(int num);
+	void Enemy_Move(int num, VECTOR PlayerCol);
 private:
 	bool c_MoveFlag;//エネミーが移動しているのか判定
 
@@ -27,3 +27,4 @@ private:
 
 };
 
+bool Collision_Cube(VECTOR MyCol, VECTOR YouCol, float MyScale, float YouScale);

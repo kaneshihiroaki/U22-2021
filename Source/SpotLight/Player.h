@@ -17,6 +17,7 @@ public:
 	VECTOR c_Position;	//プレイヤーの位置
 
 	void Player_Controller(float Sin, float Cos);
+	void Player_Move(float Sin, float Cos, VECTOR EnemyPos[ENEMY_MAX]);
 
 private:
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
@@ -46,13 +47,13 @@ private:
 		const float s_RangMax = 200.0f;
 	}; Attack Att;
 
-	void Player_Move(float Sin, float Cos);
-	void Collision_Draw();//デバックモードで使用
+	
+	void Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]);//デバックモードで使用
 	void Player_Paralyze();	//主人公がしびれる（止まる）
 	void Player_StaminaCount();	//プレイヤースタミナカウント
 	void Player_Attack();		//攻撃
 
-	ENEMY* c_enemyCol = new ENEMY();		//敵の座標を取得するために取得
+	//ENEMY* c_enemyCol = new ENEMY();		//敵の座標を取得するために取得
 };
 
 

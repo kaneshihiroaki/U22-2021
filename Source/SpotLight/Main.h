@@ -4,7 +4,7 @@
 void GameInit();
 void GameMain();
 
-class MAIN
+class MAIN 
 {
 public:
 	MAIN();

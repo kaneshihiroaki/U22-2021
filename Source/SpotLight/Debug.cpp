@@ -7,17 +7,14 @@ bool DebugMode = false;
 bool Collision_Player = false;
 bool GamePadIn_bool = false;
 
-//勝敗変数
-bool GameJudge = false;
+bool GameJudge = false;//勝敗変数
 bool Win = false;
 bool Lose = false;
 
-//ビルドの日付をけす用にする。
-bool Build_bool = true;
 
+bool Build_bool = true;//ビルドの日付をけす用にする。
 
-//ビルド時の日付や時間
-const char data[] = __DATE__;
+const char data[] = __DATE__;//ビルド時の日付や時間
 const char time[] = __TIME__;
 
 //ローカル変数（private変数）

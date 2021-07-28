@@ -15,6 +15,10 @@ ENEMY::ENEMY()
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
 	}
 	
+	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
+	Coefficient = 1.0f;
+	c_MoveFlag = FALSE;
+	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 }
 
 ENEMY::~ENEMY()
@@ -35,13 +39,13 @@ void ENEMY::Enemy_Creat() {
 
 
 
-void ENEMY::Enemy_Move(int num)
+void ENEMY::Enemy_Move(int num, VECTOR PlayerCol)
 {
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
-	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
+	
 	Coefficient = 1.0f;
 
 	// 
@@ -79,16 +83,43 @@ void ENEMY::Enemy_Move(int num)
 		TempMoveVector.y = 0.0f;
 		TempMoveVector.z = c_MoveVector.z * Coefficient;
 
+		
 		//当たりl判定の確認
-		//if (Colision_Sphere(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[0], 55) == false &&
-		//	Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[1], 55) == false &&
-		//	Collision_Cube(VAdd(c_Position, TempMoveVector), c_enemyCol->c_ObjPos[2], 55) == false) {
-		//	c_Position = VAdd(c_Position, TempMoveVector);		//移動
-		//}
-		c_ObjPos[num] = VAdd(c_ObjPos[num], TempMoveVector);;
+		for (int i = 0; i < ENEMY_MAX; i++) {
+			if (i == num)continue;
+			if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_ObjPos[i], 55, 55) == true) {
+				c_MoveFlag = false;
+			}
+		}
+		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), PlayerCol, 55, 55) == true) {
+			c_MoveFlag = false;
+		}
+
+		if (c_MoveFlag == true)
+		{
+			c_ObjPos[num] = VAdd(c_ObjPos[num], TempMoveVector);
+		}
 	}
 	DrawSphere3D(c_SpotPos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 	//if (Collision_Player) {
 	//	Collision_Draw();//デバック用
 	//}
+}
+
+
+// プレイヤーとオブジェクトのあたり判定
+bool Collision_Cube(VECTOR MyCol, VECTOR YouCol, float MyScale, float YouScale) {
+	// 各座標を取得する
+	VECTOR pos = MyCol;
+	VECTOR posYou = YouCol;
+
+	//当たったらtrue
+	if ((pos.x + MyScale > posYou.x - YouScale &&
+		pos.z + MyScale > posYou.z - YouScale) &&
+		(pos.x - MyScale < posYou.x + YouScale &&
+			pos.z - MyScale < posYou.z + YouScale)) {
+		return true;
+	}
+
+	return false;
 }
