@@ -19,6 +19,7 @@ extern int g_KeyFlg;
 extern int g_NowKey;
 extern int g_OldKey;
 
+extern bool Key_Look;//ƒvƒŒƒCƒ„[‚Ì“ü—Í‚ğ§Œä‚·‚é•Ï”
 
 extern int DebugCom();
 extern void DebugDrawing();;

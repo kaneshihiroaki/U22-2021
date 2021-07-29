@@ -11,6 +11,8 @@ bool GameJudge = false;//勝敗変数
 bool Win = false;
 bool Lose = false;
 
+//Keyを制御する変数
+bool Key_Look = false;
 
 bool Build_bool = true;//ビルドの日付をけす用にする。
 
@@ -89,6 +91,7 @@ void DebugDrawing() {
 	DrawBox(40, 20 + ((DebugNum - 1) * 20), 200, 40 + ((DebugNum - 1) * 20), GetColor(0x00, 0x00, 0x00), true);
 
 	// 文字列の描画
+	SetFontSize(16);
 	DrawString(50, 21, "FreeCamera", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 41, "Player_collision", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 61, "GamePad_State", GetColor(0x00, 0xff, 0xff));
@@ -196,6 +199,9 @@ void Game_Judge_In() {
 	if (GameJudge) {
 
 		GameJudge = false;
+		Key_Look = false;
+		Win = false;
+		Lose = false;
 	}
 	else {
 
@@ -216,11 +222,16 @@ void Game_Judge() {
 		Lose = true;
 	}
 
-	if (Win == true) {
-		DrawString(300, 40, "Win", GetColor(0xff, 0x00, 0x00));
+	if (Win == true && Lose == false) {
+		Key_Look = true;
+		SetFontSize(200);
+		DrawString(170, 120, "Win", GetColor(0xff, 0x00, 0x00));
 	}
-	if (Lose == true) {
-		DrawString(295, 40, "Lose", GetColor(0x00, 0x00, 0xff));
+	if (Lose == true && Win == false) {
+		Key_Look = true;
+		SetFontSize(200);
+		DrawString(120, 120, "Lose", GetColor(0x00, 0x00, 0xff));
 	}
+
 
 }

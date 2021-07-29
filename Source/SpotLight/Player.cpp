@@ -31,7 +31,7 @@ void PLAYER::Player_Controller(float Sin, float Cos) {
 	// 画面に映る位置に３Ｄモデルを移動
 	MV1SetPosition(c_PlayerModel, c_Position);
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
-
+	SetFontSize(18);
 	DrawFormatString(10, 450, 0xFFFFFF, "スタミナ：%d / %d", Stamina.s_Count, Stamina.s_StaminaMax);
 
 	//Player_Move(Sin, Cos);
@@ -132,31 +132,32 @@ void PLAYER::Player_Move(float Sin, float Cos, VECTOR EnemyPos[ENEMY_MAX], bool 
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
-	// プレイヤー移動
-	if (((g_NowKey & PAD_INPUT_LEFT) != 0))
-	{
-		c_MoveFlag = true;
-		if (Stamina.s_Count > 0)c_MoveVector.x = -c_movespeed;
-	}
+	if (Key_Look == false) {
+		// プレイヤー移動
+		if (((g_NowKey & PAD_INPUT_LEFT) != 0))
+		{
+			c_MoveFlag = true;
+			if (Stamina.s_Count > 0)c_MoveVector.x = -c_movespeed;
+		}
 
-	if (((g_NowKey & PAD_INPUT_RIGHT) != 0))
-	{
-		c_MoveFlag = true;
-		if (Stamina.s_Count > 0)c_MoveVector.x = c_movespeed;
-	}
+		if (((g_NowKey & PAD_INPUT_RIGHT) != 0))
+		{
+			c_MoveFlag = true;
+			if (Stamina.s_Count > 0)c_MoveVector.x = c_movespeed;
+		}
 
-	if (((g_NowKey & PAD_INPUT_DOWN) != 0))
-	{
-		c_MoveFlag = true;
-		if (Stamina.s_Count > 0)c_MoveVector.z = -c_movespeed;
-	}
+		if (((g_NowKey & PAD_INPUT_DOWN) != 0))
+		{
+			c_MoveFlag = true;
+			if (Stamina.s_Count > 0)c_MoveVector.z = -c_movespeed;
+		}
 
-	if (((g_NowKey & PAD_INPUT_UP) != 0))
-	{
-		c_MoveFlag = true;
-		if (Stamina.s_Count > 0)c_MoveVector.z = c_movespeed;
+		if (((g_NowKey & PAD_INPUT_UP) != 0))
+		{
+			c_MoveFlag = true;
+			if (Stamina.s_Count > 0)c_MoveVector.z = c_movespeed;
+		}
 	}
-
 	//Gキーを押したらプレイヤーが一定時間止まる
 	if (CheckHitKey(KEY_INPUT_G)) Damage.s_paralyzeKey = true;
 	if (Damage.s_paralyzeKey == true) Player_Paralyze();
