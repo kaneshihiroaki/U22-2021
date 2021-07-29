@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include "Main.h"
 #include "Debug.h"
+#include "Light.h"
 //ゲームの状態
 int GameState = 0;
 
@@ -33,6 +34,7 @@ MAIN::~MAIN()
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	Light_init();
 	// 背景の色
 	SetBackgroundColor(255, 255, 255);
 
@@ -91,7 +93,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (DebugCom() == -1) {
 			//デバックするなら入る
 		}
-
+		Light();
 		// 裏画面の内容を表画面に反映する
 		ScreenFlip();
 	}
