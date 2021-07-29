@@ -34,7 +34,6 @@ MAIN::~MAIN()
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	Light_init();
 	// îwåiÇÃêF
 	SetBackgroundColor(255, 255, 255);
 
@@ -42,6 +41,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ChangeWindowMode(TRUE);
 
 	if (DxLib_Init() < 0) return -1;
+
+	Light_init();
+
 
 	SetDrawScreen(DX_SCREEN_BACK);
 
@@ -122,7 +124,7 @@ void MAIN::Game_Main() {
 	c_player->Player_Controller();
 	c_player->Player_Move(c_camera,c_enemy);
 	
-	c_camera->Camera_Control(c_player->c_Position);
+	c_camera->Camera_Control(c_player);
 
 
 	if (!Collision_Player) {

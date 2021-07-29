@@ -15,10 +15,10 @@ float DrawX, DrawZ;
 void Light_init() {
 
 	// 頂点シェーダーを読み込む
-	VertexShaderHandle = LoadVertexShader("NormalMesh_SpotPointLightVS.vso");
+	VertexShaderHandle = LoadVertexShader("Shader/NormalMesh_SpotPointLightVS.vso");
 
 	// ピクセルシェーダーを読み込む
-	PixelShaderHandle = LoadPixelShader("NormalMesh_SpotPointLightPS.pso");
+	PixelShaderHandle = LoadPixelShader("Shader/NormalMesh_SpotPointLightPS.pso");
 
 	// 使用する頂点シェーダーをセット
 	SetUseVertexShader(VertexShaderHandle);

@@ -1,6 +1,7 @@
 #include "DxLib.h"
 #include <math.h>
 #include"Camera.h"
+#include "Player.h"
 
 CAMERA::CAMERA()
 {
@@ -17,7 +18,7 @@ CAMERA::~CAMERA()
 {
 }
 
-void CAMERA::Camera_Control(VECTOR PlayerPos) {
+void CAMERA::Camera_Control(PLAYER* play) {
 
 	// ƒJƒƒ‰¶‰EˆÚ“®
 	if (CheckHitKey(KEY_INPUT_C) == 1)
@@ -76,7 +77,7 @@ void CAMERA::Camera_Control(VECTOR PlayerPos) {
 	VECTOR TempPosition2;
 	VECTOR CameraPosition;
 	VECTOR CameraLookAtPosition;
-	CameraLookAtPosition = PlayerPos;
+	CameraLookAtPosition = play->c_Position;
 	//CameraLookAtPosition.y += c_CameraPosHeight;
 	//printfDx("%lf \n", c_SinParam);
 

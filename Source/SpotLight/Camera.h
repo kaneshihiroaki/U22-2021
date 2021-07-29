@@ -1,6 +1,7 @@
 #pragma once
-//#include <DxLib.h>
-//#include<math.h>
+
+class PLAYER;
+
 class CAMERA
 {
 private:
@@ -25,6 +26,6 @@ public:
 
 
 
-	void Camera_Control(VECTOR PlayerPos);
+	void Camera_Control(PLAYER* play);
 
 };
