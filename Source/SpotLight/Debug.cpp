@@ -131,13 +131,13 @@ void Build_Time() {
 	}
 
 	SetFontSize(18);
-	DrawFormatString(500, 10, 0x000000, "最終ビルド日時\n %c%c%c%c %c%c%c %c%c\n  %s",
+	DrawFormatString(1000, 10, 0x000000, "最終ビルド日時\n %c%c%c%c %c%c%c %c%c\n  %s",
 		data[7], data[8], data[9], data[10],
 		data[0], data[1], data[2],
 		data[4], data[5],
 		time);
 
-	version = 0.01f;		//ビルドのバージョン、金曜日がくるたびに数値を上げて更新すること
+	version = 0.02f;		//ビルドのバージョン、金曜日がくるたびに数値を上げて更新すること
 	//printfDx("ver%.2f", version);
 
 	DrawFormatString(10, 10, 0x000000, "ver%.2f",version);
@@ -225,12 +225,12 @@ void Game_Judge() {
 	if (Win == true && Lose == false) {
 		Key_Look = true;
 		SetFontSize(200);
-		DrawString(170, 120, "Win", GetColor(0xff, 0x00, 0x00));
+		DrawString(490, 120, "Win", GetColor(0xff, 0x00, 0x00));
 	}
 	if (Lose == true && Win == false) {
 		Key_Look = true;
 		SetFontSize(200);
-		DrawString(120, 120, "Lose", GetColor(0x00, 0x00, 0xff));
+		DrawString(440, 120, "Lose", GetColor(0x00, 0x00, 0xff));
 	}
 
 

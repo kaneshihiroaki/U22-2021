@@ -137,7 +137,7 @@ void MAIN::Game_Main() {
 	}
 	if (GameJudge) {
 		SetFontSize(50);
-		DrawString(250, 5, "Judge", GetColor(0x00, 0x00, 0x00));
+		DrawString(570, 5, "Judge", GetColor(0x00, 0x00, 0x00));
 		Game_Judge();
 
 		if (((g_NowKey & PAD_INPUT_1) != 0)) {
@@ -148,10 +148,10 @@ void MAIN::Game_Main() {
 
 void MAIN::Game_Title() {
 	SetFontSize(100);
-	DrawFormatString(100, 100, 0x000000, "SpotLight");
+	DrawFormatString(400, 100, 0x000000, "SpotLight");
 	SetFontSize(30);
 	//GameJudge = false;
-	DrawFormatString(150, 300, 0x000000, "Bボタンでゲームスタート");
+	DrawFormatString(460, 300, 0x000000, "Bボタンでゲームスタート");
 	if (((g_NowKey & PAD_INPUT_2) != 0)) {
 		GameState = 0;
 		Key_Look = false;
