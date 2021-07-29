@@ -6,10 +6,10 @@ STAGE::STAGE()
 	// À•W‰Šú‰»
 	c_StagePosition = VGet(100.0f, 0.0f, 0.0f);
 	//‘å‚«‚³‰Šú‰»
-	c_StageScale = { 20.0f,0.1f,20.0f };
+	c_StageScale = { 1.0f,1.0f,1.0f };
 
 	// ‚R‚cƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
-	c_StageModel = MV1LoadModel("Model/Stage.mv1");
+	c_StageModel = MV1LoadModel("Model/Stage3.mv1");
 
 	MV1SetPosition(c_StageModel, c_StagePosition);
 	MV1SetScale(c_StageModel, c_StageScale);
