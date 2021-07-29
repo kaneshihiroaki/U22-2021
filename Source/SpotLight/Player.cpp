@@ -34,7 +34,7 @@ void PLAYER::Player_Controller() {
 	MV1SetPosition(c_PlayerModel, c_Position);
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 	SetFontSize(18);
-	DrawFormatString(10, 750, 0xFFFFFF, "スタミナ：%d / %d", Stamina.s_Count, Stamina.s_StaminaMax);
+	DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", Stamina.s_Count, Stamina.s_StaminaMax);
 
 	//Player_Move(Sin, Cos);
 }
