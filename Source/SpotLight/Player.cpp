@@ -1,5 +1,7 @@
 #include <DxLib.h>
 #include "Player.h"
+#include "enemy.h"
+#include "Camera.h"
 #include <math.h>
 
 #include "Debug.h"
@@ -26,7 +28,7 @@ PLAYER::~PLAYER()
 {
 }
 
-void PLAYER::Player_Controller(float Sin, float Cos) {
+void PLAYER::Player_Controller() {
 	//プレイヤー
 	// 画面に映る位置に３Ｄモデルを移動
 	MV1SetPosition(c_PlayerModel, c_Position);
@@ -108,7 +110,7 @@ void PLAYER::Player_StaminaCount() {
 	}
 }
 
-void PLAYER::Player_Attack(bool EneMoveFlag[ENEMY_MAX]) {
+void PLAYER::Player_Attack(ENEMY* ene) {
 	Att.s_Rang += Att.s_AttackSpeed;
 	DrawSphere3D(c_Position, Att.s_Rang, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
 
@@ -119,14 +121,14 @@ void PLAYER::Player_Attack(bool EneMoveFlag[ENEMY_MAX]) {
 
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (HitCheck_Sphere_Sphere(c_Position, Att.s_Rang, c_enemyCol->c_ObjPos[i], 55)) {
-			//c_enemyCol->SetEnemyMoveKey(false, i);
-			EneMoveFlag[i] = false;
+			ene->SetEnemyMoveKey(i);
+			//EneMoveFlag[i] = false;
 			Att.s_ParaKey[i] = true;
 		}
 	}
 }
 
-void PLAYER::Player_Move(float Sin, float Cos, VECTOR EnemyPos[ENEMY_MAX], bool EneMoveFlag[ENEMY_MAX])
+void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 {
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
@@ -165,12 +167,12 @@ void PLAYER::Player_Move(float Sin, float Cos, VECTOR EnemyPos[ENEMY_MAX], bool 
 	Player_StaminaCount();		//スタミナ管理
 
 	if (CheckHitKey(KEY_INPUT_A) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
-	if (Att.s_AttackStartKey == true) Player_Attack(EneMoveFlag);
+	if (Att.s_AttackStartKey == true) Player_Attack(ene);
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (Att.s_ParaKey[i] == true) {
 			if (Att.s_TimePara++ >= Att.s_TimeMaxPara) {
 				Att.s_TimePara = 0;
-				EneMoveFlag[i] = true;
+				ene->SetEnemyMoveKey(i);
 			}
 		}
 	}
@@ -181,21 +183,24 @@ void PLAYER::Player_Move(float Sin, float Cos, VECTOR EnemyPos[ENEMY_MAX], bool 
 	{
 		//移動場所の確認
 		VECTOR TempMoveVector;
+		
+		float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+		float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
 
 		TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
 		TempMoveVector.y = 0.0f;
 		TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
 		//当たり判定の確認
-		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), EnemyPos[0], 55) == false &&
-			Collision_Cube(VAdd(c_Position, TempMoveVector), EnemyPos[1], 55) == false &&
-			Collision_Cube(VAdd(c_Position, TempMoveVector), EnemyPos[2], 55) == false) {
+		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[0], 55) == false &&
+			Collision_Cube(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[1], 55) == false &&
+			Collision_Cube(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[2], 55) == false) {
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
 		}
 	}
 
 	if (Collision_Player) {
-		Collision_Draw(EnemyPos);//デバック用
+		Collision_Draw(ene->c_ObjPos);//デバック用
 	}
 }
 

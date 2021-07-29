@@ -6,6 +6,7 @@
 #define CHAR_SIZE_Y		55.0f		// キャラのサイズ
 #define CHAR_SIZE_Z		55.0f		// キャラのサイズ
 
+class CAMERA;
 class ENEMY;
 
 class PLAYER
@@ -18,8 +19,8 @@ public:
 	VECTOR c_AddPosPlay;	//プレイヤーの大きさ
 	VECTOR c_Position;	//プレイヤーの位置
 
-	void Player_Controller(float Sin, float Cos);
-	void Player_Move(float Sin, float Cos, VECTOR EnemyPos[ENEMY_MAX], bool EneMoveFlag[ENEMY_MAX]);
+	void Player_Controller();
+	void Player_Move(CAMERA* camera, ENEMY* ene);
 
 private:
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
@@ -57,7 +58,7 @@ private:
 	void Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]);//デバックモードで使用
 	void Player_Paralyze();	//主人公がしびれる（止まる）
 	void Player_StaminaCount();	//プレイヤースタミナカウント
-	void Player_Attack(bool EneMoveFlag[ENEMY_MAX]);		//攻撃
+	void Player_Attack(ENEMY* ene);		//攻撃
 
 	ENEMY* c_enemyCol;		//敵の座標を取得するために取得
 };

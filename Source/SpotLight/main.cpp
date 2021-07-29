@@ -117,8 +117,8 @@ void MAIN::Game_Main() {
 	//printfDx("%d\n", c_enemy->GetEnemyMoveKey(2));
 	//c_enemy->debug();
 
-	c_player->Player_Controller(c_camera->c_SinParam, c_camera->c_CosParam);
-	c_player->Player_Move(c_camera->c_SinParam, c_camera->c_CosParam, c_enemy->c_ObjPos,c_enemy->c_MoveKey);
+	c_player->Player_Controller();
+	c_player->Player_Move(c_camera,c_enemy);
 	
 	c_camera->Camera_Control(c_player->c_Position);
 

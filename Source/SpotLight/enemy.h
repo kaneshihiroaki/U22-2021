@@ -22,9 +22,8 @@ public:
 
 	//ゲッター＆セッター
 	bool GetEnemyMoveKey(int i) { return c_MoveKey[i]; }
-	void SetEnemyMoveKey(bool key, int num) {
-		//printfDx("%d \n", GetEnemyMoveKey(2));
-		c_MoveKey[num] = key;
+	void SetEnemyMoveKey(int num) {
+		c_MoveKey[num] = !c_MoveKey[num];
 	}
 	bool c_MoveKey[ENEMY_MAX];//敵の動きを管理 true:動いている false:止まっている
 
