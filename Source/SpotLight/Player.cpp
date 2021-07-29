@@ -18,6 +18,8 @@ PLAYER::PLAYER()
 
 	// ３Ｄモデルの読み込み
 	c_PlayerModel = MV1LoadModel("Model/MyPlayer.mv1");
+
+	c_enemyCol = new ENEMY();
 }
 
 PLAYER::~PLAYER()
@@ -106,7 +108,7 @@ void PLAYER::Player_StaminaCount() {
 	}
 }
 
-void PLAYER::Player_Attack() {
+void PLAYER::Player_Attack(bool EneMoveFlag[ENEMY_MAX]) {
 	Att.s_Rang += Att.s_AttackSpeed;
 	DrawSphere3D(c_Position, Att.s_Rang, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
 
@@ -114,9 +116,17 @@ void PLAYER::Player_Attack() {
 		Att.s_AttackStartKey = false;
 		Att.s_Rang = 0.0f;
 	}
+
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (HitCheck_Sphere_Sphere(c_Position, Att.s_Rang, c_enemyCol->c_ObjPos[i], 55)) {
+			//c_enemyCol->SetEnemyMoveKey(false, i);
+			EneMoveFlag[i] = false;
+			Att.s_ParaKey[i] = true;
+		}
+	}
 }
 
-void PLAYER::Player_Move(float Sin, float Cos,VECTOR EnemyPos[ENEMY_MAX])
+void PLAYER::Player_Move(float Sin, float Cos, VECTOR EnemyPos[ENEMY_MAX], bool EneMoveFlag[ENEMY_MAX])
 {
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
@@ -154,7 +164,16 @@ void PLAYER::Player_Move(float Sin, float Cos,VECTOR EnemyPos[ENEMY_MAX])
 	Player_StaminaCount();		//スタミナ管理
 
 	if (CheckHitKey(KEY_INPUT_A) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
-	if(Att.s_AttackStartKey == true) Player_Attack();
+	if (Att.s_AttackStartKey == true) Player_Attack(EneMoveFlag);
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (Att.s_ParaKey[i] == true) {
+			if (Att.s_TimePara++ >= Att.s_TimeMaxPara) {
+				Att.s_TimePara = 0;
+				EneMoveFlag[i] = true;
+			}
+		}
+	}
+
 
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
@@ -183,7 +202,7 @@ void PLAYER::Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]) {
 
 	VECTOR Copy_Vect1;//オブジェクトのコピー
 	VECTOR Copy_Vect2;//オブジェクトのコピー
-	
+
 	//プレイヤーのコリジョン
 	Copy_Vect1 = c_Position; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
 	Copy_Vect2 = c_Position; Copy_Vect2.x += CHAR_SIZE_X; Copy_Vect2.z -= CHAR_SIZE_Z;

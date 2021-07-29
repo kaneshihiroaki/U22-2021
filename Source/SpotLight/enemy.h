@@ -2,6 +2,8 @@
 
 #define ENEMY_MAX 3
 
+class PLAYER;
+
 class ENEMY
 {
 public:
@@ -17,6 +19,16 @@ public:
 
 	void Enemy_Creat();
 	void Enemy_Move(int num, VECTOR PlayerCol);
+
+	//ゲッター＆セッター
+	bool GetEnemyMoveKey(int i) { return c_MoveKey[i]; }
+	void SetEnemyMoveKey(bool key, int num) {
+		//printfDx("%d \n", GetEnemyMoveKey(2));
+		c_MoveKey[num] = key;
+	}
+	bool c_MoveKey[ENEMY_MAX];//敵の動きを管理 true:動いている false:止まっている
+
+	void debug();		//デバッグ用、用がなくなったら消します
 private:
 	bool c_MoveFlag;//エネミーが移動しているのか判定
 

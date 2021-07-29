@@ -4,6 +4,11 @@
 void GameInit();
 void GameMain();
 
+class CAMERA;
+class PLAYER;
+class STAGE;
+class ENEMY;
+
 class MAIN 
 {
 public:
@@ -18,10 +23,10 @@ public:
 
 private:
 
-	CAMERA* c_camera = new CAMERA();
-	PLAYER* c_player = new PLAYER();
-	STAGE* c_stage = new STAGE();
-	ENEMY* c_enemy = new ENEMY();
+	CAMERA* c_camera;
+	PLAYER* c_player;
+	STAGE* c_stage;
+	ENEMY* c_enemy;
 
 };
 

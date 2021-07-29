@@ -12,6 +12,7 @@ ENEMY::ENEMY()
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
+		c_MoveKey[i] = true;
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
 	}
 	
@@ -37,7 +38,9 @@ void ENEMY::Enemy_Creat() {
 	//DrawCube3D(c_ObjPos[2], VAdd(c_ObjPos[2], VECTOR{ 50,50,50 }), GetColor(0, 255, 0), GetColor(255, 255, 255), TRUE);
 }
 
-
+void ENEMY::debug() {
+	printfDx("%d\n", GetEnemyMoveKey(2));
+}
 
 void ENEMY::Enemy_Move(int num, VECTOR PlayerCol)
 {

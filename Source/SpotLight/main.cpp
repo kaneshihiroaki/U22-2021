@@ -19,6 +19,12 @@ char key[256];
 MAIN::MAIN()
 {
 	GameState = 0;
+
+	c_camera = new CAMERA();
+	c_player = new PLAYER();
+	c_stage = new STAGE();
+	c_enemy = new ENEMY();
+
 }
 
 MAIN::~MAIN()
@@ -103,14 +109,16 @@ void MAIN::Game_Main() {
 
 	if (!Collision_Player) {
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			c_enemy->Enemy_Move(i,c_player->c_Position);
+			if (c_enemy->c_MoveKey[i] == true)c_enemy->Enemy_Move(i,c_player->c_Position);
 			
 		}
 		c_enemy->Enemy_Creat();
 	}
-	
+	//printfDx("%d\n", c_enemy->GetEnemyMoveKey(2));
+	//c_enemy->debug();
+
 	c_player->Player_Controller(c_camera->c_SinParam, c_camera->c_CosParam);
-	c_player->Player_Move(c_camera->c_SinParam, c_camera->c_CosParam, c_enemy->c_ObjPos);
+	c_player->Player_Move(c_camera->c_SinParam, c_camera->c_CosParam, c_enemy->c_ObjPos,c_enemy->c_MoveKey);
 	
 	c_camera->Camera_Control(c_player->c_Position);
 
