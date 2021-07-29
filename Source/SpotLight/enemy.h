@@ -18,7 +18,7 @@ public:
 	float c_SpotRadius = 30.0f;//スポットライトの半径
 
 	void Enemy_Creat();
-	void Enemy_Move(int num, VECTOR PlayerCol);
+	void Enemy_Move(int num, VECTOR PlayerCol,VECTOR LightPos);
 
 	//ゲッター＆セッター
 	bool GetEnemyMoveKey(int i) { return c_MoveKey[i]; }

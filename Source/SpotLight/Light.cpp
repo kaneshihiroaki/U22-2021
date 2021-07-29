@@ -11,6 +11,7 @@ int SpotLightHandle;
 int PointLightHandle;
 int i, j;
 float DrawX, DrawZ;
+VECTOR LightPos;
 
 void Light_init() {
 
@@ -62,8 +63,10 @@ void Light_init() {
 void Light() 
 {
 	// ライトの位置の回転値を加算
-	LightRotateAngle += 0.02f;
-	
+	LightRotateAngle += 0.01f;
+
+	LightPos = VGet(sin(-LightRotateAngle) * 200.0f, 800.0f, sin(-LightRotateAngle * 2) * 150.0f);
+
 	// スポットライトの位置の更新
-	SetLightPositionHandle(SpotLightHandle, VGet(sin(-LightRotateAngle) * 50.0f, 800.0f, cos(-LightRotateAngle) * 50.0f));
+	SetLightPositionHandle(SpotLightHandle, LightPos);
 }

@@ -1,6 +1,10 @@
 #pragma once
 #include"Dxlib.h"
 
+#define SCREEN_HEIGHT 800
+#define SCREEN_WIDTH 1280
+
+
 void GameInit();
 void GameMain();
 

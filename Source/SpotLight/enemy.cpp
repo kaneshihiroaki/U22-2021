@@ -42,7 +42,7 @@ void ENEMY::debug() {
 	printfDx("%d\n", GetEnemyMoveKey(2));
 }
 
-void ENEMY::Enemy_Move(int num, VECTOR PlayerCol)
+void ENEMY::Enemy_Move(int num, VECTOR PlayerCol, VECTOR LightPos)
 {
 	//ˆÚ“®‚µ‚Ä‚é‚©‚Ç‚¤‚©
 	c_MoveFlag = FALSE;
@@ -50,6 +50,8 @@ void ENEMY::Enemy_Move(int num, VECTOR PlayerCol)
 
 	
 	Coefficient = 1.0f;
+
+	c_SpotPos = LightPos;
 
 	// 
 	if (c_SpotPos.x - c_SpotRadius > c_ObjPos[num].x) {

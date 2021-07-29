@@ -39,6 +39,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	SetMainWindowText("‚R‚c");
 	ChangeWindowMode(TRUE);
+	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
+
 
 	if (DxLib_Init() < 0) return -1;
 
@@ -113,7 +115,7 @@ void MAIN::Game_Main() {
 
 	if (!Collision_Player) {
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (c_enemy->c_MoveKey[i] == true)c_enemy->Enemy_Move(i,c_player->c_Position);
+			if (c_enemy->c_MoveKey[i] == true)c_enemy->Enemy_Move(i, c_player->c_Position, LightPos);
 			
 		}
 		c_enemy->Enemy_Creat();
