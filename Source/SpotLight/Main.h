@@ -1,7 +1,7 @@
 #pragma once
 #include"Dxlib.h"
 
-#define SCREEN_HEIGHT 800
+#define SCREEN_HEIGHT 700
 #define SCREEN_WIDTH 1280
 
 

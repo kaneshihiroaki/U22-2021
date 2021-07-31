@@ -11,6 +11,8 @@ PLAYER::PLAYER()
 {
 	// プレイヤー座標初期化
 	c_Position = VGet(100.0f, 100.0f, 0.0f);
+	//プレイヤー回転
+	c_Rotation = VGet(0.0f, 0.0f, 0.0f);
 	//プレイヤーの大きさ初期化
 	c_AddPosPlay = { 0.5f,0.5f,0.5f };
 
@@ -32,6 +34,7 @@ void PLAYER::Player_Controller() {
 	//プレイヤー
 	// 画面に映る位置に３Ｄモデルを移動
 	MV1SetPosition(c_PlayerModel, c_Position);
+	MV1SetRotationXYZ(c_PlayerModel, c_Rotation);
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 	SetFontSize(18);
 	DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", Stamina.s_Count, Stamina.s_StaminaMax);
@@ -110,10 +113,21 @@ void PLAYER::Player_StaminaCount() {
 	}
 }
 
-void PLAYER::Player_Attack(ENEMY* ene) {
-	Att.s_Rang += Att.s_AttackSpeed;
-	DrawSphere3D(c_Position, Att.s_Rang, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
+void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
+	//移動場所の確認
+	VECTOR plus;
+	//plus.x = Player_rot.x;
+	//plus.y = 0.0f;
+	//plus.z = Player_rot.y;
+	plus = VAdd(c_Position, Player_rot);
 
+	Att.s_Rang += Att.s_AttackSpeed;
+	//DrawSphere3D(c_Position, Att.s_Rang, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
+
+	DrawCube3D(VGet(plus.x - 100.0f, plus.y, plus.z + Att.s_Rang),
+		VGet(plus.x+100.0f,plus.y+100.0f,plus.z+200.0f + Att.s_Rang),
+		GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
+	
 	if (Att.s_Rang >= Att.s_RangMax) {
 		Att.s_AttackStartKey = false;
 		Att.s_Rang = 0.0f;
@@ -130,6 +144,21 @@ void PLAYER::Player_Attack(ENEMY* ene) {
 
 void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 {
+	//移動場所の確認
+	VECTOR TempMoveVector;
+	VECTOR TempRotVector;
+
+	float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+	float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+
+	TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+	TempMoveVector.y = 0.0f;
+	TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
+
+	TempRotVector.x = 0.0f;
+	TempRotVector.y = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+	TempRotVector.z = 0.0f;
+
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
@@ -167,7 +196,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	Player_StaminaCount();		//スタミナ管理
 
 	if (CheckHitKey(KEY_INPUT_A) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
-	if (Att.s_AttackStartKey == true) Player_Attack(ene);
+	if (Att.s_AttackStartKey == true) Player_Attack(ene, TempMoveVector);
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (Att.s_ParaKey[i] == true) {
 			if (Att.s_TimePara++ >= Att.s_TimeMaxPara) {
@@ -181,21 +210,22 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
 	{
-		//移動場所の確認
-		VECTOR TempMoveVector;
-		
-		float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
-		float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+		////移動場所の確認
+		//VECTOR TempMoveVector;
+		//
+		////float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+		////float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
 
-		TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
-		TempMoveVector.y = 0.0f;
-		TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
+		//TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+		//TempMoveVector.y = 0.0f;
+		//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
 		//当たり判定の確認
 		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[0], 55) == false &&
 			Collision_Cube(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[1], 55) == false &&
 			Collision_Cube(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[2], 55) == false) {
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
+			c_Rotation = VAdd(c_Rotation, TempRotVector);
 		}
 	}
 
