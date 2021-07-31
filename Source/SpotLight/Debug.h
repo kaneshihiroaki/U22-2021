@@ -6,8 +6,10 @@ using namespace std;
 extern int DebugNum; //デバックの数字
 extern bool DebugMode;//デバックモードのオンオフ
 
-extern bool Collision_Player;
-extern bool GamePadIn_bool;
+extern bool Collision_Player;//当たり判定を見るよう
+extern bool GamePadIn_bool;//ゲームパッドを見るよう
+extern bool CameraUp_bool;//カメラ移動上下を反転
+extern bool CameraLR_bool;//カメラ移動左右を反転
 
 extern bool Build_bool;//ビルドを表示消すよう
 
@@ -23,7 +25,8 @@ extern bool Key_Look;//プレイヤーの入力を制御する変数
 
 extern int DebugCom();
 extern void DebugDrawing();;
-extern void CameraFree();
+extern void CameraState();
+extern void CameraReverse();
 extern void Collision_player();
 extern void GamePadIn();
 extern void Build_In();

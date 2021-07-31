@@ -10,6 +10,9 @@ bool GamePadIn_bool = false;
 bool GameJudge = false;//Ÿ”s•Ï”
 bool Win = false;
 bool Lose = false;
+bool CameraUp_bool =false;//ƒJƒƒ‰ˆÚ“®ã‰º‚ð”½“]
+bool CameraLR_bool = false;//ƒJƒƒ‰ˆÚ“®ã‰º‚ð”½“]
+
 
 //Key‚ð§Œä‚·‚é•Ï”
 bool Key_Look = false;
@@ -21,6 +24,7 @@ const char time[] = __TIME__;
 
 //ƒ[ƒJƒ‹•Ï”iprivate•Ï”j
 float version;
+int cameraNum = 0;
 
 
 
@@ -30,14 +34,27 @@ int DebugCom() {
 		GamePadIn_bool = false;
 		return 0;
 	}
-	if (((g_NowKey & PAD_INPUT_DOWN) != 0) && ((g_NowKey & g_OldKey) == 0)) {
-		if (++DebugNum >10) {
-			DebugNum = 1;
+	if (((g_NowKey & PAD_INPUT_DOWN) != 0) && ((g_NowKey & g_OldKey) == 0) ) {
+		if (DebugNum < 10) {//1~9
+			if (++DebugNum > 9) {
+				DebugNum = 1;
+			}
+		}
+		else if (DebugNum < 12) {//10or11
+			if (++DebugNum > 11) {//++‚µ‚Ä12‚É‚È‚é‚Æ10‚É‚·‚é
+				DebugNum = 10;
+			}
 		}
 	}
 	if (((g_NowKey & PAD_INPUT_UP) != 0) && ((g_NowKey & g_OldKey) == 0)) {
-		if (--DebugNum < 1) {
-			DebugNum = 10;
+		if (DebugNum < 10) {
+			if (--DebugNum < 1) {//
+				DebugNum = 9;
+			}
+		}else if (DebugNum < 12) {//10or11
+			if (--DebugNum < 10) {//10‚Ì‚Æ‚«‚É--‚µ‚Ä9‚É‚È‚é‚Æ
+				DebugNum = 11;
+			}
 		}
 	}
 
@@ -53,7 +70,7 @@ int DebugCom() {
 		switch (DebugNum)
 		{
 		case 1:
-			CameraFree();
+			CameraState();
 			break;
 		case 2:
 			Collision_player();
@@ -72,6 +89,37 @@ int DebugCom() {
 		case 5:
 			Game_Judge_In();
 			break;
+		case 10:
+			CameraReverse();
+			break;
+		case 11:
+			CameraReverse();
+			break;
+		default:
+			break;
+		}
+	}
+	if (((g_NowKey & PAD_INPUT_1) != 0) && ((g_NowKey & g_OldKey) == 0)) {//ƒLƒƒƒ“ƒZƒ‹—p
+		//‘€ì
+		switch (DebugNum)
+		{
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+		case 8:
+		case 9:
+			DebugMode = false;
+			break;
+		case 10:
+			DebugNum = 1;
+			break;
+		case 11:
+			DebugNum = 1;
+			break;
 		default:
 			break;
 		}
@@ -83,16 +131,27 @@ int DebugCom() {
 
 
 void DebugDrawing() {
-	for (int i = 0; i < 10; i++) {
-		DrawBox(40, 20 + (i * 20), 200, 40 + (i * 20), GetColor(0xbb, 0xbb, 0xbb), true);
-		DrawBox(40, 20 + (i * 20), 200, 40 + (i * 20), GetColor(0x00, 0x00, 0x00), false);
+	for (int i = 1; i < 10; i++) {
+		DrawBox(40, 0 + (i * 20), 200, 20 + (i * 20), GetColor(0xbb, 0xbb, 0xbb), true);
+		DrawBox(40, 0 + (i * 20), 200, 20 + (i * 20), GetColor(0x00, 0x00, 0x00), false);
 	}
 
-	DrawBox(40, 20 + ((DebugNum - 1) * 20), 200, 40 + ((DebugNum - 1) * 20), GetColor(0x00, 0x00, 0x00), true);
-
+	if (DebugNum < 10) {//DebugNum == 1 ~ 9
+		DrawBox(40, 20 + ((DebugNum - 1) * 20), 200, 40 + ((DebugNum - 1) * 20), GetColor(0x00, 0x00, 0x00), true);
+	}
+	else if (DebugNum < 12) {//DebugNum == 10 or 11
+		for (int i = 1; i < 3; i++) {
+			DrawBox(200, 0 + (i * 20), 360, 20 + (i * 20), GetColor(0xbb, 0xbb, 0xbb), true);
+			DrawBox(200, 0 + (i * 20), 360, 20 + (i * 20), GetColor(0x00, 0x00, 0x00), false);
+		}
+		DrawBox(200, 20 + ((DebugNum - 10) * 20), 360, 40 + ((DebugNum - 10) * 20), GetColor(0x00, 0x00, 0x00), true);
+		DrawString(210, 21, "Camera_UP_Reverse", GetColor(0x00, 0xff, 0xff));
+		DrawString(210, 41, "Camera_LR_Reverse", GetColor(0x00, 0xff, 0xff));
+	}
+	
 	// •¶Žš—ñ‚Ì•`‰æ
 	SetFontSize(16);
-	DrawString(50, 21, "FreeCamera", GetColor(0x00, 0xff, 0xff));
+	DrawString(50, 21, "CameraState", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 41, "Player_collision", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 61, "GamePad_State", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 81, "Build_Time", GetColor(0x00, 0xff, 0xff));
@@ -100,7 +159,22 @@ void DebugDrawing() {
 }
 
 
-void CameraFree() {
+void CameraState() {
+	CameraUp_bool = !CameraUp_bool;//ƒJƒƒ‰ˆÚ“®ã‰º‚ð”½“]
+	CameraLR_bool = !CameraLR_bool;//ƒJƒƒ‰ˆÚ“®¶‰E‚ð”½“]
+
+	DebugNum = 10;
+
+	//DebugMode = false;
+}
+
+void CameraReverse() {
+	if (DebugNum == 10) {
+		CameraUp_bool = !CameraUp_bool;//ƒJƒƒ‰ˆÚ“®ã‰º‚ð”½“]
+	}
+	if (DebugNum == 11) {
+		CameraLR_bool = !CameraLR_bool;//ƒJƒƒ‰ˆÚ“®¶‰E‚ð”½“]
+	}
 	DebugMode = false;
 }
 

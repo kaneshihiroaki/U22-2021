@@ -2,6 +2,7 @@
 #include <math.h>
 #include"Camera.h"
 #include "Player.h"
+#include "Debug.h"
 
 CAMERA::CAMERA()
 {
@@ -20,41 +21,88 @@ CAMERA::~CAMERA()
 
 void CAMERA::Camera_Control(PLAYER* play) {
 
-	// カメラ左右移動
-	if (CheckHitKey(KEY_INPUT_C) == 1)
-	{
-		c_CameraHAngle += c_CameraSpeed;
-		if (c_CameraHAngle >= 180.0f)
+	DINPUT_JOYSTATE inputGet;
+
+	// 入力状態を取得
+	GetJoypadDirectInputState(DX_INPUT_PAD1, &inputGet);
+	if (CameraLR_bool == false) {
+		// カメラ左右移動
+		if (inputGet.Rx > 0)
 		{
-			c_CameraHAngle -= 360.0f;
+			c_CameraHAngle += c_CameraSpeed;
+			if (c_CameraHAngle >= 180.0f)
+			{
+				c_CameraHAngle -= 360.0f;
+			}
 		}
-	}
-	if (CheckHitKey(KEY_INPUT_Z) == 1)
-	{
-		c_CameraHAngle -= c_CameraSpeed;
-		if (c_CameraHAngle <= -180.0f)
+		if (inputGet.Rx < 0)
 		{
-			c_CameraHAngle += 360.0f;
+			c_CameraHAngle -= c_CameraSpeed;
+			if (c_CameraHAngle <= -180.0f)
+			{
+				c_CameraHAngle += 360.0f;
+			}
+		}
+	}else{
+		// カメラ左右移動
+		if (inputGet.Rx < 0)
+		{
+			c_CameraHAngle += c_CameraSpeed;
+			if (c_CameraHAngle >= 180.0f)
+			{
+				c_CameraHAngle -= 360.0f;
+			}
+		}
+		if (inputGet.Rx > 0)
+		{
+			c_CameraHAngle -= c_CameraSpeed;
+			if (c_CameraHAngle <= -180.0f)
+			{
+				c_CameraHAngle += 360.0f;
+			}
 		}
 	}
 
-	//カメラの上下移動
-	if (CheckHitKey(KEY_INPUT_S) == 1)
-	{
-		c_CameraVAngle += c_CameraSpeed;
-		if (c_CameraVAngle >= 80.0f)
+	if (CameraUp_bool == false) {
+		//カメラの上下移動
+		if (inputGet.Ry > 0)
 		{
-			c_CameraVAngle = 80.0f;
+			c_CameraVAngle += c_CameraSpeed;
+			if (c_CameraVAngle >= 80.0f)
+			{
+				c_CameraVAngle = 80.0f;
+			}
+		}
+		if (inputGet.Ry < 0)
+		{
+			c_CameraVAngle -= c_CameraSpeed;
+			if (c_CameraVAngle <= 0.0f)
+			{
+				c_CameraVAngle = 0.0f;
+			}
 		}
 	}
-	if (CheckHitKey(KEY_INPUT_X) == 1)
-	{
-		c_CameraVAngle -= c_CameraSpeed;
-		if (c_CameraVAngle <= 0.0f)
+	else {
+		//カメラの上下移動
+		if (inputGet.Ry < 0)
 		{
-			c_CameraVAngle = 0.0f;
+			c_CameraVAngle += c_CameraSpeed;
+			if (c_CameraVAngle >= 80.0f)
+			{
+				c_CameraVAngle = 80.0f;
+			}
+		}
+		if (inputGet.Ry > 0)
+		{
+			c_CameraVAngle -= c_CameraSpeed;
+			if (c_CameraVAngle <= 0.0f)
+			{
+				c_CameraVAngle = 0.0f;
+			}
 		}
 	}
+
+	
 
 	////カメラとプレイヤーの距離
 	//if (CheckHitKey(KEY_INPUT_A) == 1)
