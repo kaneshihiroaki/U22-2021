@@ -22,6 +22,11 @@ public:
 	VECTOR c_Rotation;		//プレイヤーの回転
 	VECTOR c_Position;	//プレイヤーの位置
 
+	//プレイヤーの被弾判定
+	void SetPlayerParalyze(){
+		Damage.s_paralyzeKey = !Damage.s_paralyzeKey;
+	}
+
 	void Player_Controller();
 	void Player_Move(CAMERA* camera, ENEMY* ene);
 
