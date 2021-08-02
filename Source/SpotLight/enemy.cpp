@@ -13,9 +13,10 @@ ENEMY::ENEMY()
 		c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
 		c_MoveKey[i] = true;
+		c_StmCount[i] = 300;	//エネミーの体力の最大値
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
 	}
-	
+
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
 	Coefficient = 1.0f;
 	c_MoveFlag = FALSE;
@@ -29,7 +30,7 @@ ENEMY::~ENEMY()
 void ENEMY::Enemy_Creat() {
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		MV1SetPosition(c_EnemyModel[i], c_ObjPos[i]);//エネミーの移動後位置をいれてる
-		
+
 		MV1DrawModel(c_EnemyModel[i]);				 //エネミーのモデル描画
 	}
 	//オブジェクト描画
@@ -44,11 +45,12 @@ void ENEMY::debug() {
 
 void ENEMY::Enemy_Move(int num, VECTOR PlayerCol, VECTOR LightPos)
 {
+
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
-	
+
 	Coefficient = 1.0f;
 
 	c_SpotPos = LightPos;
@@ -56,27 +58,29 @@ void ENEMY::Enemy_Move(int num, VECTOR PlayerCol, VECTOR LightPos)
 	// 
 	if (c_SpotPos.x - c_SpotRadius > c_ObjPos[num].x) {
 		c_MoveFlag = true;
-		c_MoveVector.x = c_movespeed;
+		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.x = c_movespeed;
 	}
 
 	if (c_SpotPos.x + c_SpotRadius < c_ObjPos[num].x) {
 		c_MoveFlag = true;
-		c_MoveVector.x = -c_movespeed;
+		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.x = -c_movespeed;
 	}
 
 	if (c_SpotPos.z - c_SpotRadius > c_ObjPos[num].z) {
 		c_MoveFlag = true;
-		c_MoveVector.z = c_movespeed;
+		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.z = c_movespeed;
 	}
 
 	if (c_SpotPos.z + c_SpotRadius < c_ObjPos[num].z) {
 		c_MoveFlag = true;
-		c_MoveVector.z = -c_movespeed;
+		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.z = -c_movespeed;
 	}
 
 	if ((c_MoveVector.x != 0.0f) && (c_MoveVector.z != 0.0f)) {
 		Coefficient = 0.7f;
 	}
+
+	c_StmCount[num] = StaminaCount(c_MoveFlag);		//スタミナ管理
 
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
@@ -88,7 +92,7 @@ void ENEMY::Enemy_Move(int num, VECTOR PlayerCol, VECTOR LightPos)
 		TempMoveVector.y = 0.0f;
 		TempMoveVector.z = c_MoveVector.z * Coefficient;
 
-		
+
 		//当たりl判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
@@ -105,7 +109,10 @@ void ENEMY::Enemy_Move(int num, VECTOR PlayerCol, VECTOR LightPos)
 			c_ObjPos[num] = VAdd(c_ObjPos[num], TempMoveVector);
 		}
 	}
+
 	DrawSphere3D(c_SpotPos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+	DrawFormatString(1100, 620+20*num, 0xFFFFFF, "%dの敵体力 %d\n", num, c_StmCount[num]);
+
 	//if (Collision_Player) {
 	//	Collision_Draw();//デバック用
 	//}

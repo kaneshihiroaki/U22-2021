@@ -8,6 +8,7 @@
 #include "Main.h"
 #include "Debug.h"
 #include "Light.h"
+#include "Character.h"
 //ÉQÅ[ÉÄÇÃèÛë‘
 int GameState = 0;
 
@@ -15,7 +16,6 @@ int g_KeyFlg;
 int g_NowKey;
 int g_OldKey;
 char key[256];
-
 
 MAIN::MAIN()
 {
@@ -25,7 +25,6 @@ MAIN::MAIN()
 	c_player = new PLAYER();
 	c_stage = new STAGE();
 	c_enemy = new ENEMY();
-
 }
 
 MAIN::~MAIN()
@@ -115,8 +114,7 @@ void MAIN::Game_Main() {
 
 	if (!Collision_Player) {
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (c_enemy->c_MoveKey[i] == true)c_enemy->Enemy_Move(i, c_player->c_Position, LightPos);
-			
+			c_enemy->Enemy_Move(i, c_player->c_Position, LightPos);
 		}
 		c_enemy->Enemy_Creat();
 	}

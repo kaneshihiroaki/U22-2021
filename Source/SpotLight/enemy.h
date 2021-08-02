@@ -1,10 +1,11 @@
 #pragma once
+#include "Character.h"
 
 #define ENEMY_MAX 3
 
 class PLAYER;
 
-class ENEMY
+class ENEMY:public CHARACTER
 {
 public:
 	ENEMY();
@@ -30,6 +31,7 @@ public:
 	void debug();		//デバッグ用、用がなくなったら消します
 private:
 	bool c_MoveFlag;//エネミーが移動しているのか判定
+	int c_StmCount[ENEMY_MAX];	//敵の体力
 
 	VECTOR c_MoveVector;	//移動変数
 

@@ -1,6 +1,7 @@
-//#pragma once
+#pragma once
 #include "DxLib.h"
 #include "enemy.h"
+#include "Character.h"
 
 #define CHAR_SIZE_X		55.0f		// キャラのサイズ
 #define CHAR_SIZE_Y		55.0f		// キャラのサイズ
@@ -8,8 +9,9 @@
 
 class CAMERA;
 class ENEMY;
+class CHARACTER;
 
-class PLAYER
+class PLAYER : public CHARACTER
 {
 public:
 	PLAYER();
@@ -26,6 +28,8 @@ public:
 private:
 	bool c_RotFlag;		//プレイヤーが回転している
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
+	int c_StmCount;		//プレイヤーの体力
+	const int c_StmMax = 300;	//体力の最大値
 	VECTOR c_MoveVector;	//移動変数
 
 	const float c_movespeed = 5.0f;	//プレイヤー移動スピード
@@ -37,13 +41,6 @@ private:
 		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
 		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
 	}; Damage Damage;
-
-	//スタミナ関連
-	struct Stamina
-	{
-		int s_Count = 300;		//動いている時間をカウント
-		const int s_StaminaMax = 300;		//スタミナの最大値
-	}; Stamina Stamina;
 
 	struct Attack {
 		bool s_AttackStartKey = false;
@@ -59,8 +56,7 @@ private:
 	
 	void Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]);//デバックモードで使用
 	void Player_Paralyze();	//主人公がしびれる（止まる）
-	void Player_StaminaCount();	//プレイヤースタミナカウント
-	void Player_Attack(ENEMY* ene,VECTOR Player_rot);		//攻撃
+	void Player_Attack(ENEMY* ene/*,VECTOR Player_rot*/);		//攻撃
 
 	ENEMY* c_enemyCol;		//敵の座標を取得するために取得
 };
