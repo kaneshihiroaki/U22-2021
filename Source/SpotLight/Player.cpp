@@ -134,18 +134,18 @@ void PLAYER::Player_Attack(ENEMY* ene/*, VECTOR Player_rot*/) {
 
 void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 {
-	//移動場所の確認
-	VECTOR TempMoveVector;
-	VECTOR TempRotVector;
+	////移動場所の確認
+	//VECTOR TempMoveVector;
+	//VECTOR TempRotVector;
 
 	//TempRotVector.y = 0.0f;
 
-	float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
-	float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+	//float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+	//float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
 
-	TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
-	TempMoveVector.y = 0.0f;
-	TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
+	//TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+	//TempMoveVector.y = 0.0f;
+	//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
 	//TempRotVector.x = 0.0f;
 	//TempRotVector.y += 0.001f;
@@ -226,15 +226,15 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
 	{
-		////移動場所の確認
-		//VECTOR TempMoveVector;
-		//
-		////float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
-		////float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+		//移動場所の確認
+		VECTOR TempMoveVector;
+		
+		float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+		float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
 
-		//TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
-		//TempMoveVector.y = 0.0f;
-		//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
+		TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+		TempMoveVector.y = 0.0f;
+		TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
 		//当たり判定の確認
 		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[0], 55) == false &&
