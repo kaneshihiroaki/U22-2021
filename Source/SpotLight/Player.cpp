@@ -278,18 +278,78 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
 		//当たり判定の確認
-		if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[0], 55) == false &&
-			Collision_Cube(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[1], 55) == false &&
-			Collision_Cube(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[2], 55) == false) {
+		for (int i = 0; i < ENEMY_MAX; i++) {
+			if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[i], 55) == true) {
+				if (Att.s_ParaKey[i] == false) {
+					c_MoveFlag = false;
+				}
+				else if ((ene->Enemy_Push(i, c_Position, TempMoveVector)) == false) {//falseなら動かせなかった。
+					c_MoveFlag = false;
+				}
+			}
+		}
+		if (c_MoveFlag) {//移動できるときにのみとおる
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
 			c_Rotation = VAdd(c_Rotation, TempRotVector);
-			//c_Rotation = TempRotVector;
 		}
 	}
 
 	if (Collision_Player) {
 		Collision_Draw(ene->c_ObjPos);//デバック用
 	}
+}
+
+bool PLAYER::Player_Push(CAMERA* camera, VECTOR EnemyCol[ENEMY_MAX], VECTOR PushVec)
+{
+	//しびれているかどうか。しびれていないならfalseで帰る
+	if (Damage.s_paralyzeKey == false) {
+		return false;
+	}
+
+	//移動場所の確認
+	VECTOR TempMoveVector;
+	//VECTOR TempRotVector;
+
+
+
+
+	//移動してるかどうか
+	c_MoveFlag = true;
+	c_MoveVector = PushVec;
+
+	//float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+	//float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+
+	//TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+	//TempMoveVector.y = 0.0f;
+	//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
+
+	//TempRotVector.x = 0.0f;
+	//TempRotVector.y = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+	//TempRotVector.z = 0.0f;
+
+	//移動フラグがたってたら移動
+	if (c_MoveFlag == true)
+	{
+
+		TempMoveVector.x = c_MoveVector.x;
+		TempMoveVector.y = 0.0f;
+		TempMoveVector.z = c_MoveVector.z;
+
+
+		//当たり判定の確認
+		for (int i = 0; i < ENEMY_MAX; i++) {
+			if (Collision_Sphere(VAdd(c_Position, TempMoveVector), EnemyCol[i], 55) == true) {
+				c_MoveFlag = false;
+			}
+		}
+		if (c_MoveFlag) {//移動できるときにのみとおる
+			c_Position = VAdd(c_Position, TempMoveVector);		//移動
+			//c_Rotation = VAdd(c_Rotation, TempRotVector);
+		}
+	}
+
+	return c_MoveFlag;
 }
 
 void PLAYER::Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]) {

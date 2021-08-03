@@ -4,6 +4,7 @@
 #define ENEMY_MAX 3
 
 class PLAYER;
+class CAMERA;
 
 class ENEMY:public CHARACTER
 {
@@ -19,7 +20,8 @@ public:
 	float c_SpotRadius = 30.0f;//スポットライトの半径
 
 	void Enemy_Creat();
-	void Enemy_Move(int num, VECTOR PlayerCol,VECTOR LightPos);
+	void Enemy_Move(int num, PLAYER* player, CAMERA* camera);
+	bool Enemy_Push(int num, VECTOR PlayerCol, VECTOR PushVec);
 
 	//ゲッター＆セッター
 	bool GetEnemyMoveKey(int i) { return c_MoveKey[i]; }

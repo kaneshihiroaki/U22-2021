@@ -1,5 +1,8 @@
 #include <DxLib.h>
 #include "enemy.h"
+#include "Light.h"
+#include "Player.h"
+#include "Camera.h"
 
 ENEMY::ENEMY()
 {
@@ -43,7 +46,7 @@ void ENEMY::debug() {
 	printfDx("%d\n", GetEnemyMoveKey(2));
 }
 
-void ENEMY::Enemy_Move(int num, VECTOR PlayerCol, VECTOR LightPos)
+void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 {
 
 	//移動してるかどうか
@@ -55,7 +58,7 @@ void ENEMY::Enemy_Move(int num, VECTOR PlayerCol, VECTOR LightPos)
 
 	c_SpotPos = LightPos;
 
-	// 
+	// スポットライトを追跡用
 	if (c_SpotPos.x - c_SpotRadius > c_ObjPos[num].x) {
 		c_MoveFlag = true;
 		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.x = c_movespeed;
@@ -97,11 +100,15 @@ void ENEMY::Enemy_Move(int num, VECTOR PlayerCol, VECTOR LightPos)
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
 			if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_ObjPos[i], 55, 55) == true) {
-				c_MoveFlag = false;
+				if (Enemy_Push(i, c_ObjPos[i], TempMoveVector) == false) {//falseなら動かせなかった
+					c_MoveFlag = false;
+				}
 			}
 		}
-		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), PlayerCol, 55, 55) == true) {
-			c_MoveFlag = false;
+		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), player->c_Position, 55, 55) == true) {
+			if (player->Player_Push(camera, c_ObjPos, TempMoveVector) == false) {//falseなら動かせなかった
+				c_MoveFlag = false;
+			}
 		}
 
 		if (c_MoveFlag == true)
@@ -116,6 +123,57 @@ void ENEMY::Enemy_Move(int num, VECTOR PlayerCol, VECTOR LightPos)
 	//if (Collision_Player) {
 	//	Collision_Draw();//デバック用
 	//}
+}
+
+bool ENEMY::Enemy_Push(int num, VECTOR PlayerCol, VECTOR PushVec)
+{
+	//しびれているかどうか
+	/*if()*/
+
+	//移動してるかどうか
+	c_MoveFlag = FALSE;
+	c_MoveVector = PushVec;
+
+	Coefficient = 1.0f;
+
+	c_SpotPos = LightPos;
+
+	c_MoveFlag = true;
+
+
+
+
+	//移動フラグがたってたら移動
+	if (c_MoveFlag == true)
+	{
+		//移動場所の確認
+		VECTOR TempMoveVector;
+
+		TempMoveVector.x = c_MoveVector.x * Coefficient;
+		TempMoveVector.y = 0.0f;
+		TempMoveVector.z = c_MoveVector.z * Coefficient;
+
+
+		//当たりl判定の確認
+		for (int i = 0; i < ENEMY_MAX; i++) {
+			if (i == num)continue;
+			if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_ObjPos[i], 55, 55) == true) {
+				c_MoveFlag = false;
+			}
+		}
+		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), PlayerCol, 55, 55) == true) {
+			c_MoveFlag = false;
+		}
+
+		if (c_MoveFlag == true)
+		{
+			c_ObjPos[num] = VAdd(c_ObjPos[num], TempMoveVector);
+		}
+	}
+	//if (Collision_Player) {
+	//	Collision_Draw();//デバック用
+	//}
+	return c_MoveFlag;
 }
 
 
