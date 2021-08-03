@@ -1,3 +1,4 @@
+#define _USE_MATH_DEFINES
 #include <DxLib.h>
 #include "Player.h"
 #include "enemy.h"
@@ -11,8 +12,9 @@ PLAYER::PLAYER()
 {
 	// プレイヤー座標初期化
 	c_Position = VGet(100.0f, 100.0f, 0.0f);
-	//プレイヤー回転
-	c_Rotation = VGet(0.0f, 0.0f, 0.0f);
+	c_PlayerAng = 0;	//プレイヤーの角度
+	//プレイヤー回転（ラジアン変換）
+	c_Rotation = VGet(0.0f, (c_PlayerAng *(M_PI/180)), 0.0f);
 	//プレイヤーの大きさ初期化
 	c_AddPosPlay = { 0.5f,0.5f,0.5f };
 
@@ -103,20 +105,20 @@ void PLAYER::Player_Paralyze() {
 	}
 }
 
-void PLAYER::Player_Attack(ENEMY* ene/*, VECTOR Player_rot*/) {
+void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 	//移動場所の確認
-	//VECTOR plus;
-	//plus.x = Player_rot.x;
-	//plus.y = 0.0f;
-	//plus.z = Player_rot.y;
-	//plus = VAdd(c_Position, Player_rot);
+	float Sin = sin(Player_rot.y) * Att.s_Rang;
+	float Cos = cos(Player_rot.y) * Att.s_Rang;
+
+	float x = c_Position.x + Sin;
+	float z = c_Position.z + Cos;
 
 	Att.s_Rang += Att.s_AttackSpeed;
-	DrawSphere3D(c_Position, Att.s_Rang, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
+	//DrawSphere3D(c_Position, Att.s_Rang, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
 
-	//DrawCube3D(VGet(plus.x - 100.0f, plus.y, plus.z + Att.s_Rang),
-	//	VGet(plus.x+100.0f,plus.y+100.0f,plus.z+200.0f + Att.s_Rang),
-	//	GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
+	DrawCube3D(VGet(x-100, c_Position.y, z),
+		VGet(x+100.0f, c_Position.y+100.0f,z+200.0f),
+		GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
 	
 	if (Att.s_Rang >= Att.s_RangMax) {
 		Att.s_AttackStartKey = false;
@@ -126,7 +128,6 @@ void PLAYER::Player_Attack(ENEMY* ene/*, VECTOR Player_rot*/) {
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (HitCheck_Sphere_Sphere(c_Position, Att.s_Rang, c_enemyCol->c_ObjPos[i], 55)) {
 			ene->SetEnemyMoveKey(i);
-			//EneMoveFlag[i] = false;
 			Att.s_ParaKey[i] = true;
 		}
 	}
@@ -134,22 +135,30 @@ void PLAYER::Player_Attack(ENEMY* ene/*, VECTOR Player_rot*/) {
 
 void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 {
-	////移動場所の確認
+	//移動場所の確認
 	//VECTOR TempMoveVector;
-	//VECTOR TempRotVector;
+	VECTOR TempRotVector;
+	float PlayerSin = sin(c_Rotation.y) * 200;
+	float PlayerCos = cos(c_Rotation.y) * 200;
+	float Angx = c_Position.x + PlayerSin;
+	float Angz = c_Position.z + PlayerCos;
+	//float Sin = sin(camera->GetCameraAngle() / 180.0f * M_PI);
+	//float Cos = cos(camera->GetCameraAngle() / 180.0f * M_PI);
 
-	//TempRotVector.y = 0.0f;
 
-	//float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
-	//float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
 
 	//TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
 	//TempMoveVector.y = 0.0f;
 	//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
-	//TempRotVector.x = 0.0f;
-	//TempRotVector.y += 0.001f;
-	//TempRotVector.z = 0.0f;
+	TempRotVector.x = 0.0f;
+	//TempRotVector.y = (PlayerSin + PlayerCos * (M_PI / 180));
+	TempRotVector.y = 0.0f;
+	TempRotVector.z = 0.0f;
+
+	DrawFormatString(10, 100, 0x888888, "y:%f", 90 * (M_PI / 180.0f));
+	DrawFormatString(10, 130, 0x888888, "y:%f", Angx + Angz);
+	DrawSphere3D(VGet(Angx, c_Position.y, Angz),25, 32, GetColor(0, 0, 0), GetColor(0, 0, 0), TRUE);
 
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
@@ -160,51 +169,66 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		if (((g_NowKey & PAD_INPUT_LEFT) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0)c_MoveVector.x = -c_movespeed;
+			if (c_StmCount > 0) {
+				c_MoveVector.x = -c_movespeed;
+				//TempRotVector.y = -c_movespeed;
+
+			}
 
 			//TempRotVector.x = 0.0f;
-			//TempRotVector.y += -270.0f;
+			//TempRotVector.y = 0.1f;
 			//TempRotVector.z = 0.0f;
 		}
 
 		if (((g_NowKey & PAD_INPUT_RIGHT) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0)c_MoveVector.x = c_movespeed;
+			if (c_StmCount > 0) {
+				c_MoveVector.x = c_movespeed;
+				//TempRotVector.y = c_movespeed;
+			}
 
 			//TempRotVector.x = 0.0f;
-			//TempRotVector.y += 270.0f;
+			//TempRotVector.y = 0.1f;
 			//TempRotVector.z = 0.0f;
 		}
 
 		if (((g_NowKey & PAD_INPUT_DOWN) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0)c_MoveVector.z = -c_movespeed;
+			if (c_StmCount > 0) {
+				c_MoveVector.z = -c_movespeed;
+				TempRotVector.y = -c_movespeed;
+			}
 
 			//TempRotVector.x = 0.0f;
-			//TempRotVector.y += -90.0f;
+			//TempRotVector.y = 0.1f;
 			//TempRotVector.z = 0.0f;
 		}
 
 		if (((g_NowKey & PAD_INPUT_UP) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0)c_MoveVector.z = c_movespeed;
+			if (c_StmCount > 0) {
+				c_MoveVector.z = c_movespeed;
+				//TempRotVector.y = c_movespeed;
+			}
 
 			//TempRotVector.x = 0.0f;
-			//TempRotVector.y += 90.0f;
+			//TempRotVector.y = 0.1f;
 			//TempRotVector.z = 0.0f;
 		}
 	}
+
 	//Gキーを押したらプレイヤーが一定時間止まる
 	if (CheckHitKey(KEY_INPUT_G)) Damage.s_paralyzeKey = true;
 	if (Damage.s_paralyzeKey == true) Player_Paralyze();
 
 	c_StmCount = StaminaCount(c_MoveFlag);		//スタミナ管理
 
+	//攻撃
 	if (((g_NowKey & PAD_INPUT_2) != 0) && ((g_NowKey & g_OldKey) == 0) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
-	if (Att.s_AttackStartKey == true) Player_Attack(ene/*, TempRotVector*/);
+	if (Att.s_AttackStartKey == true) Player_Attack(ene, c_Rotation);
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (Att.s_ParaKey[i] == true) {
 			if (Att.s_TimePara++ >= Att.s_TimeMaxPara) {
@@ -214,8 +238,25 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		}
 	}
 
-	//printfDx("%f\n", c_Rotation.y);
 	//c_Rotation = VAdd(c_Rotation, TempRotVector);
+
+	//float Sin1 = sin(c_Rotation.y);
+	//float Cos1 = cos(c_Rotation.y);
+	//float Sin1 = sin(c_Rotation.y) * 300;
+	//float Cos1 = cos(c_Rotation.y) * 300;
+
+	//float one = c_Position.x + Sin1;
+	//float two = c_Position.z + Cos1;
+
+	//DrawFormatString(10, 100, 0x888888, "y:%f", c_Rotation.y);
+
+	//DrawCube3D(VGet(one, c_Position.y, two),
+	//	VGet((one + 100.0f) * Sin1, c_Position.y + 100.0f, (two + 200.0f)),
+	//	GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
+	//DrawSphere3D(VGet(one, c_Position.y,two),25, 32, GetColor(0, 0, 0), GetColor(0, 0, 0), TRUE);
+	//DrawSphere3D(VGet(c_Position.x, c_Position.y+100.0f, c_Position.z),25, 32, GetColor(0, 0, 0), GetColor(0, 0, 0), TRUE);
+	//printfDx("%f\n", c_Rotation.y);
+
 
 	//VECTOR c_plus;
 
@@ -229,8 +270,8 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		//移動場所の確認
 		VECTOR TempMoveVector;
 		
-		float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
-		float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+		float Sin = sin(camera->GetCameraAngle() / 180.0f * M_PI);
+		float Cos = cos(camera->GetCameraAngle() / 180.0f * M_PI);
 
 		TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
 		TempMoveVector.y = 0.0f;
@@ -241,7 +282,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 			Collision_Cube(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[1], 55) == false &&
 			Collision_Cube(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[2], 55) == false) {
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
-			//c_Rotation = VAdd(c_Rotation, TempRotVector);
+			c_Rotation = VAdd(c_Rotation, TempRotVector);
 			//c_Rotation = TempRotVector;
 		}
 	}

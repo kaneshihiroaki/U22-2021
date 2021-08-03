@@ -31,6 +31,8 @@ public:
 	void Player_Move(CAMERA* camera, ENEMY* ene);
 
 private:
+	int c_PlayerAng;		//プレイヤーの角度
+
 	bool c_RotFlag;		//プレイヤーが回転している
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
 	int c_StmCount;		//プレイヤーの体力
@@ -61,7 +63,7 @@ private:
 	
 	void Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]);//デバックモードで使用
 	void Player_Paralyze();	//主人公がしびれる（止まる）
-	void Player_Attack(ENEMY* ene/*,VECTOR Player_rot*/);		//攻撃
+	void Player_Attack(ENEMY* ene,VECTOR Player_rot);		//攻撃
 
 	ENEMY* c_enemyCol;		//敵の座標を取得するために取得
 };
