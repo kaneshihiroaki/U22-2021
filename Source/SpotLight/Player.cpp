@@ -321,7 +321,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		}
 	}
 
-	c_StmCount = StaminaCount(c_MoveFlag);		//スタミナ管理
+	c_StmCount = StaminaCount(c_MoveFlag,0);		//スタミナ管理
 
 
 	if (Collision_Player) {

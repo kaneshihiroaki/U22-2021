@@ -55,7 +55,7 @@ void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
 	switch (c_EnemyState[num])
 	{
 	case ENEMY_IDLE:
-		c_StmCount[num] = StaminaCount(false);		//スタミナ回復
+		c_StmCount[num] = StaminaCount(false,num);		//スタミナ回復
 		if (c_StmCount[num] >= 300) {//スタミナがマックスになったら移動する。
 			c_EnemyState[num] = ENEMY_MOVE;
 		}
@@ -142,7 +142,7 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 		}
 	}
 
-	c_StmCount[num] = StaminaCount(c_MoveFlag);		//スタミナ管理
+	c_StmCount[num] = StaminaCount(c_MoveFlag,num);		//スタミナ管理
 
 
 	SetFontSize(10);
