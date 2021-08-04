@@ -16,7 +16,8 @@ ENEMY::ENEMY()
 		c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
 		c_MoveKey[i] = true;
-		c_StmCount[i] = 300;	//エネミーの体力の最大値
+		c_StmCount[i] = 300;	//エネミーの体力の最大
+		c_EnemyState[i] = ENEMY_IDLE;//エネミーの初期状態
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
 	}
 
@@ -44,6 +45,31 @@ void ENEMY::Enemy_Creat() {
 
 void ENEMY::debug() {
 	printfDx("%d\n", GetEnemyMoveKey(2));
+}
+
+void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
+	
+	
+
+
+	switch (c_EnemyState[num])
+	{
+	case ENEMY_IDLE:
+		c_StmCount[num] = StaminaCount(false);		//スタミナ回復
+		if (c_StmCount[num] >= 300) {//スタミナがマックスになったら移動する。
+			c_EnemyState[num] = ENEMY_MOVE;
+		}
+		break;
+	case ENEMY_MOVE:
+		Enemy_Move(num, player, camera);
+		if (c_StmCount[num] == 0) {//スタミナ０になったらアイドルになって回復する。
+			c_EnemyState[num] = ENEMY_IDLE;
+		}
+		break;
+	case ENEMY_ATTACK:
+		break;
+	}
+	
 }
 
 void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
@@ -83,8 +109,7 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 		Coefficient = 0.7f;
 	}
 
-	c_StmCount[num] = StaminaCount(c_MoveFlag);		//スタミナ管理
-
+	
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
 	{
@@ -117,6 +142,10 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 		}
 	}
 
+	c_StmCount[num] = StaminaCount(c_MoveFlag);		//スタミナ管理
+
+
+	SetFontSize(10);
 	DrawSphere3D(c_SpotPos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 	DrawFormatString(1100, 620+20*num, 0xFFFFFF, "%dの敵体力 %d\n", num, c_StmCount[num]);
 

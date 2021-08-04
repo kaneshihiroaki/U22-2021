@@ -124,7 +124,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 		Att.s_AttackStartKey = false;
 		Att.s_Rang = 0.0f;
 	}
-
+	
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (HitCheck_Sphere_Sphere(c_Position, Att.s_Rang, c_enemyCol->c_ObjPos[i], 55)) {
 			ene->SetEnemyMoveKey(i);
@@ -248,8 +248,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	if (CheckHitKey(KEY_INPUT_G)) Damage.s_paralyzeKey = true;
 	if (Damage.s_paralyzeKey == true) Player_Paralyze();
 
-	c_StmCount = StaminaCount(c_MoveFlag);		//スタミナ管理
-
+	
 	//攻撃
 	if (((g_NowKey & PAD_INPUT_2) != 0) && ((g_NowKey & g_OldKey) == 0) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
 	if (Att.s_AttackStartKey == true) Player_Attack(ene, c_Rotation);
@@ -318,8 +317,12 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
 			//c_Rotation = VAdd(c_Rotation, TempRotVector);
 			c_Rotation = TempRotVector;
+			
 		}
 	}
+
+	c_StmCount = StaminaCount(c_MoveFlag);		//スタミナ管理
+
 
 	if (Collision_Player) {
 		Collision_Draw(ene->c_ObjPos);//デバック用

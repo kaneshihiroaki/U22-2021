@@ -114,7 +114,7 @@ void MAIN::Game_Main() {
 
 	if (!Collision_Player) {
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			c_enemy->Enemy_Move(i, c_player, c_camera);
+			c_enemy->Enemy_State(i, c_player, c_camera);
 		}
 		c_enemy->Enemy_Creat();
 	}
