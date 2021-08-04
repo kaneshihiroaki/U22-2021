@@ -32,7 +32,7 @@ public:
 	bool Player_Push(CAMERA* camera, VECTOR EnemyCol[ENEMY_MAX], VECTOR PushVec);
 
 private:
-	int c_PlayerAng;		//プレイヤーの角度
+	float c_PlayerAng;		//プレイヤーの角度
 
 	bool c_RotFlag;		//プレイヤーが回転している
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
