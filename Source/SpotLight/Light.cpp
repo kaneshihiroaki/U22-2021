@@ -133,8 +133,6 @@ void Light()
 	//10カウント表示
 	SetFontSize(100);
 	DrawFormatString(500, 10, 0x25525000, "%d秒", time / 60);
-	DrawFormatString(500, 100, 0x25525000, "%d", count);
-	DrawFormatString(500, 200, 0x25525000, "%d", cntFlg);
 
 	// スポットライトの位置の更新
 	SetLightPositionHandle(SpotLightHandle, LightPos);
