@@ -37,7 +37,7 @@ public:
 	
 	int c_EnemyState[ENEMY_MAX];//敵の状態を制御#defineに書いてます。
 	void Enemy_State(int num, PLAYER* player, CAMERA* camera);//敵の状態を制御関数
-
+	bool EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos);//enemyの判定
 	void debug();		//デバッグ用、用がなくなったら消します
 private:
 	bool c_MoveFlag;//エネミーが移動しているのか判定

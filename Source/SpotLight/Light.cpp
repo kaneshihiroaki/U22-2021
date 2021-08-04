@@ -1,6 +1,6 @@
 #include "DxLib.h"
 #include <math.h>
-
+#include "Debug.h"
 #define DRAW_NUM	(3)
 #define SPACE		(512.0f)
 
@@ -20,6 +20,8 @@ int count;
 int cntFlg;
 float distance = 1200.0f;
 int WaitTime = 0;
+
+bool LightFlg;
 
 VECTOR dis[9];
 VECTOR LightPos;
@@ -80,6 +82,8 @@ void Light_init() {
 	// グローバルアンビエントライト( 大域環境光 )を２０％の明るさにする
 	SetGlobalAmbientLight(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 
+	LightFlg = true;
+
 	count = 1;
 
 	dis[0] = VGet(-distance, 0.0f, distance);
@@ -107,10 +111,13 @@ void Light()
 		cntFlg = count;
 		time = 0;
 		WaitTime = 1;
+		Key_Look = false;
+		LightFlg = true;
 	}
 	else if (WaitTime == 1) {
 		WaitTime = 0;
 		time = 0;
+		LightFlg = false;
 	}
 	if (WaitTime == 1 && count < 9) {
 		if (LightPos.x > dis[count].x) {

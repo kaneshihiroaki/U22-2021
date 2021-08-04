@@ -13,6 +13,9 @@ class PLAYER;
 class STAGE;
 class ENEMY;
 
+extern int judge_count;
+extern bool player_win;
+
 class MAIN 
 {
 public:

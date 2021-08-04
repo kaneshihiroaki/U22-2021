@@ -3,6 +3,7 @@
 #include "Light.h"
 #include "Player.h"
 #include "Camera.h"
+#include "debug.h"
 
 ENEMY::ENEMY()
 {
@@ -145,7 +146,7 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 	c_StmCount[num] = StaminaCount(c_MoveFlag,num);		//スタミナ管理
 
 
-	SetFontSize(10);
+	SetFontSize(20);
 	DrawSphere3D(c_SpotPos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 	DrawFormatString(1100, 620+20*num, 0xFFFFFF, "%dの敵体力 %d\n", num, c_StmCount[num]);
 
@@ -221,4 +222,34 @@ bool Collision_Cube(VECTOR MyCol, VECTOR YouCol, float MyScale, float YouScale) 
 	}
 
 	return false;
+}
+bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
+	VECTOR Light = LightPos;
+	LightPos.y = 0.0f;
+	for (int i = 0; i < ENEMY_MAX; i++) {
+
+		float ex = Light.x - c_ObjPos[i].x;
+		float ez = Light.z - c_ObjPos[i].z;
+
+		float er = (ex * ex) + (ez * ez);
+		float elr = (100.0f+70.0f);
+		float elr2 = (elr * elr);
+
+		// enemyとlightの当たり判定( TRUE:当たっている FALSE:当たっていない )
+		if (er <= elr2&&LightFlg==false) {
+			
+			return true;
+		}
+
+		return false;
+	}
+
+	/*SetFontSize(20);
+	DrawFormatString(10, 100, 0x888888, "x:%f", Player.x);
+	DrawFormatString(10, 130, 0x888888, "y:%f", Player.y);
+	DrawFormatString(10, 160, 0x888888, "z:%f", Player.z);
+	DrawFormatString(10, 190, 0x888888, "x:%f", Enemy.x);
+	DrawFormatString(10, 220, 0x888888, "y:%f", Enemy.y);
+	DrawFormatString(10, 250, 0x888888, "z:%f", Enemy.z);*/
+
 }

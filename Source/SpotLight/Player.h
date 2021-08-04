@@ -30,6 +30,7 @@ public:
 	void Player_Controller();
 	void Player_Move(CAMERA* camera, ENEMY* ene);
 	bool Player_Push(CAMERA* camera, VECTOR EnemyCol[ENEMY_MAX], VECTOR PushVec);
+	bool CheckHit(VECTOR Player, VECTOR LightPos);
 
 private:
 	float c_PlayerAng;		//プレイヤーの角度

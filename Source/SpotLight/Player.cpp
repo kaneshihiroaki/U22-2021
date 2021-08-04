@@ -6,6 +6,7 @@
 #include <math.h>
 //#include "Main.h"
 #include "Debug.h"
+#include "Light.h"
 
 
 PLAYER::PLAYER()
@@ -432,4 +433,39 @@ void PLAYER::Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]) {
 	//îºåaÇÇTÇTÇ…ìùàÍÇµÇƒÇ¢ÇÈ
 	DrawSphere3D(EnemyPos[0], 55.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 
+}
+
+bool PLAYER::CheckHit(VECTOR c_Position, VECTOR LightPos) {
+
+	VECTOR Player = c_Position;
+
+	VECTOR Light = LightPos;
+
+	/*SetFontSize(20);
+	DrawFormatString(10, 100, 0x888888, "x:%f", Player.x);
+	DrawFormatString(10, 130, 0x888888, "y:%f", Player.y);
+	DrawFormatString(10, 160, 0x888888, "z:%f", Player.z);
+	DrawFormatString(10, 190, 0x888888, "x:%f", Light.x);
+	DrawFormatString(10, 220, 0x888888, "y:%f", Light.y);
+	DrawFormatString(10, 250, 0x888888, "z:%f", Light.z);*/
+	float cx = Light.x - Player.x;
+	float cz = Light.z - Player.z;
+
+	float cr = (cx * cx) + (cz * cz);
+	float lr = (10.0f + 70.0f);
+	float lr2 = (lr * lr);
+
+	DrawSphere3D(Player,10.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+	DrawSphere3D(Light,70.0f, 32, GetColor(255,0, 255), GetColor(255, 255, 255), TRUE);
+
+	// playerÇ∆lightÇÃìñÇΩÇËîªíË( TRUE:ìñÇΩÇ¡ÇƒÇ¢ÇÈ FALSE:ìñÇΩÇ¡ÇƒÇ¢Ç»Ç¢ )
+	if (cr <= lr2&&LightFlg == false){
+		Key_Look = true;
+		c_MoveFlag = false;
+		SetFontSize(200);
+		DrawString(490, 120, "Win", GetColor(0xff, 0x00, 0x00));
+		return true;
+	}
+
+	return false;
 }

@@ -12,14 +12,18 @@
 //ゲームの状態
 int GameState = 0;
 
+
 int g_KeyFlg;
 int g_NowKey;
 int g_OldKey;
 char key[256];
-
+int judge_count = 0;
+bool player_win=false;
+ 
 MAIN::MAIN()
 {
 	GameState = 0;
+
 
 	c_camera = new CAMERA();
 	c_player = new PLAYER();
@@ -125,7 +129,31 @@ void MAIN::Game_Main() {
 	c_player->Player_Move(c_camera,c_enemy);
 	
 	c_camera->Camera_Control(c_player);
+	
 
+	judge_count = 0;
+	player_win = false;
+	if (c_player->CheckHit(c_player->c_Position, LightPos)) {
+		judge_count++;
+		player_win = true;
+		
+	}
+
+	if (c_enemy->EnemyCheckHit(c_enemy->c_ObjPos, LightPos)) {
+		judge_count++;
+	}
+	if (judge_count == 1) {
+		if (player_win) {
+			Key_Look = true;
+			SetFontSize(200);
+			DrawString(490, 120, "Win", GetColor(0xff, 0x00, 0x00));
+		}
+		else {
+			Key_Look = true;
+			SetFontSize(200);
+			DrawString(440, 120, "Lose", GetColor(0x00, 0x00, 0xff));
+		}
+	}
 
 	if (!Collision_Player) {
 		MV1DrawModel(c_player->c_PlayerModel);
@@ -152,6 +180,7 @@ void MAIN::Game_Title() {
 	DrawFormatString(460, 300, 0x000000, "Bボタンでゲームスタート");
 	if (((g_NowKey & PAD_INPUT_2) != 0)) {
 		GameState = 0;
+		LightFlg = false;
 		Key_Look = false;
 		Win = false;
 		Lose = false;
