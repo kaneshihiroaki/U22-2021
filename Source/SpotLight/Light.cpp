@@ -4,6 +4,7 @@
 #define DRAW_NUM	(3)
 #define SPACE		(512.0f)
 
+
 int PixelShaderHandle;
 int VertexShaderHandle;
 float LightRotateAngle;
@@ -20,15 +21,7 @@ int cntFlg;
 float distance = 1200.0f;
 int WaitTime = 0;
 
-VECTOR dis;
-VECTOR dis1;
-VECTOR dis2;
-VECTOR dis3;
-VECTOR dis4;
-VECTOR dis5;
-VECTOR dis6;
-VECTOR dis7;
-VECTOR dis8;
+VECTOR dis[9];
 VECTOR LightPos;
 
 void Light_init() {
@@ -87,18 +80,17 @@ void Light_init() {
 	// グローバルアンビエントライト( 大域環境光 )を２０％の明るさにする
 	SetGlobalAmbientLight(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 
-	count = GetRand(8);
-	cntFlg = count;
+	count = 1;
 
-	dis = VGet(-distance, 0.0f, distance);
-	dis1 = VGet(0.0f, 0.0f, distance);
-	dis2 = VGet(distance, 0.0f, distance);
-	dis3 = VGet(-distance, 0.0f, 0.0f);
-	dis4 = VGet(0.0f, 0.0f, 0.0f);
-	dis5 = VGet(distance, 0.0f, 0.0f);
-	dis6 = VGet(-distance, 0.0f, -distance);
-	dis7 = VGet(0.0f, 0.0f, -distance);
-	dis8 = VGet(distance, 0.0f, -distance);
+	dis[0] = VGet(-distance, 0.0f, distance);
+	dis[1] = VGet(0.0f, 0.0f, distance);
+	dis[2] = VGet(distance, 0.0f, distance);
+	dis[3] = VGet(-distance, 0.0f, 0.0f);
+	dis[4] = VGet(0.0f, 0.0f, 0.0f);
+	dis[5] = VGet(distance, 0.0f, 0.0f);
+	dis[6] = VGet(-distance, 0.0f, -distance);
+	dis[7] = VGet(0.0f, 0.0f, -distance);
+	dis[8] = VGet(distance, 0.0f, -distance);
 }
 void Light()
 {
@@ -107,8 +99,8 @@ void Light()
 		time++;
 	}
 	else if (time >= 600 && WaitTime == 0) {
-		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count || cntFlg + 5 == count || cntFlg - 5 == count
-			|| cntFlg + 6 == count || cntFlg - 6 == count || cntFlg + 7 == count || cntFlg - 7 == count || cntFlg + 8 == count || cntFlg - 8 == count)
+		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count || cntFlg + 5 == count || cntFlg - 5 == count|| cntFlg + 6 == count || cntFlg - 6 == count 
+			|| cntFlg + 7 == count || cntFlg - 7 == count || cntFlg + 8 == count || cntFlg - 8 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2) || (cntFlg == 5) && (count == 6) || (cntFlg == 6) && (count == 5))
 		{
 			count = GetRand(8);
 		}
@@ -120,102 +112,29 @@ void Light()
 		WaitTime = 0;
 		time = 0;
 	}
-	if (count == 0) {
-		if (LightPos.x > dis.x) {
+	if (WaitTime == 1 && count < 9) {
+		if (LightPos.x > dis[count].x) {
 			LightRotateAngle -= 0.01f;
 		}
-		if (LightPos.z > dis.z) {
-			LightRotateAngle2 += 0.01f;
-		}
-	}
-	else if (count == 1) {
-		if (LightPos.x < dis1.x) {
+		else if (LightPos.x < dis[count].x) {
 			LightRotateAngle += 0.01f;
 		}
-		if (LightPos.x > dis1.x) {
-			LightRotateAngle -= 0.01f;
-		}
-		if (LightPos.z < dis1.z) {
-			LightRotateAngle2 += 0.01f;
-		}
-	}
-	else if (count == 2) {
-		if (LightPos.x < dis2.x) {
-			LightRotateAngle += 0.01f;
-		}
-		if (LightPos.z < dis2.z) {
-			LightRotateAngle2 += 0.01f;
-		}
-	}
-	else if (count == 3) {
-		if (LightPos.x > dis3.x) {
-			LightRotateAngle -= 0.01f;
-		}
-		if (LightPos.z > dis3.z) {
-			LightRotateAngle -= 0.01f;
-		}
-		if (LightPos.z < dis3.z) {
-			LightRotateAngle += 0.01f;
-		}
-	}
-	else if (count == 4) {
-		if (LightPos.x > dis4.x) {
-			LightRotateAngle -= 0.01f;
-		}
-		if (LightPos.x < dis4.x) {
-			LightRotateAngle += 0.01f;
-		}
-		if (LightPos.z > dis4.z) {
+		if (LightPos.z > dis[count].z) {
 			LightRotateAngle2 -= 0.01f;
 		}
-		if (LightPos.z < dis4.z) {
+		else if (LightPos.z < dis[count].z) {
 			LightRotateAngle2 += 0.01f;
 		}
 	}
-	else if (count == 5) {
-		if (LightPos.x < dis5.x) {
-			LightRotateAngle += 0.01f;
-		}
-		if (LightPos.z < dis5.z) {
-			LightRotateAngle2 += 0.01f;
-		}
-		if (LightPos.z > dis5.z) {
-			LightRotateAngle2 -= 0.01f;
-		}
-	}
-	else if (count == 6) {
-		if (LightPos.x > dis6.x) {
-			LightRotateAngle -= 0.01f;
-		}
-		if (LightPos.z > dis6.z) {
-			LightRotateAngle2 -= 0.01f;
-		}
-	}
-	else if (count == 7) {
-		if (LightPos.x < dis7.x) {
-			LightRotateAngle += 0.01f;
-		}
-		if (LightPos.x > dis7.x) {
-			LightRotateAngle -= 0.01f;
-		}
-		if (LightPos.z > dis7.z) {
-			LightRotateAngle -= 0.01f;
-		}
-	}
-	else if (count == 8) {
-		if (LightPos.x < dis8.x) {
-			LightRotateAngle += 0.01f;
-		}
-		if (LightPos.z > dis8.z) {
-			LightRotateAngle2 -= 0.01f;
-		}
-	}
+
 	// ライトの位置の回転値を加算
 	LightPos = VGet(LightRotateAngle * 200.0f, 800.0f, LightRotateAngle2 * 200.0f);
 
 	//10カウント表示
 	SetFontSize(100);
 	DrawFormatString(500, 10, 0x25525000, "%d秒", time / 60);
+	DrawFormatString(500, 100, 0x25525000, "%d", count);
+	DrawFormatString(500, 200, 0x25525000, "%d", cntFlg);
 
 	// スポットライトの位置の更新
 	SetLightPositionHandle(SpotLightHandle, LightPos);

@@ -13,15 +13,6 @@ extern int count;
 extern int cntFlg;
 
 extern VECTOR LightPos;
-extern VECTOR dis;
-extern VECTOR dis1;
-extern VECTOR dis2;
-extern VECTOR dis3;
-extern VECTOR dis4;
-extern VECTOR dis5;
-extern VECTOR dis6;
-extern VECTOR dis7;
-extern VECTOR dis8;
 
 void Light();
 void Light_init();
