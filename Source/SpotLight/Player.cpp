@@ -137,11 +137,11 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 {
 	//ˆÚ“®êŠ‚ÌŠm”F
 	//VECTOR TempMoveVector;
-	VECTOR TempRotVector;
-	float PlayerSin = sin(c_Rotation.y) * 200;
-	float PlayerCos = cos(c_Rotation.y) * 200;
-	float Angx = c_Position.x + PlayerSin;
-	float Angz = c_Position.z + PlayerCos;
+	//VECTOR TempRotVector;
+	//float PlayerSin = sin(c_Rotation.y) * 200;
+	//float PlayerCos = cos(c_Rotation.y) * 200;
+	//float Angx = c_Position.x + PlayerSin;
+	//float Angz = c_Position.z + PlayerCos;
 	//float Sin = sin(camera->GetCameraAngle() / 180.0f * M_PI);
 	//float Cos = cos(camera->GetCameraAngle() / 180.0f * M_PI);
 
@@ -151,14 +151,14 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	//TempMoveVector.y = 0.0f;
 	//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
-	TempRotVector.x = 0.0f;
-	//TempRotVector.y = (PlayerSin + PlayerCos * (M_PI / 180));
-	TempRotVector.y = 0.0f;
-	TempRotVector.z = 0.0f;
+	//TempRotVector.x = 0.0f;
+	////TempRotVector.y = (PlayerSin + PlayerCos * (M_PI / 180));
+	//TempRotVector.y = 0.0f;
+	//TempRotVector.z = 0.0f;
 
-	DrawFormatString(10, 100, 0x888888, "y:%f", 90 * (M_PI / 180.0f));
-	DrawFormatString(10, 130, 0x888888, "y:%f", Angx + Angz);
-	DrawSphere3D(VGet(Angx, c_Position.y, Angz),25, 32, GetColor(0, 0, 0), GetColor(0, 0, 0), TRUE);
+	//DrawFormatString(10, 100, 0x888888, "y:%f", 90 * (M_PI / 180.0f));
+	//DrawFormatString(10, 130, 0x888888, "y:%f", Angx + Angz);
+	//DrawSphere3D(VGet(Angx, c_Position.y, Angz),25, 32, GetColor(0, 0, 0), GetColor(0, 0, 0), TRUE);
 
 	//ˆÚ“®‚µ‚Ä‚é‚©‚Ç‚¤‚©
 	c_MoveFlag = FALSE;
@@ -198,7 +198,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 			c_MoveFlag = true;
 			if (c_StmCount > 0) {
 				c_MoveVector.z = -c_movespeed;
-				TempRotVector.y = -c_movespeed;
+				//TempRotVector.y = -c_movespeed;
 			}
 
 			//TempRotVector.x = 0.0f;
@@ -290,7 +290,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		}
 		if (c_MoveFlag) {//ˆÚ“®‚Å‚«‚é‚Æ‚«‚É‚Ì‚Ý‚Æ‚¨‚é
 			c_Position = VAdd(c_Position, TempMoveVector);		//ˆÚ“®
-			c_Rotation = VAdd(c_Rotation, TempRotVector);
+			//c_Rotation = VAdd(c_Rotation, TempRotVector);
 		}
 	}
 
