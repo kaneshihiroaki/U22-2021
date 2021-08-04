@@ -10,7 +10,7 @@ float LightRotateAngle;
 float LightRotateAngle2;
 int SpotLightHandle;
 int PointLightHandle;
-int DirLightHandle; 
+int DirLightHandle;
 int i, j;
 float DrawX, DrawZ;
 
@@ -18,6 +18,7 @@ int time = 600;
 int count;
 int cntFlg;
 float distance = 1200.0f;
+int WaitTime = 0;
 
 VECTOR dis;
 VECTOR dis1;
@@ -64,7 +65,7 @@ void Light_init() {
 
 	// ポイントライトを作成する
 	PointLightHandle = CreatePointLightHandle(VGet(0.0f, 0.0f, 0.0f), 7000.0f, 1.016523f, 0.000100f, 0.000010f);
-	
+
 	// ポイントライトのアンビエントカラーを無効にする
 	SetLightAmbColorHandle(PointLightHandle, GetColorF(0.0f, 0.0f, 0.0f, 0.0f));
 
@@ -73,7 +74,7 @@ void Light_init() {
 
 	//ポイントライトの初期値を設定
 	SetLightPositionHandle(PointLightHandle, VGet(0.0f, 1000.0f, 0.0f));
-	
+
 	//// ディレクショナルライトを作成する
 	//DirLightHandle = CreateDirLightHandle(VGet(-1.0f, 0.0f, 0.0f));
 
@@ -82,7 +83,7 @@ void Light_init() {
 
 	//// ディレクショナルライトのディフューズカラーを緑にする
 	//SetLightDifColorHandle(DirLightHandle, GetColorF(5.0f, 5.0f, 10.0f, 0.0f));
-	
+
 	// グローバルアンビエントライト( 大域環境光 )を２０％の明るさにする
 	SetGlobalAmbientLight(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 
@@ -105,14 +106,19 @@ void Light()
 	if (time < 600) {
 		time++;
 	}
-	else if (time >= 600) {
-		while (cntFlg == count) {
-				count = GetRand(8);
-			}
+	else if (time >= 600 && WaitTime == 0) {
+		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count || cntFlg + 5 == count || cntFlg - 5 == count
+			|| cntFlg + 6 == count || cntFlg - 6 == count || cntFlg + 7 == count || cntFlg - 7 == count || cntFlg + 8 == count || cntFlg - 8 == count)
+		{
+			count = GetRand(8);
+		}
 		cntFlg = count;
 		time = 0;
-		//10秒間処理を止める
-		WaitTimer(10000);
+		WaitTime = 1;
+	}
+	else if (WaitTime == 1) {
+		WaitTime = 0;
+		time = 0;
 	}
 	if (count == 0) {
 		if (LightPos.x > dis.x) {
@@ -209,8 +215,8 @@ void Light()
 
 	//10カウント表示
 	SetFontSize(100);
-	DrawFormatString(500, 10, 0x25525000, "%d秒",time/60);
-	
+	DrawFormatString(500, 10, 0x25525000, "%d秒", time / 60);
+
 	// スポットライトの位置の更新
 	SetLightPositionHandle(SpotLightHandle, LightPos);
 }
