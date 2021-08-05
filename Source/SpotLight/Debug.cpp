@@ -211,11 +211,10 @@ void Build_Time() {
 		data[4], data[5],
 		time);
 
-	version = 0.02f;		//ビルドのバージョン、金曜日がくるたびに数値を上げて更新すること
+	version = 0.03f;		//ビルドのバージョン、金曜日がくるたびに数値を上げて更新すること
 	//printfDx("ver%.2f", version);
 
 	DrawFormatString(10, 10, 0x000000, "ver%.2f",version);
-
 }
 
 void Collision_player() {
