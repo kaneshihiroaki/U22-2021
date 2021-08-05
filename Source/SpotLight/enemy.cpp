@@ -232,7 +232,7 @@ bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 		float ez = Light.z - c_ObjPos[i].z;
 
 		float er = (ex * ex) + (ez * ez);
-		float elr = (100.0f+70.0f);
+		float elr = (80.0f+70.0f);
 		float elr2 = (elr * elr);
 
 		// enemy‚Ælight‚Ì“–‚½‚è”»’è( TRUE:“–‚½‚Á‚Ä‚¢‚é FALSE:“–‚½‚Á‚Ä‚¢‚È‚¢ )

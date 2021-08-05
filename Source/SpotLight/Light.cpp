@@ -27,13 +27,14 @@ bool LightFlg;
 
 VECTOR dis[9];
 VECTOR LightPos;
+VECTOR LightPos2;
 
 void Light_init() {
 
-	// 頂点シェーダーを読み込む
+	//頂点シェーダーを読み込む
 	VertexShaderHandle = LoadVertexShader("Shader/NormalMesh_SpotPointLightVS.vso");
 
-	// ピクセルシェーダーを読み込む
+	//ピクセルシェーダーを読み込む
 	PixelShaderHandle = LoadPixelShader("Shader/NormalMesh_SpotPointLightPS.pso");
 
 	// 使用する頂点シェーダーをセット
@@ -64,25 +65,13 @@ void Light_init() {
 	PointLightHandle = CreatePointLightHandle(VGet(0.0f, 0.0f, 0.0f), 7000.0f, 1.016523f, 0.000100f, 0.000010f);
 
 	// ポイントライトのアンビエントカラーを無効にする
-	SetLightAmbColorHandle(PointLightHandle, GetColorF(0.0f, 0.0f, 0.0f, 0.0f));
+	SetLightAmbColorHandle(PointLightHandle, GetColorF(10.0f, 10.0f, 10.0f, 0.0f));
 
 	// ポイントライトのディフューズカラーを強い色にする
-	SetLightDifColorHandle(PointLightHandle, GetColorF(5.0f, 5.0f, 10.0f, 0.0f));
+	SetLightDifColorHandle(PointLightHandle, GetColorF(9.0f, 9.0f, 9.0f, 0.0f));
 
 	//ポイントライトの初期値を設定
-	SetLightPositionHandle(PointLightHandle, VGet(0.0f, 1000.0f, 0.0f));
-
-	//// ディレクショナルライトを作成する
-	//DirLightHandle = CreateDirLightHandle(VGet(-1.0f, 0.0f, 0.0f));
-
-	//// ディレクショナルライトのアンビエントカラーを抑える
-	//SetLightAmbColorHandle(DirLightHandle, GetColorF(0.0f, 0.0f, 0.0f, 0.0f));
-
-	//// ディレクショナルライトのディフューズカラーを緑にする
-	//SetLightDifColorHandle(DirLightHandle, GetColorF(5.0f, 5.0f, 10.0f, 0.0f));
-
-	//グローバルアンビエントライト( 大域環境光 )を２０％の明るさにする
-	SetGlobalAmbientLight(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
+	SetLightPositionHandle(PointLightHandle, VGet(0.0f, 1500.0f, 0.0f));
 
 	LightFlg = true;
 
@@ -138,10 +127,14 @@ void Light()
 
 	// ライトの位置の回転値を加算
 	LightPos = VGet(LightRotateAngle * 200.0f, 800.0f, LightRotateAngle2 * 200.0f);
+	LightPos2 = VGet(LightRotateAngle * 200.0f, 1100.0f, LightRotateAngle2 * 200.0f);
 
 	//10カウント表示
 	SetFontSize(100);
 	DrawFormatString(500, 10, 0x25525000, "%d秒", time / 60);
+
+	//ポイントライトの初期値を設定
+	SetLightPositionHandle(PointLightHandle,LightPos2);
 
 	// スポットライトの位置の更新
 	SetLightPositionHandle(SpotLightHandle, LightPos);
