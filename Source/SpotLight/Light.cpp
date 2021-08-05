@@ -1,6 +1,8 @@
 #include "DxLib.h"
 #include <math.h>
 #include "Debug.h"
+#include "Light.h"
+
 #define DRAW_NUM	(3)
 #define SPACE		(512.0f)
 
@@ -79,7 +81,7 @@ void Light_init() {
 	//// ディレクショナルライトのディフューズカラーを緑にする
 	//SetLightDifColorHandle(DirLightHandle, GetColorF(5.0f, 5.0f, 10.0f, 0.0f));
 
-	// グローバルアンビエントライト( 大域環境光 )を２０％の明るさにする
+	//グローバルアンビエントライト( 大域環境光 )を２０％の明るさにする
 	SetGlobalAmbientLight(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
 
 	LightFlg = true;
