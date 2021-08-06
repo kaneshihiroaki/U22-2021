@@ -33,3 +33,18 @@ int CHARACTER::StaminaCount(bool MoveFlag,int num) {
 	return Stamina.s_Count[num];
 }
 
+int CHARACTER::PlayerStaminaCount(bool MoveFlag, int count) {
+	if (MoveFlag == false) {
+		if (count < Stamina.s_StaminaMax) {
+			count++;
+		}
+	}
+	else {
+		if (count > 0) {
+			count--;
+		}
+	}
+
+	return count;
+}
+

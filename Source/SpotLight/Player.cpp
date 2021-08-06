@@ -115,19 +115,19 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 	float z = c_Position.z + Cos;
 
 	Att.s_Rang += Att.s_AttackSpeed;
-	//DrawSphere3D(c_Position, Att.s_Rang, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
+	DrawSphere3D(VGet(x, c_Position.y, z), 50, 16, GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
 
-	DrawCube3D(VGet(x-100, c_Position.y, z),
-		VGet(x+100.0f, c_Position.y+100.0f,z+200.0f),
-		GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
-	
+	//DrawCube3D(VGet(x - 100, c_Position.y, z),
+	//	VGet(x + 100.0f, c_Position.y + 100.0f, z + 200.0f),
+	//	GetColor(255, 0, 0), GetColor(255, 0, 0), TRUE);
+
 	if (Att.s_Rang >= Att.s_RangMax) {
 		Att.s_AttackStartKey = false;
 		Att.s_Rang = 0.0f;
 	}
-	
+
 	for (int i = 0; i < ENEMY_MAX; i++) {
-		if (HitCheck_Sphere_Sphere(c_Position, Att.s_Rang, c_enemyCol->c_ObjPos[i], 55)) {
+		if (HitCheck_Sphere_Sphere(VGet(x, c_Position.y, z), 50, c_enemyCol->c_ObjPos[i], 55)) {
 			ene->SetEnemyMoveKey(i);
 			Att.s_ParaKey[i] = true;
 		}
@@ -151,12 +151,12 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	// 入力状態を取得
 	GetJoypadDirectInputState(DX_INPUT_PAD1, &inputGet);
 
-	////TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
-	////TempMoveVector.y = 0.0f;
-	////TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
+	//TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+	//TempMoveVector.y = 0.0f;
+	//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
 
 	//TempRotVector.x = 0.0f;
-	////TempRotVector.y = (PlayerSin + PlayerCos * (M_PI / 180));
+	//////TempRotVector.y = (PlayerSin + PlayerCos * (M_PI / 180));
 	//TempRotVector.y = 0.0f;
 	//TempRotVector.z = 0.0f;
 	////c_PlayerAng = 30;
@@ -171,78 +171,164 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	////DrawFormatString(10, 130, 0x888888, "x:%f z:%f", cos(inputGet.X),
 	////	cos(inputGet.X));
 	////DrawSphere3D(VGet(Angx, c_Position.y, Angz),25, 32, GetColor(0, 0, 0), GetColor(0, 0, 0), TRUE);
-	//float debug1 = sin(camera->GetCameraAngle());
-	//float debug2 = cos(camera->GetCameraAngle());
-	//float debug3 = debug1+debug2;
+	//float debug1 = sin(camera->GetCameraAngle() * (M_PI / 180));
+	//float debug2 = cos(camera->GetCameraAngle() * (M_PI / 180));
+	//float debug3 = debug1 + debug2;
 
-	//DrawLine3D(c_Position, VGet(c_Position.x * debug1, c_Position.y + 10.0f, c_Position.z * debug2), 0x008080);
+	//DrawLine3D(c_Position, VGet(c_Position.x * debug3, c_Position.y + 10.0f, c_Position.z * debug3), 0x008080);
 
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
+
 	if (Key_Look == false) {
 		// プレイヤー移動
-		//左移動
-		if ((inputGet.X < 0))
+		//右上移動
+		if (((g_NowKey & PAD_INPUT_RIGHT) != 0) && ((g_NowKey & PAD_INPUT_UP) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) c_MoveVector.x = -c_movespeed;
+			if (c_StmCount > 0) {
+				c_MoveVector.x = c_movespeed;
+				c_MoveVector.z = c_movespeed;
+			}
 
 			float rag = sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI);
 
 			//TempRotVector.x = 0.0f;
 			//TempRotVector.y = (sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI)) + (c_MoveVector.x * sin(camera->GetCameraAngle() / 180.0f * M_PI) - c_MoveVector.z * cos(camera->GetCameraAngle() / 180.0f * M_PI));
 			//TempRotVector.z = 0.0f;
-			TempRotVector.x = 0.0f;
-			TempRotVector.y = 270 * (M_PI / 180);	//左むく
-			TempRotVector.z = 0.0f;
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = 45 * (M_PI / 180);	//左むく
+			c_PlayerAng = 45;
+			//TempRotVector.z = 0.0f;
 		}
-		//右方向
-		if ((inputGet.X > 0))
+		//右下移動
+		else if (((g_NowKey & PAD_INPUT_RIGHT) != 0) && ((g_NowKey & PAD_INPUT_DOWN) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) c_MoveVector.x = c_movespeed;
+			if (c_StmCount > 0) {
+				c_MoveVector.x = c_movespeed;
+				c_MoveVector.z = -c_movespeed;
+			}
+			float rag = sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI);
 
-			float rag = inputGet.X / 180.0f * M_PI;
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = 135 * (M_PI / 180);	//左むく
+			c_PlayerAng = 135;
+			//TempRotVector.z = 0.0f;
+		}
+		//左下移動
+		else if (((g_NowKey & PAD_INPUT_LEFT) != 0) && ((g_NowKey & PAD_INPUT_DOWN) != 0))
+		{
+			c_MoveFlag = true;
+			if (c_StmCount > 0) {
+				c_MoveVector.x = -c_movespeed;
+				c_MoveVector.z = -c_movespeed;
+			}
+			float rag = sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI);
 
 			//TempRotVector.x = 0.0f;
 			//TempRotVector.y = (sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI)) + (c_MoveVector.x * sin(camera->GetCameraAngle() / 180.0f * M_PI) - c_MoveVector.z * cos(camera->GetCameraAngle() / 180.0f * M_PI));
 			//TempRotVector.z = 0.0f;
-			TempRotVector.x = 0.0f;
-			TempRotVector.y = 90 * (M_PI / 180);	//右むく
-			TempRotVector.z = 0.0f;
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = 225 * (M_PI / 180);	//左むく
+			c_PlayerAng = 225;
+			//TempRotVector.z = 0.0f;
 		}
-		//下方向
-		if ((inputGet.Y > 0))
+		//左上移動
+		else if (((g_NowKey & PAD_INPUT_LEFT) != 0) && ((g_NowKey & PAD_INPUT_UP) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) c_MoveVector.z = -c_movespeed;
+			if (c_StmCount > 0) {
+				c_MoveVector.x = -c_movespeed;
+				c_MoveVector.z = c_movespeed;
+			}
+			float rag = sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI);
+
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = (sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI)) + (c_MoveVector.x * sin(camera->GetCameraAngle() / 180.0f * M_PI) - c_MoveVector.z * cos(camera->GetCameraAngle() / 180.0f * M_PI));
+			//TempRotVector.z = 0.0f;
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = 315 * (M_PI / 180);	//左むく
+			c_PlayerAng = 315;
+			//TempRotVector.z = 0.0f;
+		}
+		//左移動
+		else if ((g_NowKey & PAD_INPUT_LEFT) != 0)
+		{
+			c_MoveFlag = true;
+			if (c_StmCount > 0)c_MoveVector.x = -c_movespeed;
+
+			float rag = sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI);
+
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = (sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI)) + (c_MoveVector.x * sin(camera->GetCameraAngle() / 180.0f * M_PI) - c_MoveVector.z * cos(camera->GetCameraAngle() / 180.0f * M_PI));
+			//TempRotVector.z = 0.0f;
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = 270 * (M_PI / 180);	//左むく
+			c_PlayerAng = 270;
+			//TempRotVector.z = 0.0f;
+		}
+		//右方向
+		else if ((g_NowKey & PAD_INPUT_RIGHT) != 0)
+		{
+			c_MoveFlag = true;
+			if (c_StmCount > 0)c_MoveVector.x = c_movespeed;
+
+			float rag = inputGet.X / 180.0f * M_PI;
+
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = (sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI)) + (c_MoveVector.x * cos(camera->GetCameraAngle() / 180.0f * M_PI) - c_MoveVector.z * sin(camera->GetCameraAngle() / 180.0f * M_PI));
+			//TempRotVector.z = 0.0f;
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = 90 * (M_PI / 180);	//右むく
+			c_PlayerAng = 90;
+			//TempRotVector.z = 0.0f;
+		}
+		//下方向
+		else if ((g_NowKey & PAD_INPUT_DOWN) != 0)
+		{
+			c_MoveFlag = true;
+			if (c_StmCount > 0)c_MoveVector.z = -c_movespeed;
 
 			float rag = inputGet.Y / 180.0f * M_PI;
 
 			//TempRotVector.x = 0.0f;
 			//TempRotVector.y = (sin(camera->GetCameraAngle() / 180.0f * M_PI) + sin(camera->GetCameraAngle() / 180.0f * M_PI)) + (c_MoveVector.x * sin(camera->GetCameraAngle() / 180.0f * M_PI) - c_MoveVector.z * sin(camera->GetCameraAngle() / 180.0f * M_PI));
 			//TempRotVector.z = 0.0f;
-			TempRotVector.x = 0.0f;
-			TempRotVector.y = 180 * (M_PI / 180);	//下むく
-			TempRotVector.z = 0.0f;
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = 180 * (M_PI / 180);	//下むく
+			c_PlayerAng = 180;
+			//TempRotVector.z = 0.0f;
 		}
 		//上方向
-		if ((inputGet.Y < 0))
+		else if ((g_NowKey & PAD_INPUT_UP) != 0)
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) c_MoveVector.z = c_movespeed;
+			if (c_StmCount > 0) {
+				c_MoveVector.z = c_movespeed;
+			}
 
 			float rag = inputGet.Y / 180.0f * M_PI;
 
 			//TempRotVector.x = 0.0f;
 			//TempRotVector.y = (sin(camera->GetCameraAngle() / 180.0f * M_PI) + cos(camera->GetCameraAngle() / 180.0f * M_PI)) + (c_MoveVector.x * cos(camera->GetCameraAngle() / 180.0f * M_PI) - c_MoveVector.z * sin(camera->GetCameraAngle() / 180.0f * M_PI));
 			//TempRotVector.z = 0.0f;
-			TempRotVector.x = 0.0f;
-			TempRotVector.y = 0 * (M_PI / 180);	//上むく
-			TempRotVector.z = 0.0f;
+			//TempRotVector.x = 0.0f;
+			//TempRotVector.y = 0 * (M_PI / 180);	//上むく
+			c_PlayerAng = 0;
+			//TempRotVector.z = 0.0f;
 		}
+		//else {
+		//c_PlayerAng = -camera->GetCameraAngle();
+		//}
+
+		//if (c_MoveFlag == true) {
+		//	TempRotVector.x = 0.0f;
+		//	TempRotVector.y = 0 * (M_PI / 180);	//上むく
+		//	TempRotVector.z = 0.0f;
+		//}
 	}
 
 	//Gキーを押したらプレイヤーが一定時間止まる
@@ -281,6 +367,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	//DrawSphere3D(VGet(c_Position.x, c_Position.y+100.0f, c_Position.z),25, 32, GetColor(0, 0, 0), GetColor(0, 0, 0), TRUE);
 	//printfDx("%f\n", c_Rotation.y);
 
+	c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmCount);		//スタミナ管理
 
 	//VECTOR c_plus;
 
@@ -293,13 +380,20 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	{
 		//移動場所の確認
 		VECTOR TempMoveVector;
-		
+		//float Sin1 = sin(c_PlayerAng * (M_PI / 180));
+		//float Cos1 = cos(c_PlayerAng * (M_PI / 180));
+
+		//c_MoveVector.x = Sin1 * c_movespeed;
+		//c_MoveVector.y = 0.0f;
+		//c_MoveVector.z = Cos1 * c_movespeed;
+
 		float Sin = sin(camera->GetCameraAngle() / 180.0f * M_PI);
 		float Cos = cos(camera->GetCameraAngle() / 180.0f * M_PI);
 
 		TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
 		TempMoveVector.y = 0.0f;
 		TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
+
 
 		//DrawFormatString(10, 130, 0x888888, "x:%f z:%f", TempMoveVector.x, TempMoveVector.z);
 
@@ -317,12 +411,12 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		if (c_MoveFlag) {//移動できるときにのみとおる
 			c_Position = VAdd(c_Position, TempMoveVector);		//移動
 			//c_Rotation = VAdd(c_Rotation, TempRotVector);
-			c_Rotation = TempRotVector;
-			
+			c_Rotation.x = 0.0f;
+			c_Rotation.y = c_PlayerAng * (M_PI / 180);
+			c_Rotation.z = 0.0f;
 		}
 	}
 
-	c_StmCount = StaminaCount(c_MoveFlag,0);		//スタミナ管理
 
 
 	if (Collision_Player) {

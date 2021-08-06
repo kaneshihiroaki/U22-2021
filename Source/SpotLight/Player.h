@@ -55,7 +55,7 @@ private:
 		bool s_AttackStartKey = false;
 		float s_Rang = 0.0f;
 		const float s_AttackSpeed = 10.0f;
-		const float s_RangMax = 200.0f;
+		const float s_RangMax = 500.0f;
 
 		int s_Memo=0;
 		bool s_ParaKey[ENEMY_MAX];
