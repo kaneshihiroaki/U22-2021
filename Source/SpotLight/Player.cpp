@@ -455,15 +455,13 @@ bool PLAYER::CheckHit(VECTOR c_Position, VECTOR LightPos) {
 	float lr = (10.0f + 70.0f);
 	float lr2 = (lr * lr);
 
-	DrawSphere3D(Player,10.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
-	DrawSphere3D(Light,70.0f, 32, GetColor(255,0, 255), GetColor(255, 255, 255), TRUE);
+	/*DrawSphere3D(Player,10.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+	DrawSphere3D(Light,70.0f, 32, GetColor(255,0, 255), GetColor(255, 255, 255), TRUE);*/
 
 	// player‚Ælight‚Ì“–‚½‚è”»’è( TRUE:“–‚½‚Á‚Ä‚¢‚é FALSE:“–‚½‚Á‚Ä‚¢‚È‚¢ )
 	if (cr <= lr2&&LightFlg == false){
 		Key_Look = true;
 		c_MoveFlag = false;
-		SetFontSize(200);
-		DrawString(490, 120, "Win", GetColor(0xff, 0x00, 0x00));
 		return true;
 	}
 

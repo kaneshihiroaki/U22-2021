@@ -241,8 +241,8 @@ bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 			return true;
 		}
 
-		return false;
 	}
+	return false;
 
 	/*SetFontSize(20);
 	DrawFormatString(10, 100, 0x888888, "x:%f", Player.x);
