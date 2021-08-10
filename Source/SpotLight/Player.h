@@ -53,7 +53,14 @@ private:
 
 	struct Attack {
 		bool s_AttackStartKey = false;
+		bool s_GetOneRot = false;
 		float s_Rang = 0.0f;
+
+		float s_RotSin = 0.0f;
+		float s_RotCos = 0.0f;
+		float s_Posx = 0.0f;
+		float s_Posz = 0.0f;
+
 		const float s_AttackSpeed = 10.0f;
 		const float s_RangMax = 500.0f;
 
