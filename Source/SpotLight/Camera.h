@@ -1,12 +1,13 @@
 #pragma once
 
 class PLAYER;
+class STAGE;
 
 class CAMERA
 {
 private:
 	//const float c_CameraPosHeight = 100000.0f;			//カメラの初期高さ
-	float c_CameraPosDist = 600.0f;					//プレイヤーとカメラの初期距離
+	float c_CameraPosDist = 1500.0f;					//プレイヤーとカメラの初期距離
 	const float c_CameraSpeed = 3.0f;				//カメラの移動速さ
 
 	float  c_SinParam;
@@ -26,6 +27,6 @@ public:
 
 
 
-	void Camera_Control(PLAYER* play);
+	void Camera_Control(STAGE* stage);
 
 };
