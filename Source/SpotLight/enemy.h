@@ -24,6 +24,8 @@ public:
 	int c_Enemy_MoveAng[ENEMY_MAX];		//エネミーの現在の角度をいれる変数
 	int c_EnemyModel[ENEMY_MAX];	//エネミーのインポート用変数
 
+
+
 	VECTOR c_SpotPos;//スポットライトの場所
 	float c_SpotRadius = 30.0f;//スポットライトの半径
 
@@ -49,7 +51,8 @@ private:
 
 	VECTOR c_MoveVector;	//移動変数
 
-	const float c_movespeed = 5.0f;	//エネミー移動スピード
+	float c_EnemySpeed[ENEMY_MAX];//現在のスピード
+	const float c_movespeed = 5.0f;	//エネミー最大移動スピード
 	float Coefficient;//エネミーの移動係数（ななめ移動用）
 
 };

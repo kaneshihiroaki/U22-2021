@@ -25,6 +25,7 @@ ENEMY::ENEMY()
 		c_Rotation[i] = VGet(0.0f, 0.0f /*(c_PlayerAng * (M_PI / 180))*/, 0.0f);//エネミーの回転
 		c_EnemyAng[i] = 0;//エネミーの角度
 		c_Enemy_MoveAng[i] = 0;//エネミーの角度
+		c_EnemySpeed[i] = 0.0f;//エネミーのスピード
 		c_EnemyState[i] = ENEMY_IDLE;//エネミーの初期状態
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
 	}
@@ -59,7 +60,7 @@ void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
 	
 	
 
-
+	
 	switch (c_EnemyState[num])
 	{
 	case ENEMY_IDLE:
@@ -77,7 +78,10 @@ void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
 	case ENEMY_ATTACK:
 		break;
 	}
-	
+
+	SetFontSize(20);
+	DrawFormatString(1100, 620 + 20 * num, 0xFFFFFF, "%dの敵体力 %d\n", num, c_StmCount[num]);
+
 }
 
 void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
@@ -180,12 +184,23 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
 	{
+		if (c_EnemySpeed[num] == 0.0f) {//初速
+			c_EnemySpeed[num] = 0.9f;
+		}
+		else if (c_EnemySpeed[num] == 1.0f) {
+		}
+		else if (c_EnemySpeed[num] > 1.0f) {
+			c_EnemySpeed[num] = 1.0f;
+		}
+		else {//加速度
+			c_EnemySpeed[num] += 0.01f;
+		}
 		//移動場所の確認
 		VECTOR TempMoveVector;
 
-		TempMoveVector.x = c_MoveVector.x * Coefficient;
+		TempMoveVector.x = c_MoveVector.x * Coefficient * c_EnemySpeed[num];
 		TempMoveVector.y = 0.0f;
-		TempMoveVector.z = c_MoveVector.z * Coefficient;
+		TempMoveVector.z = c_MoveVector.z * Coefficient * c_EnemySpeed[num];
 
 
 		//当たりl判定の確認
@@ -207,15 +222,18 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 		{
 			c_ObjPos[num] = VAdd(c_ObjPos[num], TempMoveVector);
 		}
+		
 	}
 
+	if(c_MoveFlag == false) {//移動失敗
+		c_EnemySpeed[num] = 0.0f;
+	}
 	c_StmCount[num] = StaminaCount(c_MoveFlag,num);		//スタミナ管理
 
 
-	SetFontSize(20);
-	DrawSphere3D(c_SpotPos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
-	DrawFormatString(1100, 620+20*num, 0xFFFFFF, "%dの敵体力 %d\n", num, c_StmCount[num]);
-
+	
+	//DrawSphere3D(c_SpotPos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+	
 	//if (Collision_Player) {
 	//	Collision_Draw();//デバック用
 	//}
