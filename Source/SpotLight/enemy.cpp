@@ -1,4 +1,8 @@
+#define _USE_MATH_DEFINES
+
 #include <DxLib.h>
+#include <math.h>
+
 #include "enemy.h"
 #include "Light.h"
 #include "Player.h"
@@ -18,6 +22,9 @@ ENEMY::ENEMY()
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
 		c_MoveKey[i] = true;
 		c_StmCount[i] = 300;	//エネミーの体力の最大
+		c_Rotation[i] = VGet(0.0f, 0.0f /*(c_PlayerAng * (M_PI / 180))*/, 0.0f);//エネミーの回転
+		c_EnemyAng[i] = 0;//エネミーの角度
+		c_Enemy_MoveAng[i] = 0;//エネミーの角度
 		c_EnemyState[i] = ENEMY_IDLE;//エネミーの初期状態
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
 	}
@@ -35,7 +42,7 @@ ENEMY::~ENEMY()
 void ENEMY::Enemy_Creat() {
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		MV1SetPosition(c_EnemyModel[i], c_ObjPos[i]);//エネミーの移動後位置をいれてる
-
+		MV1SetRotationXYZ(c_EnemyModel[i], c_Rotation[i]);//エネミーの角度をいれている
 		MV1DrawModel(c_EnemyModel[i]);				 //エネミーのモデル描画
 	}
 	//オブジェクト描画
@@ -75,7 +82,7 @@ void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
 
 void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 {
-
+	int p_Enemy_MoveAng = 0;//エネミーの向かう角度
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
@@ -89,26 +96,85 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 	if (c_SpotPos.x - c_SpotRadius > c_ObjPos[num].x) {
 		c_MoveFlag = true;
 		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.x = c_movespeed;
+		p_Enemy_MoveAng = 90;//右
+
 	}
 
 	if (c_SpotPos.x + c_SpotRadius < c_ObjPos[num].x) {
 		c_MoveFlag = true;
 		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.x = -c_movespeed;
+		p_Enemy_MoveAng = 270;//左
+
 	}
 
 	if (c_SpotPos.z - c_SpotRadius > c_ObjPos[num].z) {
 		c_MoveFlag = true;
 		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.z = c_movespeed;
+		p_Enemy_MoveAng = 0;//上
+
 	}
 
 	if (c_SpotPos.z + c_SpotRadius < c_ObjPos[num].z) {
 		c_MoveFlag = true;
 		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.z = -c_movespeed;
+		p_Enemy_MoveAng = 180;//下
 	}
 
 	if ((c_MoveVector.x != 0.0f) && (c_MoveVector.z != 0.0f)) {
 		Coefficient = 0.7f;
+		if ((c_MoveVector.x > 0.0f) && (c_MoveVector.z > 0.0f))p_Enemy_MoveAng = 45;//右上
+		if ((c_MoveVector.x > 0.0f) && (c_MoveVector.z < 0.0f))p_Enemy_MoveAng = 135;//右下
+		if ((c_MoveVector.x < 0.0f) && (c_MoveVector.z < 0.0f))p_Enemy_MoveAng = 225;//左下
+		if ((c_MoveVector.x < 0.0f) && (c_MoveVector.z > 0.0f))p_Enemy_MoveAng = 315;//左上
 	}
+
+	//エネミーの角度を決定
+	if (c_Enemy_MoveAng[num] >= 180) {//現在の角度が180~359
+		if (c_Enemy_MoveAng[num] < p_Enemy_MoveAng || c_Enemy_MoveAng[num] - 180 > p_Enemy_MoveAng) {//185以上で5未満
+			if ((c_Enemy_MoveAng[num] < p_Enemy_MoveAng && c_Enemy_MoveAng[num] + 6 > p_Enemy_MoveAng) || (c_Enemy_MoveAng[num] + 6 - 360 > p_Enemy_MoveAng)) {
+				c_Enemy_MoveAng[num] = p_Enemy_MoveAng;
+			}
+			else {
+				c_Enemy_MoveAng[num] += 6;
+				if (c_Enemy_MoveAng[num] >= 360) {
+					c_Enemy_MoveAng[num] -= 360;
+				}
+			}
+		}
+		else {//現在の角度が185として、目指す角度が185以下で5以上なら
+			if (c_Enemy_MoveAng[num] - 6 < p_Enemy_MoveAng) {
+				c_Enemy_MoveAng[num] = p_Enemy_MoveAng;
+			}
+			else {
+				c_Enemy_MoveAng[num] -= 6;
+			}
+		}
+	}
+	else {//現在の角度が0~179
+		if (c_Enemy_MoveAng[num] > p_Enemy_MoveAng || c_Enemy_MoveAng[num] + 180 < p_Enemy_MoveAng) {//
+			if ((c_Enemy_MoveAng[num] > p_Enemy_MoveAng && c_Enemy_MoveAng[num] - 6 < p_Enemy_MoveAng) || c_Enemy_MoveAng[num] - 6 + 360 < p_Enemy_MoveAng) {
+				c_Enemy_MoveAng[num] = p_Enemy_MoveAng;
+			}
+			else {
+				c_Enemy_MoveAng[num] -= 6;
+				if (c_Enemy_MoveAng[num] < 0) {
+					c_Enemy_MoveAng[num] += 360;
+				}
+			}
+
+
+		}
+		else {//現在の角度が5として、目指す角度が185以下で5以上なら
+			if (c_Enemy_MoveAng[num] + 6 > p_Enemy_MoveAng) {
+				c_Enemy_MoveAng[num] = p_Enemy_MoveAng;
+			}
+			else {
+				c_Enemy_MoveAng[num] += 6;
+			}
+		}
+	}
+	c_Rotation[num].y = c_Enemy_MoveAng[num] * (M_PI / 180);
+
 
 	
 	//移動フラグがたってたら移動

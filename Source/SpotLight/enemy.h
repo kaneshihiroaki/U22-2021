@@ -19,6 +19,9 @@ public:
 
 	VECTOR c_AddPosEnemy[ENEMY_MAX];	//エネミーの大きさ
 	VECTOR c_ObjPos[ENEMY_MAX];		//オブジェクトの位置
+	VECTOR c_Rotation[ENEMY_MAX];		//エネミーの回転
+	int c_EnemyAng[ENEMY_MAX];		//エネミーの角度をM_PI込みでいれる変数
+	int c_Enemy_MoveAng[ENEMY_MAX];		//エネミーの現在の角度をいれる変数
 	int c_EnemyModel[ENEMY_MAX];	//エネミーのインポート用変数
 
 	VECTOR c_SpotPos;//スポットライトの場所
