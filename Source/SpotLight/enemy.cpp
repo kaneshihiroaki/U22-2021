@@ -208,13 +208,44 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 			if (i == num)continue;
 			if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_ObjPos[i], 55, 55) == true) {
 				if (Enemy_Push(i, c_ObjPos[i], TempMoveVector) == false) {//falseなら動かせなかった
-					c_MoveFlag = false;
+					VECTOR Reserve_Vect = TempMoveVector;//X座標を0にしてみる
+
+					float Reserve = Reserve_Vect.x;//X座標を0にしてみる
+					Reserve_Vect.x = 0.0f;//
+					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_ObjPos[i], 55, 55) == true) {
+						Reserve_Vect.x = Reserve;//
+						Reserve = Reserve_Vect.z;//
+						Reserve_Vect.z = 0.0f;//
+						if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_ObjPos[i], 55, 55) == true) {
+							c_MoveFlag = false;
+						}
+					}
+
+					if (c_MoveFlag) {//TRUEなら移動先を変更
+						TempMoveVector = Reserve_Vect;
+					}
+					
 				}
 			}
 		}
 		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), player->c_Position, 55, 55) == true) {
 			if (player->Player_Push(camera, c_ObjPos, TempMoveVector) == false) {//falseなら動かせなかった
-				c_MoveFlag = false;
+				VECTOR Reserve_Vect = TempMoveVector;//X座標を0にしてみる
+
+				float Reserve = Reserve_Vect.x;//X座標を0にしてみる
+				Reserve_Vect.x = 0.0f;//
+				if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), player->c_Position, 55, 55) == true) {
+					Reserve_Vect.x = Reserve;//
+					Reserve = Reserve_Vect.z;//
+					Reserve_Vect.z = 0.0f;//
+					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), player->c_Position, 55, 55) == true) {
+						c_MoveFlag = false;
+					}
+				}
+
+				if (c_MoveFlag) {//TRUEなら移動先を変更
+					TempMoveVector = Reserve_Vect;
+				}
 			}
 		}
 
@@ -307,6 +338,7 @@ bool Collision_Cube(VECTOR MyCol, VECTOR YouCol, float MyScale, float YouScale) 
 
 	return false;
 }
+
 bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 	VECTOR Light = LightPos;
 	LightPos.y = 0.0f;
