@@ -288,6 +288,8 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	if (CheckHitKey(KEY_INPUT_G)) Damage.s_paralyzeKey = true;
 	if (Damage.s_paralyzeKey == true) Player_Paralyze();
 
+	c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmCount);        //スタミナ管理
+
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
 	{
@@ -302,8 +304,8 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[0], 55) == true) {
-				if (Att.s_ParaKey[0] == false) {
+			if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[i], 55) == true) {
+				if (Att.s_ParaKey[i] == false) {
 					c_MoveFlag = false;
 				}
 				else if ((ene->Enemy_Push(0, c_Position, TempMoveVector)) == false) {//falseなら動かせなかった。
