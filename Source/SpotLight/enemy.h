@@ -2,6 +2,8 @@
 #include "Character.h"
 
 #define ENEMY_MAX 3
+#define ENEMY_WIDTH 55
+#define ENEMY_HEIGHT 55
 #define ENEMY_IDLE 0//スタミナを回復している状態
 #define ENEMY_MOVE 1//移動している状態
 #define ENEMY_ATTACK 2//攻撃している状態
@@ -19,10 +21,13 @@ public:
 
 	VECTOR c_AddPosEnemy[ENEMY_MAX];	//エネミーの大きさ
 	VECTOR c_ObjPos[ENEMY_MAX];		//オブジェクトの位置
-	VECTOR c_Rotation[ENEMY_MAX];		//エネミーの回転
-	int c_EnemyAng[ENEMY_MAX];		//エネミーの角度をM_PI込みでいれる変数
-	int c_Enemy_MoveAng[ENEMY_MAX];		//エネミーの現在の角度をいれる変数
+	VECTOR c_Rotation[ENEMY_MAX];		//エネミーの回転rad = 度*π/180
+	int c_Enemy_MoveAng[ENEMY_MAX];		//エネミーの現在の角度をいれる変数0~359
 	int c_EnemyModel[ENEMY_MAX];	//エネミーのインポート用変数
+
+
+	VECTOR c_EnemyAddVect[ENEMY_MAX];//15フレの間横にベクトルを加えるようにする
+	int c_EnemyFrameCount[ENEMY_MAX];//15フレ数える
 
 
 
@@ -58,7 +63,7 @@ private:
 	float c_EnemySpeed[ENEMY_MAX];//現在のスピード
 	const float c_movespeed = 5.0f;	//エネミー最大移動スピード
 	float Coefficient;//エネミーの移動係数（ななめ移動用）
-
+	bool Collision_Cube2(VECTOR MyCol, VECTOR MyRot, VECTOR YouCol, float MyScale_X, float MyScale_Z, float YouScale_X, float YouScale_Z);
 };
 
-bool Collision_Cube(VECTOR MyCol, VECTOR YouCol, float MyScale, float YouScale);
+bool Collision_Cube(VECTOR MyCol, VECTOR MyRot, VECTOR YouCol, float MyScale_X, float MyScale_Z, float YouScale_X, float YouScale_Z);

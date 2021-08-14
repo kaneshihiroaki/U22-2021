@@ -18,16 +18,24 @@ ENEMY::ENEMY()
 
 	// ３Ｄモデルの読み込み
 	for (int i = 0; i < ENEMY_MAX; i++) {
-		c_EnemyModel[i] = MV1LoadModel("Model/EnMe.mv1");
+		if (i == 0) {
+			c_EnemyModel[i] = MV1LoadModel("Model/EnMe.mv1");
+		}
+		else {
+			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
+		}
+		
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
 		c_MoveKey[i] = true;
 		c_StmCount[i] = 300;	//エネミーの体力の最大
 		c_Rotation[i] = VGet(0.0f, 0.0f /*(c_PlayerAng * (M_PI / 180))*/, 0.0f);//エネミーの回転
-		c_EnemyAng[i] = 0;//エネミーの角度
 		c_Enemy_MoveAng[i] = 0;//エネミーの角度
 		c_EnemySpeed[i] = 0.0f;//エネミーのスピード
 		c_EnemyState[i] = ENEMY_IDLE;//エネミーの初期状態
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
+
+		c_EnemyAddVect[i] = VGet(0.0f, 0.0f, 0.0f);//追い越す処理のときに加算するベクトルを保存
+		c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
@@ -124,10 +132,55 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 		p_Enemy_MoveAng = 180;//下
 	}
 
-	//敵が追い越す処理
+	/****************
+	ここから
+	*****************/
+	//敵が追い越す処理(敵)
 	for (int i = 0; i < ENEMY_MAX; i++) {
+		//if (num != 0)continue;//０のみ検証
 		if (i == num)continue;
+		VECTOR Check_Future_Pos = c_ObjPos[num];//変更してもいいようにローカルVEC変数
+		Check_Future_Pos.x += (c_MoveVector.x * 15);//１～３０フレーム後のポジション（仮） speed×30フレーム
+		Check_Future_Pos.z += (c_MoveVector.z * 15);//１～３０フレーム後のポジション（仮）
+		if (i == 1)DrawSphere3D(Check_Future_Pos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
+		if (c_EnemyFrameCount[num] == 0) {
+
+
+
+			
+			//if(Collision_Cube())　//角度を参照していないので変更をする
+			if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], c_ObjPos[i], 30, 150, 105, 55) == true) {
+
+				float rad = c_Rotation[num].y + (M_PI / 2);
+				c_EnemyAddVect[num].x = c_MoveVector.x * cos(rad) - c_MoveVector.z * sin(rad);
+				c_EnemyAddVect[num].z = c_MoveVector.x * sin(rad) + c_MoveVector.z * cos(rad);
+
+				c_MoveVector.x += c_EnemyAddVect[num].x;
+				c_MoveVector.z += c_EnemyAddVect[num].z;
+
+				c_EnemyFrameCount[num] = 1;
+
+				//c_MoveVector.x += 5.0f;
+
+				SetFontSize(20);
+				DrawFormatString(1100, 600, 0xFFFFFF, "いるぜ\n");
+
+			}
+		}
+		else if (c_EnemyFrameCount[num] < 30*(ENEMY_MAX-1)) {
+			c_MoveVector.x += c_EnemyAddVect[num].x;
+			c_MoveVector.z += c_EnemyAddVect[num].z;
+			c_EnemyFrameCount[num]++;
+		}
+		else {
+			c_EnemyFrameCount[num] = 0;
+		}
 	}
+	//敵が追い越す処理（プレイヤー）
+	/****************
+	ここまで
+	*****************/
 
 	if ((c_MoveVector.x != 0.0f) && (c_MoveVector.z != 0.0f)) {
 		Coefficient = 0.7f;
@@ -210,7 +263,7 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 		//当たりl判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
-			if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_ObjPos[i], 55, 55) == true) {
+			if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
 				if (Enemy_Push(i, c_ObjPos[i], TempMoveVector) == false) {//falseなら動かせなかった
 					VECTOR Reserve_Vect = TempMoveVector;//X座標を0にしてみる
 
@@ -218,11 +271,11 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 					Reserve_Vect.x = 0.0f;//
 					
 					if (Coefficient!=1.0f) {
-						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_ObjPos[i], 55, 55) == true) && (Enemy_Push(i, c_ObjPos[i], TempMoveVector) == false)) {
+						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) && (Enemy_Push(i, c_ObjPos[i], TempMoveVector) == false)) {
 							Reserve_Vect.x = Reserve;//
 							Reserve = Reserve_Vect.z;//
 							Reserve_Vect.z = 0.0f;//
-							if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_ObjPos[i], 55, 55) == true) {
+							if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
 								if (Enemy_Push(i, c_ObjPos[i], TempMoveVector) == false) {//falseなら動かせなかった
 									c_MoveFlag = false;
 								}
@@ -242,19 +295,19 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 				}
 			}
 		}
-		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), player->c_Position, 55, 55) == true) {
+		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
 			if (player->Player_Push(camera, c_ObjPos, TempMoveVector) == false) {//falseなら動かせなかった
 				VECTOR Reserve_Vect = TempMoveVector;//X座標を0にしてみる
 
 				float Reserve = Reserve_Vect.x;//X座標を0にしてみる
 				Reserve_Vect.x = 0.0f;//
 				if (Coefficient != 1.0) {
-					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), player->c_Position, 55, 55) == true && player->Player_Push(camera, c_ObjPos, Reserve_Vect) == false) {//falseなら動かせなかった
+					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true && player->Player_Push(camera, c_ObjPos, Reserve_Vect) == false) {//falseなら動かせなかった
 
 						Reserve_Vect.x = Reserve;//
 						Reserve = Reserve_Vect.z;//
 						Reserve_Vect.z = 0.0f;//
-						if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), player->c_Position, 55, 55) == true) {
+						if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
 							if (player->Player_Push(camera, c_ObjPos, Reserve_Vect) == false) {//falseなら動かせなかった
 								c_MoveFlag = false;
 							}
@@ -324,11 +377,11 @@ bool ENEMY::Enemy_Push(int num, VECTOR PlayerCol, VECTOR PushVec)
 		//当たりl判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
-			if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_ObjPos[i], 55, 55) == true) {
+			if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector),c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
 				c_MoveFlag = false;
 			}
 		}
-		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), PlayerCol, 55, 55) == true) {
+		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_Rotation[num], PlayerCol, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
 			c_MoveFlag = false;
 		}
 
@@ -344,22 +397,76 @@ bool ENEMY::Enemy_Push(int num, VECTOR PlayerCol, VECTOR PushVec)
 }
 
 
-// プレイヤーとオブジェクトのあたり判定
-bool Collision_Cube(VECTOR MyCol, VECTOR YouCol, float MyScale, float YouScale) {
+// プレイヤーとオブジェクトのあたり判定//角度を参照できるようにする（未実装）
+//MyColが自分の中心座標、YouColが相手の中心座標、MyScaleが自分の大きさだったが、縦と横も追加する
+bool Collision_Cube(VECTOR MyCol,VECTOR MyRot, VECTOR YouCol, float MyScale_X,float MyScale_Z, float YouScale_X, float YouScale_Z) {
 	// 各座標を取得する
 	VECTOR pos = MyCol;
+	VECTOR rot = MyRot;
 	VECTOR posYou = YouCol;
 
+	/*********************************************************************************
+	
+
+	// 矩形の中心を原点とした相対座標を作成する
+	VECTOR relative_position = VGet(posYou.x - pos.x,0.0f, posYou.z - pos.z);
+
+	// 相対座標に対して矩形の回転を打ち消す逆行列を掛ける
+	VECTOR transform_pos = VGet(
+		cosf(rot.y) * relative_position.x + sinf(rot.y) * relative_position.z,
+		0.0f,
+		-sinf(rot.y) * relative_position.x + cosf(rot.y) * relative_position.z
+	);
+
+	// 矩形と点の当たり判定を行う
+	if (-MyScale_X / 2.0f <= transform_pos.x && MyScale_X / 2.0f >= transform_pos.x &&
+		-MyScale_Z / 2.0f <= transform_pos.z && MyScale_Z / 2.0f >= transform_pos.z)
+	{
+		return true;
+	}
+	***********************************************************************/
+
 	//当たったらtrue
-	if ((pos.x + MyScale > posYou.x - YouScale &&
-		pos.z + MyScale > posYou.z - YouScale) &&
-		(pos.x - MyScale < posYou.x + YouScale &&
-			pos.z - MyScale < posYou.z + YouScale)) {
+	if ((pos.x + MyScale_X > posYou.x - YouScale_X &&
+	 	 pos.z + MyScale_Z > posYou.z - YouScale_Z) &&
+		(pos.x - MyScale_X < posYou.x + YouScale_X &&
+		 pos.z - MyScale_Z < posYou.z + YouScale_Z)) {
 		return true;
 	}
 
 	return false;
 }
+
+//矩形と点の当たり判定（角度を考慮に入れている）
+//これはまだ編集できそう（点のほうの大きさなどを考慮にいれることができそう）
+bool ENEMY::Collision_Cube2(VECTOR MyCol, VECTOR MyRot, VECTOR YouCol, float MyScale_X, float MyScale_Z, float YouScale_X, float YouScale_Z) {
+	// 各座標を取得する
+	VECTOR pos = MyCol;
+	VECTOR rot = MyRot;
+	VECTOR posYou = YouCol;
+
+
+	// 矩形の中心を原点とした相対座標を作成する
+	VECTOR relative_position = VGet(posYou.x - pos.x, 0.0f, posYou.z - pos.z);
+
+	// 相対座標に対して矩形の回転を打ち消す逆行列を掛ける
+	VECTOR transform_pos = VGet(
+		cosf(rot.y) * relative_position.x + sinf(rot.y) * relative_position.z,
+		0.0f,
+		-sinf(rot.y) * relative_position.x + cosf(rot.y) * relative_position.z
+	);
+
+	// 矩形と点の当たり判定を行う
+	if (-MyScale_X / 2.0f <= transform_pos.x && MyScale_X / 2.0f >= transform_pos.x &&
+		-MyScale_Z / 2.0f <= transform_pos.z && MyScale_Z / 2.0f >= transform_pos.z)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
 
 bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 	VECTOR Light = LightPos;
