@@ -35,8 +35,12 @@ public:
 
 	//ƒQƒbƒ^[•ƒZƒbƒ^[
 	bool GetEnemyMoveKey(int i) { return c_MoveKey[i]; }
-	void SetEnemyMoveKey(int num) {
-		c_MoveKey[num] = !c_MoveKey[num];
+	//“G‚ÉUŒ‚‚ğ“–‚Ä‚½Û‚É~‚ß‚éˆ—
+	void SetEnemyMoveFalseKey(int num) {
+		c_MoveKey[num] = false;
+	}
+	void SetEnemyMoveTrueKey(int num) {
+		c_MoveKey[num] = false;
 	}
 	bool c_MoveKey[ENEMY_MAX];//“G‚Ì“®‚«‚ğŠÇ— true:“®‚¢‚Ä‚¢‚é false:~‚Ü‚Á‚Ä‚¢‚é
 	

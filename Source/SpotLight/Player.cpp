@@ -25,6 +25,8 @@ PLAYER::PLAYER()
 
 	c_StmCount = 300;		//プレイヤーの体力
 
+	c_Acc = 0.0f;
+
 	// ３Ｄモデルの読み込み
 	c_PlayerModel = MV1LoadModel("Model/MyPlayer.mv1");
 	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
@@ -182,7 +184,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 			VGet(x + (Att.s_RotCos * Att.s_width), c_Position.y, z - (Att.s_RotSin * Att.s_width)),
 			VGet(x - (Att.s_RotCos * Att.s_width), c_Position.y, z + (Att.s_RotSin * Att.s_width)),
 			ene,i, Player_rot.y) == true){
-			ene->SetEnemyMoveKey(i);
+			ene->SetEnemyMoveFalseKey(i);
 			Att.s_ParaKey[i] = true;
 		}
 	}
@@ -293,14 +295,26 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
 	{
+		if (c_Acc == 0.0f) {//初速
+			c_Acc = 0.9f;
+		}
+		else if (c_Acc == 1.0f) {
+		}
+		else if (c_Acc > 1.0f) {
+			c_Acc = 1.0f;
+		}
+		else {//加速度
+			c_Acc += 0.01f;
+		}
+
 		//移動場所の確認
 		VECTOR TempMoveVector;
 		float Sin1 = sin(c_PlayerAng * (M_PI / 180));
 		float Cos1 = cos(c_PlayerAng * (M_PI / 180));
 
-		TempMoveVector.x = c_MoveVector.x * Sin1;
+		TempMoveVector.x = c_MoveVector.x * Sin1 * c_Acc;
 		TempMoveVector.y = 0.0f;
-		TempMoveVector.z = c_MoveVector.z * Cos1;
+		TempMoveVector.z = c_MoveVector.z * Cos1 * c_Acc;
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
@@ -322,6 +336,9 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 			c_Rotation.z = 0.0f;
 		}
 	}
+	else {
+		c_Acc = 0.0f;
+	}
 
 
 	//攻撃
@@ -331,7 +348,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		if (Att.s_ParaKey[i] == true) {
 			if (Att.s_TimePara++ >= Att.s_TimeMaxPara) {
 				Att.s_TimePara = 0;
-				ene->SetEnemyMoveKey(i);
+				ene->SetEnemyMoveTrueKey(i);
 			}
 		}
 	}
