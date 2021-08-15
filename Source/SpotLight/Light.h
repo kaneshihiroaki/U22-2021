@@ -18,3 +18,4 @@ extern bool LightFlg;//Ž~‚Ü‚Á‚Ä‚¢‚é‚©’²‚×‚é( TRUE:“®‚­ FALSE:Ž~‚Ü‚Á‚Ä‚¢‚é )
 
 void Light();
 void Light_init();
+void Light_SetUp();

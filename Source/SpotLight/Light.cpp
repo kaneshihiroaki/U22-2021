@@ -29,8 +29,7 @@ VECTOR dis[9];
 VECTOR LightPos;
 VECTOR LightPos2;
 
-void Light_init() {
-
+void Light_SetUp() {
 	//頂点シェーダーを読み込む
 	VertexShaderHandle = LoadVertexShader("Shader/NormalMesh_SpotPointLightVS.vso");
 
@@ -42,9 +41,6 @@ void Light_init() {
 
 	// 使用するピクセルシェーダーをセット
 	SetUsePixelShader(PixelShaderHandle);
-
-	// ライトの位置を回転する値を初期化
-	LightRotateAngle = 0.0f;
 
 	// 標準ライトを無効にする
 	SetLightEnable(FALSE);
@@ -70,12 +66,58 @@ void Light_init() {
 	// ポイントライトのディフューズカラーを強い色にする
 	SetLightDifColorHandle(PointLightHandle, GetColorF(9.0f, 9.0f, 9.0f, 0.0f));
 
+
+}
+
+void Light_init() {
+
+	////頂点シェーダーを読み込む
+	//VertexShaderHandle = LoadVertexShader("Shader/NormalMesh_SpotPointLightVS.vso");
+
+	////ピクセルシェーダーを読み込む
+	//PixelShaderHandle = LoadPixelShader("Shader/NormalMesh_SpotPointLightPS.pso");
+
+	//// 使用する頂点シェーダーをセット
+	//SetUseVertexShader(VertexShaderHandle);
+
+	//// 使用するピクセルシェーダーをセット
+	//SetUsePixelShader(PixelShaderHandle);
+
+	// ライトの位置を回転する値を初期化
+	LightRotateAngle = 0.0f;
+
+	//// 標準ライトを無効にする
+	//SetLightEnable(FALSE);
+
+	////ライトの処理を1ピクセルごとに行う（処理が重くなる）
+	//SetUsePixelLighting(TRUE);
+
+	//// スポットライトを作成する
+	//SpotLightHandle = CreateSpotLightHandle(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, -1.0f, 0.0f), 0.18f, 0.15f, 1000.0f, 0.4f, 0.001662f, 0.000001f);
+
+	//// スポットライトのアンビエントカラーを黄色にする
+	//SetLightAmbColorHandle(SpotLightHandle, GetColorF(10.0f, 10.0f, 0.0f, 0.0f));
+
+	//// スポットライトのディフューズカラーを黄色にする
+	//SetLightDifColorHandle(SpotLightHandle, GetColorF(10.0f, 10.0f, 0.0f, 0.0f));
+
+	//// ポイントライトを作成する
+	//PointLightHandle = CreatePointLightHandle(VGet(0.0f, 0.0f, 0.0f), 7000.0f, 1.016523f, 0.000100f, 0.000010f);
+
+	//// ポイントライトのアンビエントカラーを無効にする
+	//SetLightAmbColorHandle(PointLightHandle, GetColorF(10.0f, 10.0f, 10.0f, 0.0f));
+
+	//// ポイントライトのディフューズカラーを強い色にする
+	//SetLightDifColorHandle(PointLightHandle, GetColorF(9.0f, 9.0f, 9.0f, 0.0f));
+
 	//ポイントライトの初期値を設定
 	SetLightPositionHandle(PointLightHandle, VGet(0.0f, 1500.0f, 0.0f));
 
 	LightFlg = true;
 
 	count = 1;
+
+	distance = 1200.0f;
 
 	dis[0] = VGet(-distance, 0.0f, distance);
 	dis[1] = VGet(0.0f, 0.0f, distance);

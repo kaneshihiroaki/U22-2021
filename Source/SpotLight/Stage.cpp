@@ -3,21 +3,31 @@
 
 STAGE::STAGE()
 {
-	// 座標初期化
-	c_StagePosition = VGet(100.0f, 0.0f, 0.0f);
-	//大きさ初期化
-	c_StageScale = { 0.5f,0.5f,0.5f };
+	//// 座標初期化
+	//c_StagePosition = VGet(100.0f, 0.0f, 0.0f);
+	////大きさ初期化
+	//c_StageScale = { 0.5f,0.5f,0.5f };
 
 	// ３Ｄモデルの読み込み
 	c_StageModel = MV1LoadModel("Model/Stage3.mv1");
 
-	MV1SetPosition(c_StageModel, c_StagePosition);
-	MV1SetScale(c_StageModel, c_StageScale);
+	//MV1SetPosition(c_StageModel, c_StagePosition);
+	//MV1SetScale(c_StageModel, c_StageScale);
 
 }
 
 STAGE::~STAGE()
 {
+}
+
+void STAGE::init() {
+	// 座標初期化
+	c_StagePosition = VGet(100.0f, 0.0f, 0.0f);
+	//大きさ初期化
+	c_StageScale = { 0.5f,0.5f,0.5f };
+
+	MV1SetPosition(c_StageModel, c_StagePosition);
+	MV1SetScale(c_StageModel, c_StageScale);
 }
 
 void STAGE::Stage_Make() {

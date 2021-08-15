@@ -11,7 +11,8 @@ public:
 	VECTOR c_StageScale;	//ステージの大きさ
 	VECTOR c_StagePosition;	//ステージの位置
 
-	void Stage_Make();
+	void Stage_Make();	//ステージ作成
+	void init();	//初期化
 
 private:
 

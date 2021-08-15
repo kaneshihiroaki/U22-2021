@@ -10,7 +10,7 @@
 #include "Light.h"
 #include "Character.h"
 //ゲームの状態
-int GameState = 0;
+//int GameState = 0;
 
 
 int g_KeyFlg;
@@ -24,7 +24,6 @@ MAIN::MAIN()
 {
 	GameState = 0;
 
-
 	c_camera = new CAMERA();
 	c_player = new PLAYER();
 	c_stage = new STAGE();
@@ -33,6 +32,18 @@ MAIN::MAIN()
 
 MAIN::~MAIN()
 {
+}
+
+void MAIN::Game_init() {
+
+	c_player->init();
+	c_enemy->init();
+	c_stage->init();
+	c_camera->init();
+	Light_init();
+
+	GameState = 2;
+	
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -47,7 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (DxLib_Init() < 0) return -1;
 
-	Light_init();
+	Light_SetUp();
 
 
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -61,6 +72,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetWriteZBuffer3D(TRUE);
 
 	MAIN *c_main = new MAIN();
+
+	//ゲームステータスをタイトルへ
+	c_main->GameState = 0;
 
 	// メインループ(何かキーが押されたらループを抜ける)
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
@@ -81,17 +95,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			else {
 				DebugMode = true;
 			}
-
 		}
 
 		switch (c_main->GameState)
 		{
 		case 0:
-			c_main->Game_Main();
-			break;
-		case 1:
 			c_main->Game_Title();
 			break;
+		case 1:
+			c_main->Game_init();
+			break;
+		case 2:
+			c_main->Game_Main();
+			break;
+
 		default:
 			break;
 		} 
@@ -100,7 +117,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (DebugCom() == -1) {
 			//デバックするなら入る
 		}
-		Light();
 		// 裏画面の内容を表画面に反映する
 		ScreenFlip();
 	}
@@ -170,6 +186,9 @@ void MAIN::Game_Main() {
 			GameState = 1;
 		}
 	}
+
+	Light();
+
 }
 
 void MAIN::Game_Title() {
@@ -178,8 +197,8 @@ void MAIN::Game_Title() {
 	SetFontSize(30);
 	//GameJudge = false;
 	DrawFormatString(460, 300, 0x000000, "Bボタンでゲームスタート");
-	if (((g_NowKey & PAD_INPUT_2) != 0)) {
-		GameState = 0;
+	if (((g_NowKey & PAD_INPUT_2) != 0) || CheckHitKey(KEY_INPUT_I)) {
+		GameState = 1;
 		LightFlg = false;
 		Key_Look = false;
 		Win = false;

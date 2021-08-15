@@ -14,10 +14,7 @@ private:
 	float  c_CosParam;
 	float  c_CameraHAngle;		//Šp“x
 	float  c_CameraVAngle;		//Šp“x
-
-protected:
-	//float getCameraAngle() { return c_CameraHAngle; };
-
+	
 
 public:
 	CAMERA();
@@ -25,8 +22,7 @@ public:
 
 	float GetCameraAngle() { return c_CameraHAngle; }
 
-
-
+	void init();	//‰Šú‰»
 	void Camera_Control(STAGE* stage);
 
 };

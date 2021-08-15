@@ -24,6 +24,7 @@ public:
 
 	int GameState;		//ƒQ[ƒ€‚Ìó‘Ô
 
+	void Game_init();	//ƒQ[ƒ€‚Ì‰Šú‰»
 	void Game_Main();
 	void Game_Title();
 

@@ -31,6 +31,7 @@ public:
 	void Player_Move(CAMERA* camera, ENEMY* ene);
 	bool Player_Push(CAMERA* camera, VECTOR EnemyCol[ENEMY_MAX], VECTOR PushVec);
 	bool CheckHit(VECTOR Player, VECTOR LightPos);
+	void init();	//初期化
 
 private:
 	float c_PlayerAng;		//プレイヤーの角度
@@ -81,7 +82,7 @@ private:
 	void Player_Attack(ENEMY* ene,VECTOR Player_rot);		//攻撃
 	bool Player_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD, VECTOR AttPosLD, ENEMY* enepos, int num, float ang);
 
-	ENEMY* c_enemyCol;		//敵の座標を取得するために取得
+	//ENEMY* c_enemyCol;		//敵の座標を取得するために取得
 };
 
 

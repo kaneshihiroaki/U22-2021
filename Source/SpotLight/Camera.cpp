@@ -7,6 +7,20 @@
 
 CAMERA::CAMERA()
 {
+	//// ƒJƒƒ‰‚ÌŒü‚«‚ğ‰Šú‰»
+	//c_CameraHAngle = 0.0f;
+	//c_CameraVAngle = 35.0f;
+
+	//// Œü‚«‚ğ‰Šú‰»
+	//c_SinParam = 0.0f;
+	//c_CosParam = 0.0f;
+}
+
+CAMERA::~CAMERA()
+{
+}
+
+void CAMERA::init() {
 	// ƒJƒƒ‰‚ÌŒü‚«‚ğ‰Šú‰»
 	c_CameraHAngle = 0.0f;
 	c_CameraVAngle = 35.0f;
@@ -14,10 +28,6 @@ CAMERA::CAMERA()
 	// Œü‚«‚ğ‰Šú‰»
 	c_SinParam = 0.0f;
 	c_CosParam = 0.0f;
-}
-
-CAMERA::~CAMERA()
-{
 }
 
 void CAMERA::Camera_Control(STAGE* stage) {

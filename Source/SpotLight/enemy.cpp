@@ -11,10 +11,10 @@
 
 ENEMY::ENEMY()
 {
-	//オブジェクトの座標初期化
-	c_ObjPos[0] = VGet(500.0f, 80.0f, 500.0f);
-	c_ObjPos[1] = VGet(300.0f, 100.0f, 50.0f);
-	c_ObjPos[2] = VGet(50.0f, 100.0f, 170.0f);
+	////オブジェクトの座標初期化
+	//c_ObjPos[0] = VGet(500.0f, 80.0f, 500.0f);
+	//c_ObjPos[1] = VGet(300.0f, 100.0f, 50.0f);
+	//c_ObjPos[2] = VGet(50.0f, 100.0f, 170.0f);
 
 	// ３Ｄモデルの読み込み
 	for (int i = 0; i < ENEMY_MAX; i++) {
@@ -25,6 +25,37 @@ ENEMY::ENEMY()
 			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
 		}
 		
+		//c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
+		//c_MoveKey[i] = true;
+		//c_StmCount[i] = 300;	//エネミーの体力の最大
+		//c_Rotation[i] = VGet(0.0f, 0.0f /*(c_PlayerAng * (M_PI / 180))*/, 0.0f);//エネミーの回転
+		//c_Enemy_MoveAng[i] = 0;//エネミーの角度
+		//c_EnemySpeed[i] = 0.0f;//エネミーのスピード
+		//c_EnemyState[i] = ENEMY_IDLE;//エネミーの初期状態
+		//MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
+
+		//c_EnemyAddVect[i] = VGet(0.0f, 0.0f, 0.0f);//追い越す処理のときに加算するベクトルを保存
+		//c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
+	}
+
+	//c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
+	//Coefficient = 1.0f;
+	//c_MoveFlag = FALSE;
+	//c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
+}
+
+ENEMY::~ENEMY()
+{
+}
+
+void ENEMY::init() {
+	//オブジェクトの座標初期化
+	c_ObjPos[0] = VGet(500.0f, 80.0f, 500.0f);
+	c_ObjPos[1] = VGet(300.0f, 100.0f, 50.0f);
+	c_ObjPos[2] = VGet(50.0f, 100.0f, 170.0f);
+
+	// ３Ｄモデルの読み込み
+	for (int i = 0; i < ENEMY_MAX; i++) {
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
 		c_MoveKey[i] = true;
 		c_StmCount[i] = 300;	//エネミーの体力の最大
@@ -42,10 +73,6 @@ ENEMY::ENEMY()
 	Coefficient = 1.0f;
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
-}
-
-ENEMY::~ENEMY()
-{
 }
 
 void ENEMY::Enemy_Creat() {

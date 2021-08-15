@@ -45,7 +45,7 @@ public:
 		c_MoveKey[num] = false;
 	}
 	void SetEnemyMoveTrueKey(int num) {
-		c_MoveKey[num] = false;
+		c_MoveKey[num] = true;
 	}
 	bool c_MoveKey[ENEMY_MAX];//敵の動きを管理 true:動いている false:止まっている
 	
@@ -53,6 +53,7 @@ public:
 	void Enemy_State(int num, PLAYER* player, CAMERA* camera);//敵の状態を制御関数
 	bool EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos);//enemyの判定
 	void debug();		//デバッグ用、用がなくなったら消します
+	void init();		//初期化
 private:
 	bool c_MoveFlag;//エネミーが移動しているのか判定
 	int c_StmCount[ENEMY_MAX];	//敵の体力

@@ -11,11 +11,39 @@
 
 PLAYER::PLAYER()
 {
+	//// プレイヤー座標初期化
+	//c_Position = VGet(100.0f, 100.0f, 0.0f);
+	//c_PlayerAng = 0;	//プレイヤーの角度
+	////プレイヤー回転（ラジアン変換）
+	//c_Rotation = VGet(0.0f, (c_PlayerAng *(M_PI/180)), 0.0f);
+	////プレイヤーの大きさ初期化
+	//c_AddPosPlay = { 0.5f,0.5f,0.5f };
+
+	//c_MoveFlag = FALSE;	//プレイヤーが移動しているのか判定
+
+	//c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
+
+	//c_StmCount = 300;		//プレイヤーの体力
+
+	//c_Acc = 0.0f;
+
+	// ３Ｄモデルの読み込み
+	c_PlayerModel = MV1LoadModel("Model/MyPlayer.mv1");
+	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
+
+	//c_enemyCol = new ENEMY();
+}
+
+PLAYER::~PLAYER()
+{
+}
+
+void PLAYER::init() {
 	// プレイヤー座標初期化
 	c_Position = VGet(100.0f, 100.0f, 0.0f);
 	c_PlayerAng = 0;	//プレイヤーの角度
 	//プレイヤー回転（ラジアン変換）
-	c_Rotation = VGet(0.0f, (c_PlayerAng *(M_PI/180)), 0.0f);
+	c_Rotation = VGet(0.0f, (c_PlayerAng * (M_PI / 180)), 0.0f);
 	//プレイヤーの大きさ初期化
 	c_AddPosPlay = { 0.5f,0.5f,0.5f };
 
@@ -26,16 +54,6 @@ PLAYER::PLAYER()
 	c_StmCount = 300;		//プレイヤーの体力
 
 	c_Acc = 0.0f;
-
-	// ３Ｄモデルの読み込み
-	c_PlayerModel = MV1LoadModel("Model/MyPlayer.mv1");
-	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
-
-	c_enemyCol = new ENEMY();
-}
-
-PLAYER::~PLAYER()
-{
 }
 
 void PLAYER::Player_Controller() {
@@ -322,7 +340,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 				if (Att.s_ParaKey[i] == false) {
 					c_MoveFlag = false;
 				}
-				else if ((ene->Enemy_Push(0, c_Position, TempMoveVector)) == false) {//falseなら動かせなかった。
+				else if ((ene->Enemy_Push(i, c_Position, TempMoveVector)) == false) {//falseなら動かせなかった。
 					c_MoveFlag = false;
 				}
 			}
@@ -342,7 +360,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 
 
 	//攻撃
-	if (((g_NowKey & PAD_INPUT_2) != 0) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
+	if (((g_KeyFlg & PAD_INPUT_2) != 0) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
 	if (Att.s_AttackStartKey == true) Player_Attack(ene, c_Rotation);
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (Att.s_ParaKey[i] == true) {
