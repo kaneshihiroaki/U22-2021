@@ -231,7 +231,7 @@ void Collision_player() {
 void GamePadIn() {
 
 	DINPUT_JOYSTATE input;
-
+	SetFontSize(20);
 	// “ü—Íó‘Ô‚ğæ“¾
 	GetJoypadDirectInputState(DX_INPUT_PAD1, &input);
 	int num;

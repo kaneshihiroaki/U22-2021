@@ -262,7 +262,9 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 	}
 	c_Rotation[num].y = c_Enemy_MoveAng[num] * (M_PI / 180);
 
-
+	if (Damage[num].s_paralyzeKey == true) Enemy_Paralyze(num);//しびれているならカウントと移動フラグをoffにする
+	if (((g_KeyFlg & PAD_INPUT_5) != 0) && Att[num].s_AttackStartKey == false)Att[num].s_AttackStartKey = true;//今のところR1をおすと敵が攻撃
+	if (Att[num].s_AttackStartKey == true) Enemy_Attack(player, num);
 	
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
@@ -372,10 +374,14 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 	//}
 }
 
+
+//numは押される側
 bool ENEMY::Enemy_Push(int num, VECTOR PlayerCol, VECTOR PushVec)
 {
-	//しびれているかどうか
-	/*if()*/
+	//しびれているかどうか。しびれていないならfalseで帰る
+	if (Damage[num].s_paralyzeKey == false) {
+		return false;
+	}
 
 	//移動してるかどうか
 	c_MoveFlag = FALSE;
@@ -493,6 +499,112 @@ bool ENEMY::Collision_Cube2(VECTOR MyCol, VECTOR MyRot, VECTOR YouCol, float MyS
 	return false;
 }
 
+
+void ENEMY::Enemy_Attack(PLAYER* player, int num) {
+
+	//一度だけ取得
+	if (Att[num].s_GetOneRot == false) {
+		//移動場所の確認
+		Att[num].s_RotSin = sin(c_Rotation[num].y);
+		Att[num].s_RotCos = cos(c_Rotation[num].y);
+		Att[num].s_Posx = c_ObjPos[num].x;
+		Att[num].s_Posz = c_ObjPos[num].z;
+		Att[num].s_GetOneRot = true;
+	}
+
+	//エネミーの前方方向取得
+	float x = Att[num].s_Posx + (Att[num].s_RotSin * Att[num].s_Rang);
+	float z = Att[num].s_Posz + (Att[num].s_RotCos * Att[num].s_Rang);
+
+	//攻撃が前方に進む
+	Att[num].s_Rang += Att[num].s_AttackSpeed;
+
+	//下横
+	DrawLine3D(VGet(x + (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width)),
+		VGet(x - (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width)), 0x888888);
+
+	//右縦
+	DrawLine3D(VGet(x + (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
+		VGet(x + (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width)), 0x888888);
+
+	//左縦
+	DrawLine3D(VGet(x - (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
+		VGet(x - (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width)), 0x888888);
+
+	//上横
+	DrawLine3D(VGet(x - (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
+		VGet(x + (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)), 0x888888);
+
+	//右上は x + (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_Position.y, z - (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)
+	//左上は x - (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_Position.y, z + (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)
+	//右下は x + (Att[num].s_RotCos * Att[num].s_width), c_Position.y, z - (Att[num].s_RotSin * Att[num].s_width)
+	//左下は x - (Att[num].s_RotCos * Att[num].s_width), c_Position.y, z + (Att[num].s_RotSin * Att[num].s_width)
+
+	//攻撃時間
+	if (Att[num].s_Rang >= Att[num].s_RangMax) {
+		Att[num].s_AttackStartKey = false;
+		Att[num].s_GetOneRot = false;
+		Att[num].s_Rang = 0.0f;
+	}
+
+	//エネミーの当たり判定
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (i == num)continue;
+		if (Enemy_AttackCol(VGet(x + (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
+			VGet(x - (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
+			VGet(x + (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width)),
+			VGet(x - (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width)),
+			c_ObjPos[i],num, c_Rotation[num].y) == true) {
+			SetEnemyMoveFalseKey(i);
+		}
+	}
+
+	//プレイヤーの当たり判定
+	if (Enemy_AttackCol(VGet(x + (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
+		VGet(x - (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
+		VGet(x + (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width)),
+		VGet(x - (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width)),
+		player->c_Position, num, c_Rotation[num].y) == true) {
+		player->SetPlayerParalyze();
+		
+	}
+}
+
+bool ENEMY::Enemy_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD, VECTOR AttPosLD,VECTOR YouPos, int num, float ang) {
+	//中心点割り出し
+	float halfx = (AttPosRU.x + AttPosRD.x + AttPosLU.x + AttPosLD.x) / 4;
+	float halfz = (AttPosRU.z + AttPosRD.z + AttPosLU.z + AttPosLD.z) / 4;
+
+	//中心点と敵の座標の距離
+	float distx = YouPos.x - halfx;
+	float distz = YouPos.z - halfz;
+
+	//当たり判定の計算
+	float posx = cos(ang) * distx + sin(ang) * distz;
+	float posz = -sin(ang) * distx + cos(ang) * distz;
+
+	//矩形と点の当たり判定を行う
+	if (-Att[num].s_width /*/ 2.0f*/ <= posx && Att[num].s_width /*/ 2.0f*/ >= posx &&
+		-Att[num].s_heigt / 2.0f <= posz && Att[num].s_heigt / 2.0f >= posz) {
+		return true;
+	}
+
+	return false;
+}
+
+bool ENEMY::CheckPara(int num) {
+	return Damage[num].s_paralyzeKey;
+}//調べたいエネミーがしびれているかどうかの判定
+
+
+void ENEMY::Enemy_Paralyze(int num) {
+	c_MoveFlag = false;
+
+	if (Damage[num].s_ParaTime++ == Damage[num].s_MaxTimeParalyze) {
+		Damage[num].s_paralyzeKey = false;
+		Damage[num].s_ParaTime = 0;
+	}
+}
 
 
 bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {

@@ -24,7 +24,7 @@ public:
 
 	//プレイヤーの被弾判定
 	void SetPlayerParalyze(){
-		Damage.s_paralyzeKey = !Damage.s_paralyzeKey;
+		Damage.s_paralyzeKey = true;//trueしか使ってないので書き換えます
 	}
 
 	void Player_Controller();
@@ -32,6 +32,19 @@ public:
 	bool Player_Push(CAMERA* camera, VECTOR EnemyCol[ENEMY_MAX], VECTOR PushVec);
 	bool CheckHit(VECTOR Player, VECTOR LightPos);
 	void init();	//初期化
+
+	void Player_Paralyze();	//主人公がしびれる（止まる）←しびれているときに入る関数。しびれのカウントをして直すのもここ
+
+
+	bool CheckPara();//調べたいエネミーがしびれているかどうかの判定
+	//痺れ（ダメージ関連）
+	struct Damage
+	{
+		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
+		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
+		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
+	}; Damage Damage;
+
 
 private:
 	float c_PlayerAng;		//プレイヤーの角度
@@ -45,13 +58,7 @@ private:
 	const float c_movespeed = 5.0f;	//プレイヤー移動スピード
 	float c_Acc;	//加速を制御
 
-	//痺れ（ダメージ関連）
-	struct Damage
-	{
-		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
-		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
-		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
-	}; Damage Damage;
+	
 
 	struct Attack {
 		//攻撃を行うかどうか判定変数
@@ -72,13 +79,12 @@ private:
 		const float s_RangMax = 500.0f;
 
 		int s_Memo=0;
-		bool s_ParaKey[ENEMY_MAX];
 		int s_TimePara = 0;
 		const int s_TimeMaxPara = 50;
 	}; Attack Att;
 	
 	void Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]);//デバックモードで使用
-	void Player_Paralyze();	//主人公がしびれる（止まる）
+	
 	void Player_Attack(ENEMY* ene,VECTOR Player_rot);		//攻撃
 	bool Player_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD, VECTOR AttPosLD, ENEMY* enepos, int num, float ang);
 

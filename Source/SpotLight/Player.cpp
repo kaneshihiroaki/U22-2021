@@ -117,9 +117,13 @@ bool Collision_Sphere(VECTOR PlayerCol, VECTOR ObjCol, float EnemyScale) {
 	return false;
 }
 
+bool PLAYER::CheckPara() {
+	return Damage.s_paralyzeKey;
+}//プレイヤーがしびれているかどうかエネミーに返す
+
 void PLAYER::Player_Paralyze() {
 	c_MoveFlag = false;
-
+	
 	if (Damage.s_ParaTime++ == Damage.s_MaxTimeParalyze) {
 		Damage.s_paralyzeKey = false;
 		Damage.s_ParaTime = 0;
@@ -158,6 +162,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 		Att.s_Posx = c_Position.x;
 		Att.s_Posz = c_Position.z;
 		Att.s_GetOneRot = true;
+		c_StmCount -= 15;;		//プレイヤーの体力
 	}
 
 	//プレイヤーの前方方向取得
@@ -194,7 +199,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 		Att.s_GetOneRot = false;
 		Att.s_Rang = 0.0f;
 	}
-	
+
 	//当たり判定
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if(Player_AttackCol(VGet(x + (Att.s_RotCos * Att.s_width) + (Att.s_RotSin * Att.s_heigt), c_Position.y, z - (Att.s_RotSin * Att.s_width) + (Att.s_RotCos * Att.s_heigt)),
@@ -203,7 +208,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 			VGet(x - (Att.s_RotCos * Att.s_width), c_Position.y, z + (Att.s_RotSin * Att.s_width)),
 			ene,i, Player_rot.y) == true){
 			ene->SetEnemyMoveFalseKey(i);
-			Att.s_ParaKey[i] = true;
+			
 		}
 	}
 }
@@ -337,7 +342,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[i], 55) == true) {
-				if (Att.s_ParaKey[i] == false) {
+				if (ene->CheckPara(i) == false) {
 					c_MoveFlag = false;
 				}
 				else if ((ene->Enemy_Push(i, c_Position, TempMoveVector)) == false) {//falseなら動かせなかった。
@@ -362,14 +367,14 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	//攻撃
 	if (((g_KeyFlg & PAD_INPUT_2) != 0) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
 	if (Att.s_AttackStartKey == true) Player_Attack(ene, c_Rotation);
-	for (int i = 0; i < ENEMY_MAX; i++) {
-		if (Att.s_ParaKey[i] == true) {
+	/*for (int i = 0; i < ENEMY_MAX; i++) {
+		if (ene->CheckPara(i) == true) {
 			if (Att.s_TimePara++ >= Att.s_TimeMaxPara) {
 				Att.s_TimePara = 0;
 				ene->SetEnemyMoveTrueKey(i);
 			}
 		}
-	}
+	}*///これよくわからん
 
 
 	if (Collision_Player) {
