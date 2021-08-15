@@ -17,6 +17,7 @@ private:
 		//bool s_MoveFlag;	//移動しているのか判定
 		int s_Count[3];		//動いている時間をカウント
 		int s_PlayerCount;
+		int s_RecoveryCount[3];//回復するまでのインターバル
 		const int s_StaminaMax = 300;		//スタミナの最大値
 	}; Stamina Stamina;
 };
