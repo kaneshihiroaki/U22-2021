@@ -17,7 +17,7 @@ extern int WaitTime;
 
 extern VECTOR LightPos;
 extern bool LightFlg;//~‚Ü‚Á‚Ä‚¢‚é‚©’²‚×‚é( TRUE:“®‚­ FALSE:~‚Ü‚Á‚Ä‚¢‚é )
-extern bool judge_win;//Ÿ‚Á‚½”‚ğƒJƒEƒ“ƒg‚·‚éflg
+
 
 void Light();
 void Light_init();

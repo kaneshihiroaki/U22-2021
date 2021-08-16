@@ -24,7 +24,7 @@ void STAGE::init() {
 	// À•W‰Šú‰»
 	c_StagePosition = VGet(100.0f, 0.0f, 0.0f);
 	//‘å‚«‚³‰Šú‰»
-	c_StageScale = { 0.5f,0.5f,0.5f };
+	c_StageScale = { 1.0f,1.0f,1.0f };
 
 	MV1SetPosition(c_StageModel, c_StagePosition);
 	MV1SetScale(c_StageModel, c_StageScale);
