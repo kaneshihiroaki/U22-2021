@@ -352,12 +352,11 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		}
 		if (c_MoveFlag) {//ˆÚ“®‚Å‚«‚é‚Æ‚«‚É‚Ì‚Ý‚Æ‚¨‚é
 			c_Position = VAdd(c_Position, TempMoveVector);		//ˆÚ“®
-
-			//Šp“x‘ã“ü
-			c_Rotation.x = 0.0f;
-			c_Rotation.y = c_PlayerAng * (M_PI / 180);
-			c_Rotation.z = 0.0f;
 		}
+		//Šp“x‘ã“ü
+		c_Rotation.x = 0.0f;
+		c_Rotation.y = c_PlayerAng * (M_PI / 180);
+		c_Rotation.z = 0.0f;
 	}
 	else {
 		c_Acc = 0.0f;
