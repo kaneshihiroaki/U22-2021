@@ -205,7 +205,7 @@ void Build_Time() {
 	}
 
 	SetFontSize(18);
-	DrawFormatString(1000, 10, 0x000000, "最終ビルド日時\n %c%c%c%c %c%c%c %c%c\n  %s",
+	DrawFormatString(1000, 10, 0xFFFFFF, "最終ビルド日時\n %c%c%c%c %c%c%c %c%c\n  %s",
 		data[7], data[8], data[9], data[10],
 		data[0], data[1], data[2],
 		data[4], data[5],
@@ -214,7 +214,7 @@ void Build_Time() {
 	version = 0.04f;		//ビルドのバージョン、金曜日がくるたびに数値を上げて更新すること
 	//printfDx("ver%.2f", version);
 
-	DrawFormatString(10, 10, 0x000000, "ver%.2f",version);
+	DrawFormatString(10, 10, 0xFFFFFF, "ver%.2f",version);
 }
 
 void Collision_player() {

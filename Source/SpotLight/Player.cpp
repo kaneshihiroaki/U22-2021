@@ -51,7 +51,7 @@ void PLAYER::init() {
 
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
-	c_StmCount = 300;		//プレイヤーの体力
+	c_StmCount = 600;		//プレイヤーの体力
 
 	c_Acc = 0.0f;
 }

@@ -49,6 +49,7 @@ void MAIN::Game_init() {
 	//Ÿ”s”»’è‰Šú‰»
 	finish = true;
 	judgefinish = false;
+	WaitTime = 0;
 
 	//‰Šú‰»‚µ‚½‚çƒQ[ƒ€ƒƒCƒ“‚Ö
 	GameState = 2;
@@ -58,7 +59,7 @@ void MAIN::Game_init() {
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	// ”wŒi‚ÌF
-	SetBackgroundColor(255, 255, 255);
+	SetBackgroundColor(250, 250, 250);
 
 	SetMainWindowText("‚R‚c");
 	ChangeWindowMode(TRUE);
@@ -109,12 +110,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		switch (c_main->GameState)
 		{
 		case 0:
+			// ”wŒi‚ÌF
+			SetBackgroundColor(250, 250, 250);
 			c_main->Game_Title();
 			break;
 		case 1:
 			c_main->Game_init();
 			break;
 		case 2:
+			// ”wŒi‚ÌF
+			SetBackgroundColor(35, 35, 35);
 			c_main->Game_Main();
 
 			//if (((g_NowKey & PAD_INPUT_1) != 0)) {

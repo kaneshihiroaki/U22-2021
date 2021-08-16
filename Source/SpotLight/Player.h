@@ -52,7 +52,7 @@ private:
 	bool c_RotFlag;		//プレイヤーが回転している
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
 	int c_StmCount;		//プレイヤーの体力
-	const int c_StmMax = 300;	//体力の最大値
+	const int c_StmMax = 600;	//体力の最大値
 	VECTOR c_MoveVector;	//移動変数
 
 	const float c_movespeed = 5.0f;	//プレイヤー移動スピード
