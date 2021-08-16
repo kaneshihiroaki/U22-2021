@@ -19,6 +19,10 @@ int g_OldKey;
 char key[256];
 int judge_count = 0;
 bool player_win=false;
+
+bool finish;	//ゲームが終わったか判定（true:ゲーム再開 false:タイトルへ戻る)
+bool judgefinish = false;	//決着ついたか判定	true:終了 false:続ける
+
  
 MAIN::MAIN()
 {
@@ -42,6 +46,11 @@ void MAIN::Game_init() {
 	c_camera->init();
 	Light_init();
 
+	//勝敗判定初期化
+	finish = true;
+	judgefinish = false;
+
+	//初期化したらゲームメインへ
 	GameState = 2;
 	
 }
@@ -107,6 +116,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 2:
 			c_main->Game_Main();
+
+			//if (((g_NowKey & PAD_INPUT_1) != 0)) {
+			//	c_main->GameState = 1;
+			//}
+
 			break;
 
 		default:
@@ -169,7 +183,10 @@ void MAIN::Game_Main() {
 			SetFontSize(200);
 			DrawString(440, 120, "Lose", GetColor(0x00, 0x00, 0xff));
 		}
+		//if(finish == false) GameState = 0;
 	}
+
+	if (finish == false) GameState = 0;	//決着ついたらタイトルへ戻る
 
 	if (!Collision_Player) {
 		MV1DrawModel(c_player->c_PlayerModel);
@@ -183,7 +200,7 @@ void MAIN::Game_Main() {
 		Game_Judge();
 
 		if (((g_NowKey & PAD_INPUT_1) != 0)) {
-			GameState = 1;
+			GameState = 0;
 		}
 	}
 

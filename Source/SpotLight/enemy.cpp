@@ -621,7 +621,7 @@ bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 
 		// enemy‚Ælight‚Ì“–‚½‚è”»’è( TRUE:“–‚½‚Á‚Ä‚¢‚é FALSE:“–‚½‚Á‚Ä‚¢‚È‚¢ )
 		if (er <= elr2&&LightFlg==false) {
-			
+			judgefinish = true;
 			return true;
 		}
 

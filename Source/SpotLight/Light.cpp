@@ -119,6 +119,10 @@ void Light_init() {
 
 	distance = 1200.0f;
 
+	// ライトの位置の回転値を加算
+	LightPos = VGet(0.0f, 800.0f, 0.0f);
+	LightPos2 = VGet(0.0f, 1100.0f, 0.0f);
+
 	dis[0] = VGet(-distance, 0.0f, distance);
 	dis[1] = VGet(0.0f, 0.0f, distance);
 	dis[2] = VGet(distance, 0.0f, distance);
@@ -128,6 +132,19 @@ void Light_init() {
 	dis[6] = VGet(-distance, 0.0f, -distance);
 	dis[7] = VGet(0.0f, 0.0f, -distance);
 	dis[8] = VGet(distance, 0.0f, -distance);
+
+	//角度を初期化
+	LightRotateAngle = 0;
+	LightRotateAngle2 = 0;
+
+	//ポイントライトの初期値
+	SetLightPositionHandle(PointLightHandle, LightPos2);
+
+	// スポットライトの初期値
+	SetLightPositionHandle(SpotLightHandle, LightPos);
+
+	//時間初期化
+	time = 600;
 }
 void Light()
 {
@@ -146,11 +163,13 @@ void Light()
 		WaitTime = 1;
 		Key_Look = false;
 		LightFlg = true;
+		if (judgefinish == true) finish = false;
 	}
 	else if (WaitTime == 1) {
 		WaitTime = 0;
 		time = 0;
 		LightFlg = false;
+		//finish = false;
 	}
 	if (WaitTime == 1 && count < 9) {
 		if (LightPos.x > dis[count].x) {
