@@ -637,6 +637,7 @@ bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 			if (i == 2) {
 				ENEMY_WIN = 3;
 			}
+			judgefinish = true;		//ƒ^ƒCƒgƒ‹‚Ö–ß‚é‚½‚ß‚Ì•Ï”
 			return true;
 		}
 

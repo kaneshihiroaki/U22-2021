@@ -514,7 +514,7 @@ bool PLAYER::CheckHit(VECTOR c_Position, VECTOR LightPos) {
 	if (cr <= lr2&&LightFlg == false){
 		Key_Look = true;
 		c_MoveFlag = false;
-		judgefinish = true;
+		judgefinish = true;		//ƒ^ƒCƒgƒ‹‚Ö–ß‚é‚½‚ß‚Ì•Ï”
 		return true;
 	}
 
