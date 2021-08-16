@@ -93,7 +93,7 @@ void Light_init() {
 	//SetUsePixelShader(PixelShaderHandle);
 
 	// ライトの位置を回転する値を初期化
-	//LightRotateAngle = 0.0f;
+	LightRotateAngle = 0.0f;
 
 	//// 標準ライトを無効にする
 	//SetLightEnable(FALSE);
@@ -151,6 +151,9 @@ void Light_init() {
 	//時間初期化
 	time = 600;
 
+	WaitTime = 0;
+	cntFlg = 4;
+	rc = 4;
 	while (count == 0 || count == 2 || count == 4 || count == 6 || count == 8)
 	{
 		count = GetRand(8);
