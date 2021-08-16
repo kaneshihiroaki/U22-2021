@@ -9,6 +9,12 @@
 #include "Camera.h"
 #include "debug.h"
 
+
+int ENEMY_WIN;//どの敵が勝ったか調べる変数
+int ENEMY_WIN_COUNT1;//敵１の勝利数
+int ENEMY_WIN_COUNT2;//敵２の勝利数
+int ENEMY_WIN_COUNT3;//敵３の勝利数
+
 ENEMY::ENEMY()
 {
 	////オブジェクトの座標初期化
@@ -608,20 +614,29 @@ void ENEMY::Enemy_Paralyze(int num) {
 
 
 bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
-	VECTOR Light = LightPos;
 	LightPos.y = 0.0f;
+
 	for (int i = 0; i < ENEMY_MAX; i++) {
 
-		float ex = Light.x - c_ObjPos[i].x;
-		float ez = Light.z - c_ObjPos[i].z;
+		float ex = LightPos.x - c_ObjPos[i].x;
+		float ez = LightPos.z - c_ObjPos[i].z;
 
 		float er = (ex * ex) + (ez * ez);
-		float elr = (80.0f+70.0f);
+		float elr = (20.0f + 70.0f);
 		float elr2 = (elr * elr);
-
+		//DrawSphere3D(c_ObjPos[i], 10.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 		// enemyとlightの当たり判定( TRUE:当たっている FALSE:当たっていない )
-		if (er <= elr2&&LightFlg==false) {
-			judgefinish = true;
+		if (er <= elr2 && LightFlg == false) {
+
+			if (i == 0) {
+				ENEMY_WIN = 1;
+			}
+			if (i == 1) {
+				ENEMY_WIN = 2;
+			}
+			if (i == 2) {
+				ENEMY_WIN = 3;
+			}
 			return true;
 		}
 

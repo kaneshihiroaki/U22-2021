@@ -11,6 +11,9 @@ class CAMERA;
 class ENEMY;
 class CHARACTER;
 
+extern int PLAYER_WIN_COUNT;//player‚ªŸ‚Á‚½”‚ğ“ü‚ê‚é•Ï”
+
+
 class PLAYER : public CHARACTER
 {
 public:

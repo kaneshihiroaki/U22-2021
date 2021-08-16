@@ -163,6 +163,7 @@ void Light()
 		WaitTime = 1;
 		Key_Look = false;
 		LightFlg = true;
+		judge_win = false;
 		if (judgefinish == true) finish = false;
 	}
 	else if (WaitTime == 1) {

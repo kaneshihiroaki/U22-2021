@@ -7,6 +7,8 @@
 
 void GameInit();
 void GameMain();
+void WIN_Text();
+
 
 class CAMERA;
 class PLAYER;
@@ -15,6 +17,7 @@ class ENEMY;
 
 extern int judge_count;
 extern bool player_win;
+extern bool enemy_win;
 
 class MAIN 
 {

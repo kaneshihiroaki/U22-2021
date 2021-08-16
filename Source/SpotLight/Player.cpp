@@ -8,6 +8,7 @@
 #include "Debug.h"
 #include "Light.h"
 
+int PLAYER_WIN_COUNT = 0;
 
 PLAYER::PLAYER()
 {
@@ -503,7 +504,7 @@ bool PLAYER::CheckHit(VECTOR c_Position, VECTOR LightPos) {
 	float cz = Light.z - Player.z;
 
 	float cr = (cx * cx) + (cz * cz);
-	float lr = (10.0f + 70.0f);
+	float lr = (20.0f + 70.0f);
 	float lr2 = (lr * lr);
 
 	/*DrawSphere3D(Player,10.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);

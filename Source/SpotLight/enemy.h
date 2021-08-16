@@ -9,6 +9,10 @@
 #define ENEMY_ATTACK 2//UŒ‚‚µ‚Ä‚¢‚éó‘Ô
 //#define ENEMY_ATTACK 3
 
+extern int ENEMY_WIN;//‚Ç‚Ì“G‚ªŸ‚Á‚½‚©’²‚×‚é•Ï”
+extern int ENEMY_WIN_COUNT1;//“G‚P‚ÌŸ—˜”
+extern int ENEMY_WIN_COUNT2;//“G‚Q‚ÌŸ—˜”
+extern int ENEMY_WIN_COUNT3;//“G‚R‚ÌŸ—˜”
 
 class PLAYER;
 class CAMERA;
