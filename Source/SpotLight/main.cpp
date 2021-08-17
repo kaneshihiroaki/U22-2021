@@ -151,7 +151,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 
 void MAIN::Game_Main() {
-	c_stage->Stage_Make();
+	c_stage->Stage_Make(c_enemy,c_player);
 
 	if (!Collision_Player) {
 		for (int i = 0; i < ENEMY_MAX; i++) {

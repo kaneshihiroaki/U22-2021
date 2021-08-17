@@ -48,9 +48,11 @@ void PLAYER::init() {
 	//プレイヤーの大きさ初期化
 	c_AddPosPlay = { 0.5f,0.5f,0.5f };
 
-	c_MoveFlag = FALSE;	//プレイヤーが移動しているのか判定
+	c_MoveFlag = false;	//プレイヤーが移動しているのか判定
+	c_StageIn = true;	//ステージ内にいるかどうか判定
 
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
+	c_TempMoveVector = VGet(0.0f, 0.0f, 0.0f);
 
 	c_StmCount = 600;		//プレイヤーの体力
 
@@ -124,14 +126,14 @@ bool PLAYER::CheckPara() {
 
 void PLAYER::Player_Paralyze() {
 	c_MoveFlag = false;
-	
+
 	if (Damage.s_ParaTime++ == Damage.s_MaxTimeParalyze) {
 		Damage.s_paralyzeKey = false;
 		Damage.s_ParaTime = 0;
 	}
 }
 
-bool PLAYER::Player_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD, VECTOR AttPosLD, ENEMY* enepos,int num, float ang) {
+bool PLAYER::Player_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD, VECTOR AttPosLD, ENEMY* enepos, int num, float ang) {
 	//中心点割り出し
 	float halfx = (AttPosRU.x + AttPosRD.x + AttPosLU.x + AttPosLD.x) / 4;
 	float halfz = (AttPosRU.z + AttPosRD.z + AttPosLU.z + AttPosLD.z) / 4;
@@ -172,7 +174,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 
 	//攻撃が前方に進む
 	Att.s_Rang += Att.s_AttackSpeed;
-	
+
 	//下横
 	DrawLine3D(VGet(x + (Att.s_RotCos * Att.s_width), c_Position.y, z - (Att.s_RotSin * Att.s_width)),
 		VGet(x - (Att.s_RotCos * Att.s_width), c_Position.y, z + (Att.s_RotSin * Att.s_width)), 0x888888);
@@ -203,13 +205,13 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 
 	//当たり判定
 	for (int i = 0; i < ENEMY_MAX; i++) {
-		if(Player_AttackCol(VGet(x + (Att.s_RotCos * Att.s_width) + (Att.s_RotSin * Att.s_heigt), c_Position.y, z - (Att.s_RotSin * Att.s_width) + (Att.s_RotCos * Att.s_heigt)),
+		if (Player_AttackCol(VGet(x + (Att.s_RotCos * Att.s_width) + (Att.s_RotSin * Att.s_heigt), c_Position.y, z - (Att.s_RotSin * Att.s_width) + (Att.s_RotCos * Att.s_heigt)),
 			VGet(x - (Att.s_RotCos * Att.s_width) + (Att.s_RotSin * Att.s_heigt), c_Position.y, z + (Att.s_RotSin * Att.s_width) + (Att.s_RotCos * Att.s_heigt)),
 			VGet(x + (Att.s_RotCos * Att.s_width), c_Position.y, z - (Att.s_RotSin * Att.s_width)),
 			VGet(x - (Att.s_RotCos * Att.s_width), c_Position.y, z + (Att.s_RotSin * Att.s_width)),
-			ene,i, Player_rot.y) == true){
+			ene, i, Player_rot.y) == true) {
 			ene->SetEnemyMoveFalseKey(i);
-			
+
 		}
 	}
 }
@@ -301,9 +303,8 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		else if ((g_NowKey & PAD_INPUT_UP) != 0)
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) {
-				c_MoveVector.z = c_movespeed;
-			}
+			if (c_StmCount > 0) c_MoveVector.z = c_movespeed;
+
 
 			//角度代入
 			c_PlayerAng = 0.0f;
@@ -311,7 +312,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	}
 
 	//Gキーを押したらプレイヤーが一定時間止まる
-	if (CheckHitKey(KEY_INPUT_G)) Damage.s_paralyzeKey = true;
+	if (CheckHitKey(KEY_INPUT_G)) SetParalyzeKey();/*Damage.s_paralyzeKey = true;*/
 	if (Damage.s_paralyzeKey == true) Player_Paralyze();
 
 	c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmCount);        //スタミナ管理
@@ -331,28 +332,40 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 			c_Acc += 0.01f;
 		}
 
+		//float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+		//float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
+
+		//TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+		//TempMoveVector.y = 0.0f;
+		//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
+
+		//TempRotVector.x = 0.0f;
+		//TempRotVector.y = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
+		//TempRotVector.z = 0.0f;
+		//TempRotVector.z = 0.0f;
+
 		//移動場所の確認
-		VECTOR TempMoveVector;
+		//VECTOR TempMoveVector;
 		float Sin1 = sin(c_PlayerAng * (M_PI / 180));
 		float Cos1 = cos(c_PlayerAng * (M_PI / 180));
 
-		TempMoveVector.x = c_MoveVector.x * Sin1 * c_Acc;
-		TempMoveVector.y = 0.0f;
-		TempMoveVector.z = c_MoveVector.z * Cos1 * c_Acc;
+		c_TempMoveVector.x = c_MoveVector.x * Sin1 * c_Acc;
+		c_TempMoveVector.y = 0.0f;
+		c_TempMoveVector.z = c_MoveVector.z * Cos1 * c_Acc;
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (Collision_Sphere(VAdd(c_Position, TempMoveVector), ene->c_ObjPos[i], 55) == true) {
+			if (Collision_Sphere(VAdd(c_Position, c_TempMoveVector), ene->c_ObjPos[i], 55) == true) {
 				if (ene->CheckPara(i) == false) {
 					c_MoveFlag = false;
 				}
-				else if ((ene->Enemy_Push(i, c_Position, TempMoveVector)) == false) {//falseなら動かせなかった。
+				else if ((ene->Enemy_Push(i, c_Position, c_TempMoveVector)) == false) {//falseなら動かせなかった。
 					c_MoveFlag = false;
 				}
 			}
 		}
-		if (c_MoveFlag) {//移動できるときにのみとおる
-			c_Position = VAdd(c_Position, TempMoveVector);		//移動
+		if (c_MoveFlag && c_StageIn == true) {//移動できるときにのみとおる
+			c_Position = VAdd(c_Position, c_TempMoveVector);		//移動
 		}
 		//角度代入
 		c_Rotation.x = 0.0f;
@@ -389,45 +402,27 @@ bool PLAYER::Player_Push(CAMERA* camera, VECTOR EnemyCol[ENEMY_MAX], VECTOR Push
 		return false;
 	}
 
-	//移動場所の確認
-	VECTOR TempMoveVector;
-	//VECTOR TempRotVector;
-
-
-
-
 	//移動してるかどうか
 	c_MoveFlag = true;
 	c_MoveVector = PushVec;
-
-	//float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
-	//float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
-
-	//TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
-	//TempMoveVector.y = 0.0f;
-	//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
-
-	//TempRotVector.x = 0.0f;
-	//TempRotVector.y = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
-	//TempRotVector.z = 0.0f;
 
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
 	{
 
-		TempMoveVector.x = c_MoveVector.x;
-		TempMoveVector.y = 0.0f;
-		TempMoveVector.z = c_MoveVector.z;
+		c_TempMoveVector.x = c_MoveVector.x;
+		c_TempMoveVector.y = 0.0f;
+		c_TempMoveVector.z = c_MoveVector.z;
 
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (Collision_Sphere(VAdd(c_Position, TempMoveVector), EnemyCol[i], 55) == true) {
+			if (Collision_Sphere(VAdd(c_Position, c_TempMoveVector), EnemyCol[i], 55) == true) {
 				c_MoveFlag = false;
 			}
 		}
 		if (c_MoveFlag) {//移動できるときにのみとおる
-			c_Position = VAdd(c_Position, TempMoveVector);		//移動
+			c_Position = VAdd(c_Position, c_TempMoveVector);		//移動
 			//c_Rotation = VAdd(c_Rotation, TempRotVector);
 		}
 	}
@@ -511,7 +506,7 @@ bool PLAYER::CheckHit(VECTOR c_Position, VECTOR LightPos) {
 	DrawSphere3D(Light,70.0f, 32, GetColor(255,0, 255), GetColor(255, 255, 255), TRUE);*/
 
 	// playerとlightの当たり判定( TRUE:当たっている FALSE:当たっていない )
-	if (cr <= lr2&&LightFlg == false){
+	if (cr <= lr2 && LightFlg == false) {
 		Key_Look = true;
 		c_MoveFlag = false;
 		judgefinish = true;		//タイトルへ戻るための変数

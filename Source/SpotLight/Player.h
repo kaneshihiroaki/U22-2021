@@ -40,28 +40,50 @@ public:
 
 
 	bool CheckPara();//調べたいエネミーがしびれているかどうかの判定
-	//痺れ（ダメージ関連）
-	struct Damage
-	{
-		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
-		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
-		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
-	}; Damage Damage;
+	////痺れ（ダメージ関連）
+	//struct Damage
+	//{
+	//	int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
+	//	bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
+	//	const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
+	//}; Damage Damage;
 
+	//プレイヤーを痺れさせるセッター
+	void SetParalyzeKey() {
+		Damage.s_paralyzeKey = true;
+	}
+
+	//プレイヤーがステージにいるかどうか
+	void SetPlayerOutStage() {
+		c_StageIn = false;
+	}
+	void SetPlayerInStage() {
+		c_StageIn = true;
+	}
+	VECTOR GetFuturePos() { return VAdd(c_Position, c_TempMoveVector); };
 
 private:
 	float c_PlayerAng;		//プレイヤーの角度
 
 	bool c_RotFlag;		//プレイヤーが回転している
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
+	bool c_StageIn;		//ステージ内にいるかどうか判定
 	int c_StmCount;		//プレイヤーの体力
 	const int c_StmMax = 600;	//体力の最大値
 	VECTOR c_MoveVector;	//移動変数
+	VECTOR c_TempMoveVector; //移動先を計算する変数
+
 
 	const float c_movespeed = 5.0f;	//プレイヤー移動スピード
 	float c_Acc;	//加速を制御
 
-	
+		//痺れ（ダメージ関連）
+	struct Damage
+	{
+		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
+		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
+		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
+	}; Damage Damage;
 
 	struct Attack {
 		//攻撃を行うかどうか判定変数

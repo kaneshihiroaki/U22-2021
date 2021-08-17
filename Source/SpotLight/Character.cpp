@@ -52,4 +52,3 @@ int CHARACTER::PlayerStaminaCount(bool MoveFlag, int count) {
 
 	return count;
 }
-
