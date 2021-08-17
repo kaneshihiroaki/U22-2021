@@ -8,6 +8,7 @@ public:
 protected:
 	int StaminaCount(bool MoveFlag,int num);	//エネミースタミナカウント
 	int PlayerStaminaCount(bool MoveFlag,int count);//プレイヤースタミナカウント
+	int AttackStaminaCount( int num);	//エネミー攻撃によるスタミナカウント
 	void Character_Init();
 
 private:

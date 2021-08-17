@@ -52,3 +52,11 @@ int CHARACTER::PlayerStaminaCount(bool MoveFlag, int count) {
 
 	return count;
 }
+
+int CHARACTER::AttackStaminaCount(int num) {
+	
+	Stamina.s_Count[num] -= 15;
+	Stamina.s_RecoveryCount[num] = 30;//移動などでスタミナを消費したら30フレーム回復しないようにする
+
+	return Stamina.s_Count[num];
+}//エネミー攻撃によるスタミナカウント

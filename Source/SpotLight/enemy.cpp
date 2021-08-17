@@ -186,8 +186,8 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 			if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], c_ObjPos[i], 30, 150, 105, 55) == true) {
 
 				float rad = c_Rotation[num].y + (M_PI / 2);
-				c_EnemyAddVect[num].x = c_MoveVector.x * cos(rad) - c_MoveVector.z * sin(rad);
-				c_EnemyAddVect[num].z = c_MoveVector.x * sin(rad) + c_MoveVector.z * cos(rad);
+				c_EnemyAddVect[num].x = 5.0f * sinf(rad)/* - c_MoveVector.z * sin(rad)*/;
+				c_EnemyAddVect[num].z = 5.0f * cosf(rad) /*+ c_MoveVector.z * cos(rad)*/;
 
 				c_MoveVector.x += c_EnemyAddVect[num].x;
 				c_MoveVector.z += c_EnemyAddVect[num].z;
@@ -269,7 +269,10 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 	c_Rotation[num].y = c_Enemy_MoveAng[num] * (M_PI / 180);
 
 	if (Damage[num].s_paralyzeKey == true) Enemy_Paralyze(num);//しびれているならカウントと移動フラグをoffにする
-	if (((g_KeyFlg & PAD_INPUT_5) != 0) && Att[num].s_AttackStartKey == false)Att[num].s_AttackStartKey = true;//今のところR1をおすと敵が攻撃
+	if (((g_KeyFlg & PAD_INPUT_5) != 0) && Att[num].s_AttackStartKey == false && c_StmCount[num] > 16) {
+		Att[num].s_AttackStartKey = true;//今のところR1をおすと敵が攻撃
+		c_StmCount[num] = AttackStaminaCount(num);
+	}
 	if (Att[num].s_AttackStartKey == true) Enemy_Attack(player, num);
 	
 	//移動フラグがたってたら移動
