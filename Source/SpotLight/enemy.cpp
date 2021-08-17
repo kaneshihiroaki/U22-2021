@@ -94,7 +94,7 @@ void ENEMY::Enemy_Creat() {
 }
 
 void ENEMY::debug() {
-	printfDx("%d\n", GetEnemyMoveKey(2));
+	//printfDx("%d\n", GetEnemyMoveKey(2));
 }
 
 void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
@@ -140,28 +140,28 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 	// スポットライトを追跡用
 	if (c_SpotPos.x - c_SpotRadius > c_ObjPos[num].x) {
 		c_MoveFlag = true;
-		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.x = c_movespeed;
+		if (c_StmCount[num] > 0)c_MoveVector.x = c_movespeed;
 		p_Enemy_MoveAng = 90;//右
 
 	}
 
 	if (c_SpotPos.x + c_SpotRadius < c_ObjPos[num].x) {
 		c_MoveFlag = true;
-		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.x = -c_movespeed;
+		if (c_StmCount[num] > 0)c_MoveVector.x = -c_movespeed;
 		p_Enemy_MoveAng = 270;//左
 
 	}
 
 	if (c_SpotPos.z - c_SpotRadius > c_ObjPos[num].z) {
 		c_MoveFlag = true;
-		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.z = c_movespeed;
+		if (c_StmCount[num] > 0)c_MoveVector.z = c_movespeed;
 		p_Enemy_MoveAng = 0;//上
 
 	}
 
 	if (c_SpotPos.z + c_SpotRadius < c_ObjPos[num].z) {
 		c_MoveFlag = true;
-		if (c_MoveKey[num] == true && c_StmCount[num] > 0)c_MoveVector.z = -c_movespeed;
+		if (c_StmCount[num] > 0)c_MoveVector.z = -c_movespeed;
 		p_Enemy_MoveAng = 180;//下
 	}
 
@@ -288,30 +288,30 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 		}
 
 		//移動場所の確認
-		VECTOR TempMoveVector;
+		//VECTOR TempMoveVector;
 
-		TempMoveVector.x = c_MoveVector.x * Coefficient * c_EnemySpeed[num];
-		TempMoveVector.y = 0.0f;
-		TempMoveVector.z = c_MoveVector.z * Coefficient * c_EnemySpeed[num];
+		c_TempMoveVector.x = c_MoveVector.x * Coefficient * c_EnemySpeed[num];
+		c_TempMoveVector.y = 0.0f;
+		c_TempMoveVector.z = c_MoveVector.z * Coefficient * c_EnemySpeed[num];
 
 
 		//当たりl判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
-			if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-				if (Enemy_Push(i, c_ObjPos[i], TempMoveVector) == false) {//falseなら動かせなかった
-					VECTOR Reserve_Vect = TempMoveVector;//X座標を0にしてみる
+			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
+				if (Enemy_Push(i, c_ObjPos[i], c_TempMoveVector) == false) {//falseなら動かせなかった
+					VECTOR Reserve_Vect = c_TempMoveVector;//X座標を0にしてみる
 
 					float Reserve = Reserve_Vect.x;//X座標を0にしてみる
 					Reserve_Vect.x = 0.0f;//
 					
 					if (Coefficient!=1.0f) {
-						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) && (Enemy_Push(i, c_ObjPos[i], TempMoveVector) == false)) {
+						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) && (Enemy_Push(i, c_ObjPos[i], c_TempMoveVector) == false)) {
 							Reserve_Vect.x = Reserve;//
 							Reserve = Reserve_Vect.z;//
 							Reserve_Vect.z = 0.0f;//
 							if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-								if (Enemy_Push(i, c_ObjPos[i], TempMoveVector) == false) {//falseなら動かせなかった
+								if (Enemy_Push(i, c_ObjPos[i], c_TempMoveVector) == false) {//falseなら動かせなかった
 									c_MoveFlag = false;
 								}
 							}
@@ -324,15 +324,15 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 					
 
 					if (c_MoveFlag) {//TRUEなら移動先を変更
-						TempMoveVector = Reserve_Vect;
+						c_TempMoveVector = Reserve_Vect;
 					}
 					
 				}
 			}
 		}
-		if (Collision_Cube(VAdd(c_ObjPos[num], TempMoveVector), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-			if (player->Player_Push(camera, c_ObjPos, TempMoveVector) == false) {//falseなら動かせなかった
-				VECTOR Reserve_Vect = TempMoveVector;//X座標を0にしてみる
+		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
+			if (player->Player_Push(camera, c_ObjPos, c_TempMoveVector) == false) {//falseなら動かせなかった
+				VECTOR Reserve_Vect = c_TempMoveVector;//X座標を0にしてみる
 
 				float Reserve = Reserve_Vect.x;//X座標を0にしてみる
 				Reserve_Vect.x = 0.0f;//
@@ -354,14 +354,14 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 				}
 
 				if (c_MoveFlag) {//TRUEなら移動先を変更
-					TempMoveVector = Reserve_Vect;
+					c_TempMoveVector = Reserve_Vect;
 				}
 			}
 		}
-
-		if (c_MoveFlag == true)
+		//c_MoveKeyがtrueだったらステージないにいる＝動く
+		if (c_MoveFlag == true && c_MoveKey[num] == true)
 		{
-			c_ObjPos[num] = VAdd(c_ObjPos[num], TempMoveVector);
+			c_ObjPos[num] = VAdd(c_ObjPos[num], c_TempMoveVector);
 		}
 		
 	}
@@ -561,7 +561,7 @@ void ENEMY::Enemy_Attack(PLAYER* player, int num) {
 			VGet(x + (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width)),
 			VGet(x - (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width)),
 			c_ObjPos[i],num, c_Rotation[num].y) == true) {
-			SetEnemyMoveFalseKey(i);
+			/*SetEnemyMoveFalseKey(i);*/SetEnemyParaKey(i);		//SetEnemyMoveFalseKeyはステージの判定に使うので変えました（名称以外は前のものと同じです）
 		}
 	}
 

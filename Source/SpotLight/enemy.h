@@ -42,19 +42,20 @@ public:
 	void Enemy_Move(int num, PLAYER* player, CAMERA* camera);
 	bool Enemy_Push(int num, VECTOR PlayerCol, VECTOR PushVec);
 
-	//ゲッター＆セッター
-	bool GetEnemyMoveKey(int i) { return c_MoveKey[i]; }
-	//敵に攻撃を当てた際に止める処理
-	void SetEnemyMoveFalseKey(int num) {
-		//c_MoveKey[num] = false;
-
+	//敵を痺れさせるセッター
+	void SetEnemyParaKey(int num) {
 		Damage[num].s_paralyzeKey = true;//しびれた時に呼ばれる
-
 	}
-	void SetEnemyMoveTrueKey(int num) {
+
+	//敵がステージの外に行かないようにする
+	void SetEnemyStageOutKey(int num) {
+		c_MoveKey[num] = false;
+	}
+	void SetEnemyStageInKey(int num) {
 		c_MoveKey[num] = true;
 	}
-	bool c_MoveKey[ENEMY_MAX];//敵の動きを管理 true:動いている false:止まっている
+	VECTOR GetEnemyMoveKey(int i) { return VAdd(c_ObjPos[i], c_TempMoveVector); }
+	bool c_MoveKey[ENEMY_MAX];//ステージ内の敵の動きを管理 true:動いている false:止まっている
 	
 	int c_EnemyState[ENEMY_MAX];//敵の状態を制御#defineに書いてます。
 	void Enemy_State(int num, PLAYER* player, CAMERA* camera);//敵の状態を制御関数
@@ -79,6 +80,7 @@ private:
 	const int c_StmMax = 300;	//体力の最大値
 
 	VECTOR c_MoveVector;	//移動変数
+	VECTOR c_TempMoveVector;	//移動先計算用変数
 
 	float c_EnemySpeed[ENEMY_MAX];//現在のスピード
 	const float c_movespeed = 5.0f;	//エネミー最大移動スピード

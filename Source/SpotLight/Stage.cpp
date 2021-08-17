@@ -47,28 +47,27 @@ void STAGE::Stage_Make(ENEMY* enemy, PLAYER* player) {
 }
 
 void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
-	VECTOR debug = MV1GetPosition(c_StageModel);
-
-	SetFontSize(20);
-	//DrawFormatString(100, 100, 0xFFFFFF, "x:%f y:%f z:%f", debug.x, debug.y, debug.z);
-	
-	//上
-	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
-		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)), 0xFFFFFF);
-	//下
-	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)),
-		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
-	//左
-	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
-		VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
-	//右
-	DrawLine3D(VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
-		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
+	////上
+	//DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
+	//	VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)), 0xFFFFFF);
+	////下
+	//DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)),
+	//	VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
+	////左
+	//DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
+	//	VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
+	////右
+	//DrawLine3D(VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
+	//	VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
 
 	//右上の点：VGet(c_StagePosition.x + 2000.0f, c_StagePosition.y + 50.0f, c_StagePosition.z + 2000.0f);
 	//左上の点：VGet(c_StagePosition.x - 2000.0f, c_StagePosition.y + 50.0f, c_StagePosition.z + 2000.0f);
 	//右下の点：VGet(c_StagePosition.x + 2000.0f, c_StagePosition.y + 50.0f, c_StagePosition.z - 2000.0f);
 	//左下の点：VGet(c_StagePosition.x - 2000.0f, c_StagePosition.y + 50.0f, c_StagePosition.z - 2000.0f);
+
+	/****************************************
+	//プレイヤーの当たり判定を設定
+	*****************************************/
 
 	//中心点割り出し
 	float halfx = (c_StagePosition.x + 2000.0f + c_StagePosition.x + 2000.0f +
@@ -77,8 +76,6 @@ void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
 		c_StagePosition.z + 2000.0f + c_StagePosition.z - 2000.0f) / 4;
 
 	//中心点とプレイヤーの座標の距離
-	//float distx = enepos->c_ObjPos[num].x - halfx;
-	//float distz = enepos->c_ObjPos[num].z - halfz;
 	float playerdistx = player->GetFuturePos().x - halfx;
 	float playerdistz = player->GetFuturePos().z - halfz;
 	float enemydistx;
@@ -91,7 +88,6 @@ void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
 	DrawFormatString(100, 100, 0xFFFFFF, "x:%f y:%f z:%f", player->GetFuturePos().x, debug.y, player->GetFuturePos().z);
 
 	//プレイヤーの当たり判定
-		//矩形と点の当たり判定を行う
 	if (-c_width / 2.0f <= posx && c_width / 2.0f >= posx &&
 		-c_depth / 2.0f <= posz && c_depth / 2.0f >= posz) {
 		//return true;
@@ -99,6 +95,36 @@ void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
 	}
 	else {
 		player->SetPlayerOutStage();
+	}
+
+	/****************************************
+	//敵の当たり判定を設定
+	*****************************************/
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		//中心点割り出し
+		float enehalfx = (c_StagePosition.x + 2000.0f + c_StagePosition.x + 2000.0f +
+			c_StagePosition.x - 2000.0f + c_StagePosition.x - 2000.0f) / 4;
+		float enehalfz = (c_StagePosition.z + 2000.0f + c_StagePosition.z - 2000.0f +
+			c_StagePosition.z + 2000.0f + c_StagePosition.z - 2000.0f) / 4;
+
+		//中心点と敵の座標の距離
+		float enedistx = enemy->GetEnemyMoveKey(i).x - enehalfx;
+		float enedistz = enemy->GetEnemyMoveKey(i).z - enehalfz;
+
+		//敵との当たり判定の計算
+		float posx = cos(0) * enedistx + sin(0) * enedistz;
+		float posz = -sin(0) * enedistx + cos(0) * enedistz;
+
+		DrawFormatString(100, 100*i, 0xFFFFFF, "x:%f y:%f z:%f", enemy->GetEnemyMoveKey(i).x, debug.y, enemy->GetEnemyMoveKey(i).z);
+
+		//敵の当たり判定
+		if (-c_width / 2.0f <= posx && c_width / 2.0f >= posx &&
+			-c_depth / 2.0f <= posz && c_depth / 2.0f >= posz) {
+			enemy->SetEnemyStageInKey(i);
+		}
+		else {
+			enemy->SetEnemyStageOutKey(i);
+		}
 	}
 }
 

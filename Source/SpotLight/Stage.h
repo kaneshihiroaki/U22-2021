@@ -3,7 +3,6 @@
 
 class ENEMY;
 class PLAYER;
-class CHARACTER;
 
 class STAGE
 {

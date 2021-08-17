@@ -210,7 +210,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 			VGet(x + (Att.s_RotCos * Att.s_width), c_Position.y, z - (Att.s_RotSin * Att.s_width)),
 			VGet(x - (Att.s_RotCos * Att.s_width), c_Position.y, z + (Att.s_RotSin * Att.s_width)),
 			ene, i, Player_rot.y) == true) {
-			ene->SetEnemyMoveFalseKey(i);
+			ene->SetEnemyParaKey(i);
 
 		}
 	}
