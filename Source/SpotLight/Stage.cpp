@@ -3,7 +3,6 @@
 #include "enemy.h"
 #include "Player.h"
 
-
 STAGE::STAGE()
 {
 	//// 座標初期化
@@ -85,7 +84,7 @@ void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
 	float posx = cos(0) * playerdistx + sin(0) * playerdistz;
 	float posz = -sin(0) * playerdistx + cos(0) * playerdistz;
 
-	DrawFormatString(100, 100, 0xFFFFFF, "x:%f y:%f z:%f", player->GetFuturePos().x, debug.y, player->GetFuturePos().z);
+	//DrawFormatString(100, 100, 0xFFFFFF, "x:%f y:%f z:%f", player->GetFuturePos().x, debug.y, player->GetFuturePos().z);
 
 	//プレイヤーの当たり判定
 	if (-c_width / 2.0f <= posx && c_width / 2.0f >= posx &&
@@ -115,7 +114,7 @@ void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
 		float posx = cos(0) * enedistx + sin(0) * enedistz;
 		float posz = -sin(0) * enedistx + cos(0) * enedistz;
 
-		DrawFormatString(100, 100*i, 0xFFFFFF, "x:%f y:%f z:%f", enemy->GetEnemyMoveKey(i).x, debug.y, enemy->GetEnemyMoveKey(i).z);
+		//DrawFormatString(100, 100*i, 0xFFFFFF, "x:%f y:%f z:%f", enemy->GetEnemyMoveKey(i).x, debug.y, enemy->GetEnemyMoveKey(i).z);
 
 		//敵の当たり判定
 		if (-c_width / 2.0f <= posx && c_width / 2.0f >= posx &&
