@@ -65,8 +65,13 @@ void PLAYER::Player_Controller() {
 	MV1SetPosition(c_PlayerModel, c_Position);
 	MV1SetRotationXYZ(c_PlayerModel, c_Rotation);
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
+
+	//プレイヤーのスタミナのUI
 	SetFontSize(18);
-	DrawFormatString(10, 670, 0x888888, "スタミナ：%d / %d", c_StmCount, c_StmMax);
+	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);
+	DrawFormatString(10, 650, 0xFFFFFF, "スタミナ");
+	DrawBox(10, 670, 220, 690, 0xFFFFFF,FALSE);
+	DrawBox(10, 670, 220 * c_StmCount / c_StmMax, 690, 0xFFFFFF,TRUE);
 
 	//Player_Move(Sin, Cos);
 }
