@@ -32,6 +32,9 @@ public:
 	void Game_Title();
 
 private:
+	bool c_ready;		//ボタンを押してメインを開始する変数
+	int c_dispTime;		//GOの表示時間カウント
+	const int c_dispTimeOver = 30;	//表示管
 
 	CAMERA* c_camera;
 	PLAYER* c_player;

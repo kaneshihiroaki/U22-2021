@@ -53,6 +53,10 @@ void MAIN::Game_init() {
 	judgefinish = false;
 	WaitTime = 0;
 
+	//ゲーム開始の演出関連変数初期化
+	c_ready = false;
+	c_dispTime = 0;
+
 	//初期化したらゲームメインへ
 	GameState = 2;
 	
@@ -123,11 +127,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			// 背景の色
 			SetBackgroundColor(35, 35, 35);
 			c_main->Game_Main();
-
-			//if (((g_NowKey & PAD_INPUT_1) != 0)) {
-			//	c_main->GameState = 1;
-			//}
-
 			break;
 
 		default:
@@ -151,105 +150,119 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 
 void MAIN::Game_Main() {
-	c_stage->Stage_Make(c_enemy,c_player);
+	SetFontSize(100);
 
-	if (!Collision_Player) {
-		for (int i = 0; i < ENEMY_MAX; i++) {
-			c_enemy->Enemy_State(i, c_player, c_camera);
-		}
-		c_enemy->Enemy_Creat();
-	}
-	//printfDx("%d\n", c_enemy->GetEnemyMoveKey(2));
-	//c_enemy->debug();
+	//最初にBボタンを押してゲーム開始
+	if (c_ready == true) {
 
-	c_player->Player_Controller();
-	c_player->Player_Move(c_camera,c_enemy);
-	
-	c_camera->Camera_Control(c_stage);
-	
-	WIN_Text();
-	judge_count = 0;
-	player_win = false;
-	enemy_win = false;
-	if (c_player->CheckHit(c_player->c_Position, LightPos)) {
-		judge_count++;
-		player_win = true;
-		
-	}
+		c_stage->Stage_Make(c_enemy, c_player);
 
-	if (c_enemy->EnemyCheckHit(c_enemy->c_ObjPos, LightPos)) {
-		judge_count++;
-		enemy_win = true;
-	}
-	if (judge_count == 1) {
-		if (player_win) {
-			if (judge_win == false)
-			{
-				PLAYER_WIN_COUNT++;
-				judge_win = true;
+		if (!Collision_Player) {
+			for (int i = 0; i < ENEMY_MAX; i++) {
+				c_enemy->Enemy_State(i, c_player, c_camera);
 			}
-
-			SetFontSize(100);
-			DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
+			c_enemy->Enemy_Creat();
 		}
-		if (enemy_win) {
-			if (ENEMY_WIN == 1) {
-				Key_Look = true;
+
+		//プレイヤーの表示と動きの制御
+		c_player->Player_Controller();
+		c_player->Player_Move(c_camera, c_enemy);
+
+		c_camera->Camera_Control(c_stage);
+
+		WIN_Text();
+		judge_count = 0;
+		player_win = false;
+		enemy_win = false;
+		if (c_player->CheckHit(c_player->c_Position, LightPos)) {
+			judge_count++;
+			player_win = true;
+
+		}
+
+		if (c_enemy->EnemyCheckHit(c_enemy->c_ObjPos, LightPos)) {
+			judge_count++;
+			enemy_win = true;
+		}
+		if (judge_count == 1) {
+			if (player_win) {
 				if (judge_win == false)
 				{
-					ENEMY_WIN_COUNT1++;
+					PLAYER_WIN_COUNT++;
 					judge_win = true;
 				}
+
 				SetFontSize(100);
-				DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
+				DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
 			}
-			if (ENEMY_WIN == 2) {
-				Key_Look = true;
-				if (judge_win == false)
-				{
-					ENEMY_WIN_COUNT2++;
-					judge_win = true;
+			if (enemy_win) {
+				if (ENEMY_WIN == 1) {
+					Key_Look = true;
+					if (judge_win == false)
+					{
+						ENEMY_WIN_COUNT1++;
+						judge_win = true;
+					}
+					SetFontSize(100);
+					DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
 				}
-				SetFontSize(100);
-				DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
-			}
-			if (ENEMY_WIN == 3) {
-				Key_Look = true;
-				if (judge_win == false)
-				{
-					ENEMY_WIN_COUNT3++;
-					judge_win = true;
+				if (ENEMY_WIN == 2) {
+					Key_Look = true;
+					if (judge_win == false)
+					{
+						ENEMY_WIN_COUNT2++;
+						judge_win = true;
+					}
+					SetFontSize(100);
+					DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
 				}
-				SetFontSize(100);
-				DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
+				if (ENEMY_WIN == 3) {
+					Key_Look = true;
+					if (judge_win == false)
+					{
+						ENEMY_WIN_COUNT3++;
+						judge_win = true;
+					}
+					SetFontSize(100);
+					DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
+				}
 			}
 		}
-		//if(finish == false) GameState = 0;
-	}
 
-	if (finish == false) GameState = 0;	//決着ついたらタイトルへ戻る
+		if (finish == false) GameState = 0;	//決着ついたらタイトルへ戻る
 
-	if (!Collision_Player) {
-		MV1DrawModel(c_player->c_PlayerModel);
-	}
-	if (Build_bool) {
-		Build_Time();
-	}
-	if (GameJudge) {
-		SetFontSize(50);
-		DrawString(570, 5, "Judge", GetColor(0x00, 0x00, 0x00));
-		SetFontSize(20);
-		DrawFormatString(20, 100, 0xFFFFFF, "ENEMYWIN:%d", ENEMY_WIN);
-		DrawFormatString(20, 120, 0xFFFFFF, "judge:%d", judge_count);
-		Game_Judge();
-
-		if (((g_NowKey & PAD_INPUT_1) != 0)) {
-			GameState = 0;
+		if (!Collision_Player) {
+			MV1DrawModel(c_player->c_PlayerModel);
 		}
+		if (Build_bool) {
+			Build_Time();
+		}
+		if (GameJudge) {
+			SetFontSize(50);
+			DrawString(570, 5, "Judge", GetColor(0x00, 0x00, 0x00));
+			SetFontSize(20);
+			DrawFormatString(20, 100, 0xFFFFFF, "ENEMYWIN:%d", ENEMY_WIN);
+			DrawFormatString(20, 120, 0xFFFFFF, "judge:%d", judge_count);
+			Game_Judge();
+
+			if (((g_NowKey & PAD_INPUT_1) != 0)) {
+				GameState = 0;
+			}
+		}
+
+		Light();
+
+		//開始時にGO!を表示
+		if (c_dispTime++ <= c_dispTimeOver)DrawFormatString(525, 250, 0x0000FF, "GO!");
+
+	}
+	//ボタンを押していない時は始めない
+	else {
+		DrawFormatString(470, 250, 0xFF0000, "READY?");
 	}
 
-	Light();
-
+	//ボタン押したらゲーム開始
+	if (((g_KeyFlg & PAD_INPUT_2) != 0) && c_ready == false) c_ready = true;
 }
 
 void MAIN::Game_Title() {
@@ -258,7 +271,7 @@ void MAIN::Game_Title() {
 	SetFontSize(30);
 	//GameJudge = false;
 	DrawFormatString(460, 300, 0x000000, "Bボタンでゲームスタート");
-	if (((g_NowKey & PAD_INPUT_2) != 0) || CheckHitKey(KEY_INPUT_I)) {
+	if (((g_KeyFlg & PAD_INPUT_2) != 0) || CheckHitKey(KEY_INPUT_I)) {
 		GameState = 1;
 		LightFlg = false;
 		Key_Look = false;

@@ -384,15 +384,6 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	//攻撃
 	if (((g_KeyFlg & PAD_INPUT_2) != 0) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
 	if (Att.s_AttackStartKey == true) Player_Attack(ene, c_Rotation);
-	/*for (int i = 0; i < ENEMY_MAX; i++) {
-		if (ene->CheckPara(i) == true) {
-			if (Att.s_TimePara++ >= Att.s_TimeMaxPara) {
-				Att.s_TimePara = 0;
-				ene->SetEnemyMoveTrueKey(i);
-			}
-		}
-	}*///これよくわからん
-
 
 	if (Collision_Player) {
 		Collision_Draw(ene->c_ObjPos);//デバック用
