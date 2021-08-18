@@ -23,7 +23,7 @@ int count;
 int cntFlg = 4;
 int rc = 4; 
 float distance = 1200.0f;
-int WaitTime = 0;
+int WaitTime = 1;
 
 bool LightFlg;
 
@@ -74,8 +74,6 @@ void Light_SetUp() {
 
 	// ポイントライトのディフューズカラーを強い色にする
 	SetLightDifColorHandle(PointLightHandle, GetColorF(9.0f, 9.0f, 9.0f, 0.0f));
-
-
 }
 
 void Light_init() {
@@ -93,7 +91,7 @@ void Light_init() {
 	//SetUsePixelShader(PixelShaderHandle);
 
 	// ライトの位置を回転する値を初期化
-	LightRotateAngle = 0.0f;
+	//LightRotateAngle = 0.0f;
 
 	//// 標準ライトを無効にする
 	//SetLightEnable(FALSE);
