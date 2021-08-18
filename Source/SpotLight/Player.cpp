@@ -320,7 +320,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	if (CheckHitKey(KEY_INPUT_G)) SetParalyzeKey();/*Damage.s_paralyzeKey = true;*/
 	if (Damage.s_paralyzeKey == true) Player_Paralyze();
 
-	c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmCount);        //スタミナ管理
+	c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmCount,c_StmMax);        //スタミナ管理
 
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
