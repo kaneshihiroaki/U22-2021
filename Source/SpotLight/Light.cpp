@@ -173,6 +173,7 @@ void Light()
 		WaitTime = 0;
 		time = 0;
 		LightFlg = false;
+		judge_win = false;
 		//finish = false;
 	}
 	else if (time >= 600 && WaitTime == 0) {

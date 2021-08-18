@@ -13,6 +13,7 @@ extern int count;
 extern int cntFlg;
 extern bool finish;		//ゲームが終わったか判定（true:ゲーム再開 false:タイトルへ戻る)
 extern bool judgefinish;	//決着ついたか判定	true:終了 false:続ける
+extern bool judge_win;//勝利数をカウントするときに使うflg
 extern int WaitTime;
 
 extern VECTOR LightPos;
