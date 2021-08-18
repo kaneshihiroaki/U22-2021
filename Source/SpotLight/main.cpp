@@ -265,6 +265,7 @@ void MAIN::Game_Title() {
 		Win = false;
 		Lose = false;
 		GameJudge = false;
+		judge_win = false;
 		PLAYER_WIN_COUNT = 0;
 		ENEMY_WIN = 0;
 		ENEMY_WIN_COUNT1 = 0;
