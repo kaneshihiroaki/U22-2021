@@ -70,9 +70,9 @@ void PLAYER::Player_Controller() {
 	SetFontSize(18);
 	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);
 	DrawFormatString(10, 650, 0xFFFFFF, "スタミナ");
-	DrawBox(10, 670, 220, 690, 0xFFFFFF,FALSE);
-	DrawBox(10, 670, 220 * c_StmCount / c_StmMax, 690, 0xFFFFFF,TRUE);
-
+	DrawBox(10, 670, 10+110, 690, 0xFFFFFF,FALSE);
+	DrawBox(10, 670, 10+110 * c_StmCount / c_StmMax, 690, 0xFFFFFF,TRUE);
+	printfDx("%d\n",c_StmCount);
 	//Player_Move(Sin, Cos);
 }
 
