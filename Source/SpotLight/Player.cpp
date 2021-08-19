@@ -151,7 +151,7 @@ bool PLAYER::Player_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD,
 	float posz = -sin(ang) * distx + cos(ang) * distz;
 
 	//‹éŒ`‚Æ“_‚Ì“–‚½‚è”»’è‚ğs‚¤
-	if (-Att.s_width /*/ 2.0f*/ <= posx && Att.s_width /*/ 2.0f*/ >= posx &&
+	if (-Att.s_width / 2.0f <= posx && Att.s_width / 2.0f >= posx &&
 		-Att.s_heigt / 2.0f <= posz && Att.s_heigt / 2.0f >= posz) {
 		return true;
 	}
