@@ -15,6 +15,9 @@ extern int ENEMY_WIN_COUNT1;//敵１の勝利数
 extern int ENEMY_WIN_COUNT2;//敵２の勝利数
 extern int ENEMY_WIN_COUNT3;//敵３の勝利数
 
+extern int check_1;//判定確認のための変数
+extern int check_2;
+
 class PLAYER;
 class CAMERA;
 
@@ -61,6 +64,8 @@ public:
 	int c_EnemyState[ENEMY_MAX];//敵の状態を制御#defineに書いてます。
 	void Enemy_State(int num, PLAYER* player, CAMERA* camera);//敵の状態を制御関数
 	bool EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos);//enemyの判定
+	bool EnemyCheckHit2(VECTOR c_ObjPos[ENEMY_MAX]);//enemy同士の判定
+	bool EnemyCheckHit3(VECTOR c_ObjPos[ENEMY_MAX], VECTOR c_Position);//playerとenemyの判定
 	void debug();		//デバッグ用、用がなくなったら消します
 	void init();		//初期化
 
@@ -86,6 +91,7 @@ public:
 
 	void Ga_Attack(int num, PLAYER* player);//がっきーの攻撃関数
 	void Ga_Move(int num, PLAYER* player);//移動関数
+	void A_Move(int num);//アスカの移動関数
 	int Ga_Interval[ENEMY_MAX] = {0,0,0};//攻撃のインターバル60フレーム
 	void Bot_Normal(int num, PLAYER* player);//従来の敵ジャニーズ君
 

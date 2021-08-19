@@ -102,6 +102,9 @@ void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
 		Ga_Move(num,player);
 		Ga_Attack(num, player);
 	}
+	if (num == 2) {//タイプアスカ
+		A_Move(num);
+	}
 	else {//それ以外
 		Bot_Normal(num, player);
 	}
@@ -796,6 +799,29 @@ void ENEMY::Ga_Move(int num, PLAYER* player) {
 	}
 	
 }
+void ENEMY::A_Move(int num) {
+	if (WaitTime == 0 || time >= 480) {//スポットライトの動きが止まっているまたは、8秒以上になっている
+		if (c_StmCount[num] >= 480) {//スタミナが480以上なら勝ちを取りに行こうと動く
+			if (check_1 == 0 && check_2 == 0) {//敵と味方両方とも範囲にいない場合行動に移る
+				c_EnemyState[num] = ENEMY_MOVE;
+			}
+		}
+		else if (c_StmCount[num] < 180) {//スタミナが180以下なら回復に専念
+			c_EnemyState[num] = ENEMY_IDLE;
+		}
+	}
+	else {//スタートして0~8秒までの間は普通に動く
+		if (c_StmCount[num] >= 480) {//スタミナが480以上ならほぼ全回復と判断して移動に移る
+			if (check_1 == 0 && check_2 == 0) {//敵と味方両方とも範囲にいない場合行動に移る
+				c_EnemyState[num] = ENEMY_MOVE;
+			}
+		}
+		else if (c_StmCount[num] < 180) {//スタミナが180以下なら回復に専念
+			c_EnemyState[num] = ENEMY_IDLE;
+		}
+	}
+
+}
 
 void ENEMY::Bot_Normal(int num, PLAYER* player) {
 
@@ -805,4 +831,41 @@ void ENEMY::Bot_Normal(int num, PLAYER* player) {
 	if (c_StmCount[num] == 0) {//スタミナ０になったらアイドルになって回復する。
 		c_EnemyState[num] = ENEMY_IDLE;
 	}
+}
+
+bool ENEMY::EnemyCheckHit2(VECTOR c_ObjPos[ENEMY_MAX]) {//enemy同士の判定
+	for (int i = 0; i < ENEMY_MAX; i++) {
+
+		float eex = c_ObjPos[i].x - c_ObjPos[2].x;
+		float eez = c_ObjPos[i].z - c_ObjPos[2].z;
+
+		float eer = (eex * eex) + (eez * eez);
+		float eelr = (200.0f);
+		float eelr2 = (eelr * eelr);
+		if (eer <= eelr2) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool ENEMY::EnemyCheckHit3(VECTOR c_ObjPos[ENEMY_MAX], VECTOR c_Position) {//playerとenemyの判定
+
+	VECTOR Player = c_Position;
+
+	Player.y = 0.0f;
+	float pex = Player.x - c_ObjPos[2].x;
+	float pez = Player.z - c_ObjPos[2].z;
+
+	float per = (pex * pex) + (pez * pez);
+	float pelr = (200.0f);
+	float pelr2 = (pelr * pelr);
+	if (per <= pelr2) {
+
+		return true;
+	}
+
+
+	return false;
 }

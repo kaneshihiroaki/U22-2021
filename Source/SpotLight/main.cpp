@@ -21,6 +21,8 @@ int judge_count = 0;
 bool player_win = false;
 bool enemy_win = false;
 bool judge_win = false;
+int check_1 = 0;
+int check_2 = 0;
 
 bool finish;	//ゲームが終わったか判定（true:ゲーム再開 false:タイトルへ戻る)
 bool judgefinish = false;	//決着ついたか判定	true:終了 false:続ける
@@ -174,6 +176,8 @@ void MAIN::Game_Main() {
 		judge_count = 0;
 		player_win = false;
 		enemy_win = false;
+		check_1 = 0;
+		check_2 = 0;
 		if (c_player->CheckHit(c_player->c_Position, LightPos)) {
 			judge_count++;
 			player_win = true;
@@ -183,6 +187,12 @@ void MAIN::Game_Main() {
 		if (c_enemy->EnemyCheckHit(c_enemy->c_ObjPos, LightPos)) {
 			judge_count++;
 			enemy_win = true;
+		}
+		if (c_enemy->EnemyCheckHit2(c_enemy->c_ObjPos)) {
+			check_1 = 1;
+		}
+		if (c_enemy->EnemyCheckHit3(c_enemy->c_ObjPos, c_player->c_Position)) {
+			check_2 = 1;
 		}
 		if (judge_count == 1) {
 			if (player_win) {
@@ -204,7 +214,7 @@ void MAIN::Game_Main() {
 						judge_win = true;
 					}
 					SetFontSize(100);
-					DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
+					DrawString(360, 120, "enemy0_WIN", GetColor(0x00, 0x00, 0xff));
 				}
 				if (ENEMY_WIN == 2) {
 					Key_Look = true;
@@ -214,7 +224,7 @@ void MAIN::Game_Main() {
 						judge_win = true;
 					}
 					SetFontSize(100);
-					DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
+					DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
 				}
 				if (ENEMY_WIN == 3) {
 					Key_Look = true;
@@ -224,7 +234,7 @@ void MAIN::Game_Main() {
 						judge_win = true;
 					}
 					SetFontSize(100);
-					DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
+					DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
 				}
 			}
 		}
@@ -241,6 +251,8 @@ void MAIN::Game_Main() {
 			SetFontSize(50);
 			DrawString(570, 5, "Judge", GetColor(0x00, 0x00, 0x00));
 			SetFontSize(20);
+			DrawFormatString(20, 60, 0xFFFFFF, "check_1:%d", check_1);
+			DrawFormatString(20, 80, 0xFFFFFF, "check_2:%d", check_2);
 			DrawFormatString(20, 100, 0xFFFFFF, "ENEMYWIN:%d", ENEMY_WIN);
 			DrawFormatString(20, 120, 0xFFFFFF, "judge:%d", judge_count);
 			Game_Judge();
@@ -284,6 +296,8 @@ void MAIN::Game_Title() {
 		ENEMY_WIN_COUNT1 = 0;
 		ENEMY_WIN_COUNT2 = 0;
 		ENEMY_WIN_COUNT3 = 0;
+		check_1 = 0;
+		check_2 = 0;
 	}
 
 }
