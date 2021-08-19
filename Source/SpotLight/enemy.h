@@ -9,6 +9,7 @@
 #define ENEMY_ATTACK 2//攻撃している状態
 //#define ENEMY_ATTACK 3
 
+
 extern int ENEMY_WIN;//どの敵が勝ったか調べる変数
 extern int ENEMY_WIN_COUNT1;//敵１の勝利数
 extern int ENEMY_WIN_COUNT2;//敵２の勝利数
@@ -74,10 +75,24 @@ public:
 		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
 	}; Damage Damage[ENEMY_MAX];
 
+	/*・攻撃は移動中は移動しながら攻撃。立ち止まっているときは立ち止まって攻撃
+      ・移動は600～180になるまで行う。180からは回復→全回復するまではその場で待機。
+         もし秒数が8秒超えたら、300まで回復して、その後0になるまで消費する。その後また300まで回復。
+         待機中に他プレイヤーを見つけると攻撃
+      ・視界はボックスの横と後ろ3倍、前方4.0倍と仮定する
+         前方に見つけると即攻撃。
+         前方以外にとらえたら10フレーム後攻撃（調整必要）
+         攻撃のインターバルは打って、再度発射可能から60フレーム後（調整必要）*/
+
+	void Ga_Attack(int num, PLAYER* player);//がっきーの攻撃関数
+	void Ga_Move(int num, PLAYER* player);//移動関数
+	int Ga_Interval[ENEMY_MAX] = {0,0,0};//攻撃のインターバル60フレーム
+	void Bot_Normal(int num, PLAYER* player);//従来の敵ジャニーズ君
+
 private:
 	bool c_MoveFlag;//エネミーが移動しているのか判定
 	int c_StmCount[ENEMY_MAX];	//敵の体力
-	const int c_StmMax = 300;	//体力の最大値
+	const int c_StmMax = 600;	//体力の最大値
 
 	VECTOR c_MoveVector;	//移動変数
 	VECTOR c_TempMoveVector;	//移動先計算用変数

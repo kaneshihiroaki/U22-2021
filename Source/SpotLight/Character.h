@@ -19,7 +19,7 @@ private:
 		int s_Count[3];		//動いている時間をカウント
 		int s_PlayerCount;
 		int s_RecoveryCount[3];//回復するまでのインターバル
-		const int s_StaminaMax = 300;		//敵のスタミナの最大値
+		const int s_StaminaMax = 600;		//敵のスタミナの最大値
 		//const int s_PlayStaminaMax = 600;		//プレイヤーのスタミナの最大値
 	}; Stamina Stamina;
 };

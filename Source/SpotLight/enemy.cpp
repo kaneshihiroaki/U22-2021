@@ -64,7 +64,7 @@ void ENEMY::init() {
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
 		c_MoveKey[i] = true;
-		c_StmCount[i] = 300;	//エネミーの体力の最大
+		c_StmCount[i] = c_StmMax;	//エネミーの体力の最大
 		c_Rotation[i] = VGet(0.0f, 0.0f /*(c_PlayerAng * (M_PI / 180))*/, 0.0f);//エネミーの回転
 		c_Enemy_MoveAng[i] = 0;//エネミーの角度
 		c_EnemySpeed[i] = 0.0f;//エネミーのスピード
@@ -98,31 +98,41 @@ void ENEMY::debug() {
 }
 
 void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
+	if (num == 0) {//タイプがっきー
+		Ga_Move(num,player);
+		Ga_Attack(num, player);
+	}
+	else {//それ以外
+		Bot_Normal(num, player);
+	}
 	
+	if (Damage[num].s_paralyzeKey == true)Enemy_Paralyze(num);//しびれているならカウントしないといけない
 	
-
-	
+	SetFontSize(20);
 	switch (c_EnemyState[num])
 	{
 	case ENEMY_IDLE:
 		c_StmCount[num] = StaminaCount(false,num);		//スタミナ回復
-		if (c_StmCount[num] >= 300) {//スタミナがマックスになったら移動する。
-			c_EnemyState[num] = ENEMY_MOVE;
-		}
+		DrawFormatString(1100, 420 + 20 * num, 0xFFFFFF, "%d IDLE\n", num);
 		break;
 	case ENEMY_MOVE:
 		Enemy_Move(num, player, camera);
-		if (c_StmCount[num] == 0) {//スタミナ０になったらアイドルになって回復する。
-			c_EnemyState[num] = ENEMY_IDLE;
-		}
+		DrawFormatString(1100, 420 + 20 * num, 0xFFFFFF, "%d MOVE\n", num);
 		break;
 	case ENEMY_ATTACK:
 		break;
 	}
 
-	SetFontSize(20);
-	DrawFormatString(1100, 620 + 20 * num, 0xFFFFFF, "%dの敵体力 %d\n", num, c_StmCount[num]);
-
+	
+	DrawFormatString(1100, 620 + 20 * num, 0xFFFFFF, "%d %d\n", num, c_StmCount[num]);
+	if (Damage[num].s_paralyzeKey) {
+		DrawFormatString(1100, 520 + 20 * num, 0xFFFFFF, "%d True\n", num);
+	}
+	else {
+		DrawFormatString(1100, 520 + 20 * num, 0xFFFFFF, "%d False\n", num);
+	}
+	
+	
 }
 
 void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
@@ -175,7 +185,7 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 		VECTOR Check_Future_Pos = c_ObjPos[num];//変更してもいいようにローカルVEC変数
 		Check_Future_Pos.x += (c_MoveVector.x * 15);//１～３０フレーム後のポジション（仮） speed×30フレーム
 		Check_Future_Pos.z += (c_MoveVector.z * 15);//１～３０フレーム後のポジション（仮）
-		if (i == 1)DrawSphere3D(Check_Future_Pos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+		//if (i == 1)DrawSphere3D(Check_Future_Pos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 
 		if (c_EnemyFrameCount[num] == 0) {
 
@@ -199,6 +209,26 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 				SetFontSize(20);
 				DrawFormatString(1100, 600, 0xFFFFFF, "いるぜ\n");
 
+			}
+			//1回だけ通る
+			if (i == 0 || (num == 0 && i == 1)) {
+				if (Collision_Cube2(Check_Future_Pos, c_Rotation[num],player->c_Position, 30, 150, 105, 55) == true) {
+
+					float rad = c_Rotation[num].y + (M_PI / 2);
+					c_EnemyAddVect[num].x = 5.0f * sinf(rad)/* - c_MoveVector.z * sin(rad)*/;
+					c_EnemyAddVect[num].z = 5.0f * cosf(rad) /*+ c_MoveVector.z * cos(rad)*/;
+
+					c_MoveVector.x += c_EnemyAddVect[num].x;
+					c_MoveVector.z += c_EnemyAddVect[num].z;
+
+					c_EnemyFrameCount[num] = 1;
+
+					//c_MoveVector.x += 5.0f;
+
+					SetFontSize(20);
+					DrawFormatString(1100, 600, 0xFFFFFF, "いるぜ\n");
+
+				}
 			}
 		}
 		else if (c_EnemyFrameCount[num] < 30*(ENEMY_MAX-1)) {
@@ -268,11 +298,8 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)
 	}
 	c_Rotation[num].y = c_Enemy_MoveAng[num] * (M_PI / 180);
 
-	if (Damage[num].s_paralyzeKey == true) Enemy_Paralyze(num);//しびれているならカウントと移動フラグをoffにする
-	if (((g_KeyFlg & PAD_INPUT_5) != 0) && Att[num].s_AttackStartKey == false && c_StmCount[num] > 16) {
-		Att[num].s_AttackStartKey = true;//今のところR1をおすと敵が攻撃
-		c_StmCount[num] = AttackStaminaCount(num);
-	}
+	if (Damage[num].s_paralyzeKey == true) c_MoveFlag = false; //しびれているなら移動フラグをoffにする
+	
 	if (Att[num].s_AttackStartKey == true) Enemy_Attack(player, num);
 	
 	//移動フラグがたってたら移動
@@ -607,8 +634,7 @@ bool ENEMY::CheckPara(int num) {
 
 
 void ENEMY::Enemy_Paralyze(int num) {
-	c_MoveFlag = false;
-
+	
 	if (Damage[num].s_ParaTime++ == Damage[num].s_MaxTimeParalyze) {
 		Damage[num].s_paralyzeKey = false;
 		Damage[num].s_ParaTime = 0;
@@ -655,4 +681,128 @@ bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 	DrawFormatString(10, 220, 0x888888, "y:%f", Enemy.y);
 	DrawFormatString(10, 250, 0x888888, "z:%f", Enemy.z);*/
 
+}
+
+
+
+void ENEMY::Ga_Attack(int num, PLAYER* player) {
+	if (Att[num].s_AttackStartKey == true) return; //攻撃中だと帰る
+	if (Ga_Interval[num] > 0) {//攻撃のインターバル
+		Ga_Interval[num]--;
+		return;
+	}
+	if (c_StmCount[num] < 16)return;//スタミナが15以下だと帰る
+
+	VECTOR Check_Future_Pos = c_ObjPos[num];//前方に座標をうつすため。長さ９６
+	Check_Future_Pos.x += 96.0f * sinf(c_Rotation[num].y)/* - c_MoveVector.z * sin(rad)*/;
+	Check_Future_Pos.z += 96.0f * cosf(c_Rotation[num].y) /*+ c_MoveVector.z * cos(rad)*/;
+	//DrawSphere3D(Check_Future_Pos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
+	if (((g_KeyFlg & PAD_INPUT_5) != 0)) {
+		Att[num].s_AttackStartKey = true;//今のところR1をおすと敵が攻撃
+		c_StmCount[num] = AttackStaminaCount(num);
+		return;
+	}
+
+	//他のエネミーが自分の周りにいるかどうか判定
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (i == num)continue;
+
+		//自分の前方をみる
+		if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], c_Rotation[i], 30, 96, 105, 55) == true) {
+
+			Ga_Interval[num] = 60;//攻撃のインターバル60フレーム
+			Att[num].s_AttackStartKey = true;//
+			c_StmCount[num] = AttackStaminaCount(num);
+			return;
+
+		}
+		//自分の後ろや周りをみる
+		if (Collision_Cube(c_ObjPos[num], c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH * 2, ENEMY_HEIGHT * 2, 55, 55) == true) {
+			float PosX = c_ObjPos[i].x - c_ObjPos[num].x;
+			float PosZ = c_ObjPos[i].z - c_ObjPos[num].z;
+			float rad = atan2f(c_ObjPos[i].z - c_ObjPos[num].z, c_ObjPos[i].x - c_ObjPos[num].x) * 180 / M_PI;
+			//向いている角度の調整
+			if ((rad >= -180 && rad < -135) || (rad >= 135)) {//左
+				c_Rotation[num].y = 270.0f;
+			}
+			else if (rad >= -135 && rad < -45) {//下
+				c_Rotation[num].y = 180.0f;
+			}
+			else if (rad >= -45 && rad < 45) {//右
+				c_Rotation[num].y = 90.0f;
+			}
+			else if (rad >= 45 && rad < 135) {//上
+				c_Rotation[num].y = 0.0f;
+			}
+
+			Ga_Interval[num] = 60;//攻撃のインターバル60フレーム
+			Att[num].s_AttackStartKey = true;//
+			c_StmCount[num] = AttackStaminaCount(num);
+			return;
+
+		}
+	}
+	//プレイヤーが自分の周りにいるかどうか判定
+	//自分の前方をみる
+	if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], player->c_Position, 30, 150, 105, 55) == true) {
+		Ga_Interval[num] = 60;//攻撃のインターバル60フレー
+		Att[num].s_AttackStartKey = true;//
+		c_StmCount[num] = AttackStaminaCount(num);
+		return;
+	}
+	//自分の後ろや周りをみる
+	if (Collision_Cube(c_ObjPos[num], c_Rotation[num], player->c_Position, ENEMY_WIDTH * 2, ENEMY_HEIGHT * 2, 55, 55) == true) {
+		float PosX = player->c_Position.x - c_ObjPos[num].x;
+		float PosZ = player->c_Position.z - c_ObjPos[num].z;
+		float rad = atan2f(player->c_Position.z - c_ObjPos[num].z, player->c_Position.x - c_ObjPos[num].x) * 180 / M_PI;
+		//向いている角度の調整
+		if ((rad >= -180 && rad < -135) || (rad >= 135)) {//左
+			c_Rotation[num].y = 270.0f;
+		}
+		else if (rad >= -135 && rad < -45) {//下
+			c_Rotation[num].y = 180.0f;
+		}
+		else if (rad >= -45 && rad < 45) {//右
+			c_Rotation[num].y = 90.0f;
+		}
+		else if (rad >= 45 && rad < 135) {//上
+			c_Rotation[num].y = 0.0f;
+		}
+
+		Ga_Interval[num] = 60;//攻撃のインターバル60フレー
+		Att[num].s_AttackStartKey = true;//
+		c_StmCount[num] = AttackStaminaCount(num);
+		return;
+	}
+}
+
+void ENEMY::Ga_Move(int num, PLAYER* player) {
+	if (WaitTime == 0 || time >= 480) {//スポットライトの動きが止まっているまたは、8秒以上になっている
+		if (c_StmCount[num] >= 300) {//スタミナが300以上なら勝ちを取りに行こうと動く
+			c_EnemyState[num] = ENEMY_MOVE;
+		}
+		else if (c_StmCount[num] < 10) {//スタミナが10以下なら回復に専念
+			c_EnemyState[num] = ENEMY_IDLE;
+		}
+	}
+	else {//スタートして0~8秒までの間は普通に動く
+		if (c_StmCount[num] >= 580) {//スタミナが580以上ならほぼ全回復と判断して移動に移る
+			c_EnemyState[num] = ENEMY_MOVE;
+		}
+		else if (c_StmCount[num] < 180) {//スタミナが180以下なら回復に専念
+			c_EnemyState[num] = ENEMY_IDLE;
+		}
+	}
+	
+}
+
+void ENEMY::Bot_Normal(int num, PLAYER* player) {
+
+	if (c_StmCount[num] >= 580) {//スタミナがマックスになったら移動する。
+		c_EnemyState[num] = ENEMY_MOVE;
+	}
+	if (c_StmCount[num] == 0) {//スタミナ０になったらアイドルになって回復する。
+		c_EnemyState[num] = ENEMY_IDLE;
+	}
 }

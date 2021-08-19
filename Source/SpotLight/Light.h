@@ -19,6 +19,8 @@ extern int WaitTime;
 extern VECTOR LightPos;
 extern bool LightFlg;//止まっているか調べる( TRUE:動く FALSE:止まっている )
 
+extern int time;//エネミーの方で今何秒なのか検知するよう
+extern int WaitTime;//上に同じ
 
 void Light();
 void Light_init();

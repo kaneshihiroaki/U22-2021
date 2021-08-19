@@ -4,7 +4,7 @@
 CHARACTER::CHARACTER()
 {
 	for (int i = 0; i < 3; i++) {
-		Stamina.s_Count[i] = 300;
+		Stamina.s_Count[i] = Stamina.s_StaminaMax;
 	}
 }
 
@@ -14,7 +14,7 @@ CHARACTER::~CHARACTER()
 
 void CHARACTER::Character_Init() {
 	for (int i = 0; i < 3; i++) {
-		Stamina.s_Count[i] = 300;
+		Stamina.s_Count[i] = Stamina.s_StaminaMax;
 		Stamina.s_RecoveryCount[i] = 0;
 	}
 }
