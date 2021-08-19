@@ -115,27 +115,30 @@ void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
 	switch (c_EnemyState[num])
 	{
 	case ENEMY_IDLE:
-		c_StmCount[num] = StaminaCount(false,num);		//スタミナ回復
-		DrawFormatString(1100, 420 + 20 * num, 0xFFFFFF, "%d IDLE\n", num);
+		c_StmCount[num] = StaminaCount(false, num);		//スタミナ回復
+		if (Debug_Enemy) {
+			DrawFormatString(1100, 420 + 20 * num, 0xFFFFFF, "%d IDLE\n", num);
+		}
 		break;
 	case ENEMY_MOVE:
 		Enemy_Move(num, player, camera);
-		DrawFormatString(1100, 420 + 20 * num, 0xFFFFFF, "%d MOVE\n", num);
+		if (Debug_Enemy) {
+			DrawFormatString(1100, 420 + 20 * num, 0xFFFFFF, "%d MOVE\n", num);
+		}
 		break;
 	case ENEMY_ATTACK:
 		break;
 	}
 
-	
-	DrawFormatString(1100, 620 + 20 * num, 0xFFFFFF, "%d %d\n", num, c_StmCount[num]);
-	if (Damage[num].s_paralyzeKey) {
-		DrawFormatString(1100, 520 + 20 * num, 0xFFFFFF, "%d True\n", num);
+	if (Debug_Enemy) {
+		DrawFormatString(1100, 620 + 20 * num, 0xFFFFFF, "%d %d\n", num, c_StmCount[num]);
+		if (Damage[num].s_paralyzeKey) {
+			DrawFormatString(1100, 520 + 20 * num, 0xFFFFFF, "%d True\n", num);
+		}
+		else {
+			DrawFormatString(1100, 520 + 20 * num, 0xFFFFFF, "%d False\n", num);
+		}
 	}
-	else {
-		DrawFormatString(1100, 520 + 20 * num, 0xFFFFFF, "%d False\n", num);
-	}
-	
-	
 }
 
 void ENEMY::Enemy_Move(int num, PLAYER* player, CAMERA* camera)

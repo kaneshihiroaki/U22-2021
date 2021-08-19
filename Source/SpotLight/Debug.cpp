@@ -22,6 +22,9 @@ bool Build_bool = true;//ビルドの日付をけす用にする。
 const char data[] = __DATE__;//ビルド時の日付や時間
 const char time[] = __TIME__;
 
+bool Debug_Enemy = false;//デバック用フラグtrueで確認可能にする
+
+
 //ローカル変数（private変数）
 float version;
 int cameraNum = 0;
@@ -88,6 +91,9 @@ int DebugCom() {
 			break;
 		case 5:
 			Game_Judge_In();
+			break;
+		case 6:
+			Enemy_State();
 			break;
 		case 10:
 			CameraReverse();
@@ -156,6 +162,7 @@ void DebugDrawing() {
 	DrawString(50, 61, "GamePad_State", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 81, "Build_Time", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 101, "Game_Judge", GetColor(0x00, 0xff, 0xff));
+	DrawString(50, 121, "Enemy_State", GetColor(0x00, 0xff, 0xff));
 }
 
 
@@ -307,4 +314,10 @@ void Game_Judge() {
 	}
 
 
+}
+
+//エネミーのステータスを見るよう
+void Enemy_State() {
+	Debug_Enemy = !Debug_Enemy;
+	DebugMode = false;
 }

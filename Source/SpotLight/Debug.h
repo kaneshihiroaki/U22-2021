@@ -23,6 +23,9 @@ extern int g_OldKey;
 
 extern bool Key_Look;//プレイヤーの入力を制御する変数
 
+extern bool Debug_Enemy;//デバック用フラグtrueで確認可能にする
+
+
 extern int DebugCom();
 extern void DebugDrawing();;
 extern void CameraState();
@@ -31,6 +34,7 @@ extern void Collision_player();
 extern void GamePadIn();
 extern void Build_In();
 extern void Game_Judge_In();
+extern void Enemy_State();
 
 
 extern void Build_Time();//ビルドスタンプ関数
