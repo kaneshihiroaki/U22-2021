@@ -16,6 +16,7 @@ class STAGE;
 class ENEMY;
 
 extern int judge_count;
+extern int win_timer;//勝利を表示し続けるカウント
 extern bool player_win;
 extern bool enemy_win;
 

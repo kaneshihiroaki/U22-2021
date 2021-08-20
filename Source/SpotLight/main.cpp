@@ -18,6 +18,7 @@ int g_NowKey;
 int g_OldKey;
 char key[256];
 int judge_count = 0;
+int win_timer = 0;
 bool player_win = false;
 bool enemy_win = false;
 bool judge_win = false;
@@ -53,6 +54,7 @@ void MAIN::Game_init() {
 	//勝敗判定初期化
 	finish = true;
 	judgefinish = false;
+	win_timer = 0;
 	WaitTime = 0;
 
 	//ゲーム開始の演出関連変数初期化
@@ -201,9 +203,16 @@ void MAIN::Game_Main() {
 					PLAYER_WIN_COUNT++;
 					judge_win = true;
 				}
-
+				
+				win_timer = (win_timer + 1) % 121;
+				if (win_timer < 119) {
 				SetFontSize(100);
 				DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
+				}
+				if (win_timer == 120) {
+					time = 600;
+					win_timer = 0;
+				}
 			}
 			if (enemy_win) {
 				if (ENEMY_WIN == 1) {
@@ -213,8 +222,12 @@ void MAIN::Game_Main() {
 						ENEMY_WIN_COUNT1++;
 						judge_win = true;
 					}
+				
+					win_timer = (win_timer + 1) % 121;
+					if (win_timer < 119) {
 					SetFontSize(100);
 					DrawString(360, 120, "enemy0_WIN", GetColor(0x00, 0x00, 0xff));
+				     }
 				}
 				if (ENEMY_WIN == 2) {
 					Key_Look = true;
@@ -223,8 +236,12 @@ void MAIN::Game_Main() {
 						ENEMY_WIN_COUNT2++;
 						judge_win = true;
 					}
-					SetFontSize(100);
-					DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
+				
+					win_timer = (win_timer + 1) % 121;
+					if (win_timer < 119) {
+						SetFontSize(100);
+						DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
+					}
 				}
 				if (ENEMY_WIN == 3) {
 					Key_Look = true;
@@ -233,8 +250,16 @@ void MAIN::Game_Main() {
 						ENEMY_WIN_COUNT3++;
 						judge_win = true;
 					}
-					SetFontSize(100);
-					DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
+			
+					win_timer = (win_timer + 1) % 121;
+					if (win_timer < 119) {
+						SetFontSize(100);
+						DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
+					}
+				}
+				if (win_timer == 120) {
+					time = 600;
+					win_timer = 0;
 				}
 			}
 		}
@@ -251,6 +276,7 @@ void MAIN::Game_Main() {
 			SetFontSize(50);
 			DrawString(570, 5, "Judge", GetColor(0x00, 0x00, 0x00));
 			SetFontSize(20);
+			DrawFormatString(20, 40, 0xFFFFFF, "win_timer:%d", win_timer);
 			DrawFormatString(20, 60, 0xFFFFFF, "check_1:%d", check_1);
 			DrawFormatString(20, 80, 0xFFFFFF, "check_2:%d", check_2);
 			DrawFormatString(20, 100, 0xFFFFFF, "ENEMYWIN:%d", ENEMY_WIN);
