@@ -27,7 +27,7 @@ int check_2 = 0;
 
 bool finish;	//ゲームが終わったか判定（true:ゲーム再開 false:タイトルへ戻る)
 bool judgefinish = false;	//決着ついたか判定	true:終了 false:続ける
-
+int round_count = 0;			//ラウンド数
  
 MAIN::MAIN()
 {
@@ -60,6 +60,21 @@ void MAIN::Game_init() {
 	//ゲーム開始の演出関連変数初期化
 	c_ready = false;
 	c_dispTime = 0;
+
+	//ライト・リザルト用変数初期化
+	LightFlg = false;
+	Key_Look = false;
+	Win = false;
+	Lose = false;
+	GameJudge = false;
+	judge_win = false;
+	PLAYER_WIN_COUNT = 0;
+	ENEMY_WIN = 0;
+	ENEMY_WIN_COUNT1 = 0;
+	ENEMY_WIN_COUNT2 = 0;
+	ENEMY_WIN_COUNT3 = 0;
+	check_1 = 0;
+	check_2 = 0;
 
 	//初期化したらゲームメインへ
 	GameState = 2;
@@ -131,6 +146,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			// 背景の色
 			SetBackgroundColor(35, 35, 35);
 			c_main->Game_Main();
+			break;
+
+		case 3:
+			c_main->Game_Result();
 			break;
 
 		default:
@@ -264,7 +283,7 @@ void MAIN::Game_Main() {
 			}
 		}
 
-		if (finish == false) GameState = 0;	//決着ついたらタイトルへ戻る
+		if (finish == false) GameState = 3;	//決着ついたらタイトルへ戻る
 
 		if (!Collision_Player) {
 			MV1DrawModel(c_player->c_PlayerModel);
@@ -311,22 +330,44 @@ void MAIN::Game_Title() {
 	DrawFormatString(460, 300, 0x000000, "Bボタンでゲームスタート");
 	if (((g_KeyFlg & PAD_INPUT_2) != 0) || CheckHitKey(KEY_INPUT_I)) {
 		GameState = 1;
-		LightFlg = false;
-		Key_Look = false;
-		Win = false;
-		Lose = false;
-		GameJudge = false;
-		judge_win = false;
-		PLAYER_WIN_COUNT = 0;
-		ENEMY_WIN = 0;
-		ENEMY_WIN_COUNT1 = 0;
-		ENEMY_WIN_COUNT2 = 0;
-		ENEMY_WIN_COUNT3 = 0;
-		check_1 = 0;
-		check_2 = 0;
+		//LightFlg = false;
+		//Key_Look = false;
+		//Win = false;
+		//Lose = false;
+		//GameJudge = false;
+		//judge_win = false;
+		//PLAYER_WIN_COUNT = 0;
+		//ENEMY_WIN = 0;
+		//ENEMY_WIN_COUNT1 = 0;
+		//ENEMY_WIN_COUNT2 = 0;
+		//ENEMY_WIN_COUNT3 = 0;
+		//check_1 = 0;
+		//check_2 = 0;
 	}
 
 }
+
+void MAIN::Game_Result() {
+	int score[4];	//スコア格納用の変数　０はプレイヤー用　１～３は適用
+
+	score[0] = PLAYER_WIN_COUNT * c_pointcal;
+	score[1] = ENEMY_WIN_COUNT1 * c_pointcal;
+	score[2] = ENEMY_WIN_COUNT2 * c_pointcal;
+	score[3] = ENEMY_WIN_COUNT3 * c_pointcal;
+
+	SetFontSize(20);
+	DrawFormatString(100, 100, 0xFFFFFF, "PLAYER_WIN_NUM:%d", PLAYER_WIN_COUNT);
+	DrawFormatString(100, 120, 0xFFFFFF, "PLAYER_POINT:%d", score[0]);
+	DrawFormatString(500, 100, 0xFFFFFF, "ENEMY1_WIN_NUM:%d", ENEMY_WIN_COUNT1);
+	DrawFormatString(500, 120, 0xFFFFFF, "ENEMY1_POINT:%d", score[1]);
+	DrawFormatString(120, 140, 0xFFFFFF, "ENEMY2_WIN_NUM:%d", ENEMY_WIN_COUNT2);
+	DrawFormatString(120, 160, 0xFFFFFF, "ENEMY2_POINT:%d", score[2]);
+	DrawFormatString(520, 140, 0xFFFFFF, "ENEMY3_WIN_NUM:%d", ENEMY_WIN_COUNT3);
+	DrawFormatString(520, 160, 0xFFFFFF, "ENEMY3_POINT:%d", score[3]);
+
+	if ((g_KeyFlg & PAD_INPUT_2) != 0) GameState = 0;
+}
+
 void WIN_Text() {
 	SetFontSize(20);
 	DrawFormatString(20, 140, 0xFFFFFF, "PLAYER_WIN:%d", PLAYER_WIN_COUNT);

@@ -164,6 +164,7 @@ void Light()
 		time = 0;
 		LightFlg = false;
 		//finish = false;
+		round_count++;
 	}
 	else if (time >= 600 && WaitTime == 0) {
 		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count || cntFlg + 5 == count || cntFlg - 5 == count || cntFlg + 6 == count || cntFlg - 6 == count
@@ -178,7 +179,7 @@ void Light()
 		Key_Look = false;
 		LightFlg = true;
 		judge_win = false;
-		if (judgefinish == true) finish = false;
+		if (round_count >= 6) finish = false;		//6ƒ‰ƒEƒ“ƒh‚â‚Á‚½‚çI‚í‚é
 	}
 
 	if (WaitTime == 1 && count < 9) {
