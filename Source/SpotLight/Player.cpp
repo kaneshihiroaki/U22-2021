@@ -149,6 +149,22 @@ bool PLAYER::Player_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD,
 	//当たり判定の計算
 	float posx = cos(ang) * distx + sin(ang) * distz;
 	float posz = -sin(ang) * distx + cos(ang) * distz;
+	/*
+	if (num == 0) {
+		DrawSphere3D(VGet(posx, 150.0f, posz), 50.0f, 32, GetColor(255, 0, 0), GetColor(100 * num, 100 * num, 50 * num), TRUE);
+	}
+	else if (num == 1) {
+		DrawSphere3D(VGet(posx, 150.0f, posz), 50.0f, 32, GetColor(0, 255, 0), GetColor(100 * num, 100 * num, 50 * num), TRUE);
+	}
+	else {
+		DrawSphere3D(VGet(posx, 150.0f, posz), 50.0f, 32, GetColor(0, 0, 255), GetColor(100 * num, 100 * num, 50 * num), TRUE);
+	}
+
+	DrawLine3D(VGet(-Att.s_width, 150.0f, Att.s_heigt), VGet(Att.s_width, 150.0f, Att.s_heigt), GetColor(255, 255, 255));
+	DrawLine3D(VGet(-Att.s_width, 150.0f, Att.s_heigt), VGet(-Att.s_width, 150.0f, -Att.s_heigt), GetColor(255, 255, 255));
+	DrawLine3D(VGet(Att.s_width, 150.0f, Att.s_heigt), VGet(Att.s_width, 150.0f, -Att.s_heigt), GetColor(255, 255, 255));
+	DrawLine3D(VGet(-Att.s_width, 150.0f, -Att.s_heigt), VGet(Att.s_width, 150.0f, -Att.s_heigt), GetColor(255, 255, 255));
+	*/
 
 	//矩形と点の当たり判定を行う
 	if (-Att.s_width / 2.0f <= posx && Att.s_width / 2.0f >= posx &&
