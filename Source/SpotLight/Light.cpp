@@ -21,7 +21,7 @@ float DrawZ = 0.0f;
 int time = 600;
 int count;
 int cntFlg = 4;
-int rc = 4; 
+int rc = 4;
 float distance = 1200.0f;
 int WaitTime = 1;
 
@@ -56,7 +56,7 @@ void Light_SetUp() {
 
 	//ライトの処理を1ピクセルごとに行う（処理が重くなる）
 	SetUsePixelLighting(TRUE);
-
+	
 	// スポットライトを作成する
 	SpotLightHandle = CreateSpotLightHandle(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, -1.0f, 0.0f), 0.28f, 0.0f, 2000.0f, 0.0f, 0.006f, 0.0f);
 
@@ -77,18 +77,8 @@ void Light_SetUp() {
 }
 
 void Light_init() {
-
-	////頂点シェーダーを読み込む
-	//VertexShaderHandle = LoadVertexShader("Shader/NormalMesh_SpotPointLightVS.vso");
-
-	////ピクセルシェーダーを読み込む
-	//PixelShaderHandle = LoadPixelShader("Shader/NormalMesh_SpotPointLightPS.pso");
-
-	//// 使用する頂点シェーダーをセット
-	//SetUseVertexShader(VertexShaderHandle);
-
-	//// 使用するピクセルシェーダーをセット
-	//SetUsePixelShader(PixelShaderHandle);
+	// Direct3D9Ex を使用する
+	SetUseDirect3DVersion(DX_DIRECT3D_9EX);
 
 	// ライトの位置を回転する値を初期化
 	//LightRotateAngle = 0.0f;
@@ -176,7 +166,7 @@ void Light()
 		//finish = false;
 	}
 	else if (time >= 600 && WaitTime == 0) {
-		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count || cntFlg + 5 == count || cntFlg - 5 == count|| cntFlg + 6 == count || cntFlg - 6 == count 
+		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count || cntFlg + 5 == count || cntFlg - 5 == count || cntFlg + 6 == count || cntFlg - 6 == count
 			|| cntFlg + 7 == count || cntFlg - 7 == count || cntFlg + 8 == count || cntFlg - 8 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2) || (cntFlg == 5) && (count == 6) || (cntFlg == 6) && (count == 5))
 		{
 			count = GetRand(8);
