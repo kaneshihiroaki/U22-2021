@@ -66,6 +66,10 @@ void PLAYER::Player_Controller() {
 	MV1SetRotationXYZ(c_PlayerModel, c_Rotation);
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 
+	if (!Collision_Player) {
+		MV1DrawModel(c_PlayerModel);
+	}
+
 	//プレイヤーのスタミナのUI
 	SetFontSize(18);
 	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);

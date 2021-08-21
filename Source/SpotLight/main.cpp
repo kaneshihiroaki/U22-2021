@@ -28,7 +28,7 @@ int check_2 = 0;
 bool finish;	//ゲームが終わったか判定（true:ゲーム再開 false:タイトルへ戻る)
 bool judgefinish = false;	//決着ついたか判定	true:終了 false:続ける
 int round_count = 0;			//ラウンド数
- 
+
 MAIN::MAIN()
 {
 	GameState = 0;
@@ -56,10 +56,11 @@ void MAIN::Game_init() {
 	judgefinish = false;
 	win_timer = 0;
 	WaitTime = 0;
+	round_count = 0;
 
 	//ゲーム開始の演出関連変数初期化
 	c_ready = false;
-	c_dispTime = 0;
+	c_dispTime = c_readyMaxTime;
 
 	//ライト・リザルト用変数初期化
 	LightFlg = false;
@@ -78,7 +79,7 @@ void MAIN::Game_init() {
 
 	//初期化したらゲームメインへ
 	GameState = 2;
-	
+
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -106,7 +107,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Ｚバッファへの書き込みを有効にする
 	SetWriteZBuffer3D(TRUE);
 
-	MAIN *c_main = new MAIN();
+	MAIN* c_main = new MAIN();
 
 	//ゲームステータスをタイトルへ
 	c_main->GameState = 0;
@@ -154,7 +155,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		default:
 			break;
-		} 
+		}
 
 		//デバックコマンド表示
 		if (DebugCom() == -1) {
@@ -175,23 +176,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 void MAIN::Game_Main() {
 	SetFontSize(100);
 
+	//オブジェクトの表示
+	c_stage->Stage_Make(c_enemy, c_player);
+	c_player->Player_Controller();
+	if (!Collision_Player)c_enemy->Enemy_Creat();
+	c_camera->Camera_Control(c_stage);
+
 	//最初にBボタンを押してゲーム開始
 	if (c_ready == true) {
 
-		c_stage->Stage_Make(c_enemy, c_player);
+		//c_stage->Stage_Make(c_enemy, c_player);
 
 		if (!Collision_Player) {
 			for (int i = 0; i < ENEMY_MAX; i++) {
 				c_enemy->Enemy_State(i, c_player, c_camera);
 			}
-			c_enemy->Enemy_Creat();
+			//c_enemy->Enemy_Creat();
 		}
 
 		//プレイヤーの表示と動きの制御
-		c_player->Player_Controller();
+		//c_player->Player_Controller();
 		c_player->Player_Move(c_camera, c_enemy);
 
-		c_camera->Camera_Control(c_stage);
+		//c_camera->Camera_Control(c_stage);
 
 		WIN_Text();
 		judge_count = 0;
@@ -222,11 +229,11 @@ void MAIN::Game_Main() {
 					PLAYER_WIN_COUNT++;
 					judge_win = true;
 				}
-				
+
 				win_timer = (win_timer + 1) % 121;
 				if (win_timer < 119) {
-				SetFontSize(100);
-				DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
+					SetFontSize(100);
+					DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
 				}
 				if (win_timer == 120) {
 					time = 600;
@@ -241,12 +248,12 @@ void MAIN::Game_Main() {
 						ENEMY_WIN_COUNT1++;
 						judge_win = true;
 					}
-				
+
 					win_timer = (win_timer + 1) % 121;
 					if (win_timer < 119) {
-					SetFontSize(100);
-					DrawString(360, 120, "enemy0_WIN", GetColor(0x00, 0x00, 0xff));
-				     }
+						SetFontSize(100);
+						DrawString(360, 120, "enemy0_WIN", GetColor(0x00, 0x00, 0xff));
+					}
 				}
 				if (ENEMY_WIN == 2) {
 					Key_Look = true;
@@ -255,7 +262,7 @@ void MAIN::Game_Main() {
 						ENEMY_WIN_COUNT2++;
 						judge_win = true;
 					}
-				
+
 					win_timer = (win_timer + 1) % 121;
 					if (win_timer < 119) {
 						SetFontSize(100);
@@ -269,7 +276,7 @@ void MAIN::Game_Main() {
 						ENEMY_WIN_COUNT3++;
 						judge_win = true;
 					}
-			
+
 					win_timer = (win_timer + 1) % 121;
 					if (win_timer < 119) {
 						SetFontSize(100);
@@ -285,9 +292,9 @@ void MAIN::Game_Main() {
 
 		if (finish == false) GameState = 3;	//決着ついたらタイトルへ戻る
 
-		if (!Collision_Player) {
-			MV1DrawModel(c_player->c_PlayerModel);
-		}
+		//if (!Collision_Player) {
+		//	MV1DrawModel(c_player->c_PlayerModel);
+		//}
 		if (Build_bool) {
 			Build_Time();
 		}
@@ -310,16 +317,21 @@ void MAIN::Game_Main() {
 		Light();
 
 		//開始時にGO!を表示
-		if (c_dispTime++ <= c_dispTimeOver)DrawFormatString(525, 250, 0x0000FF, "GO!");
+		if (--c_dispTime >= 0)DrawFormatString(525, 250, 0x0000FF, "GO!");
 
 	}
-	//ボタンを押していない時は始めない
+	//3秒立ったら始める
 	else {
+		SetFontSize(100);
 		DrawFormatString(470, 250, 0xFF0000, "READY?");
+		DrawFormatString(580, 350, 0xFF0000, "%d", c_dispTime / 60);
 	}
 
 	//ボタン押したらゲーム開始
-	if (((g_KeyFlg & PAD_INPUT_2) != 0) && c_ready == false) c_ready = true;
+	if (--c_dispTime <= 60 && c_ready == false) {
+		c_ready = true;
+		c_dispTime = c_dispTimeMax;	//GOの表示時間を代入
+	}
 }
 
 void MAIN::Game_Title() {
