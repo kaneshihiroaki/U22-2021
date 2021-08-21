@@ -339,7 +339,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 	if (CheckHitKey(KEY_INPUT_G)) SetParalyzeKey();/*Damage.s_paralyzeKey = true;*/
 	if (Damage.s_paralyzeKey == true) Player_Paralyze();
 
-	c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmCount,c_StmMax);        //スタミナ管理
+	if(Key_Look == false)c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmCount,c_StmMax);        //スタミナ管理
 
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true)
@@ -402,7 +402,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 
 
 	//攻撃
-	if (((g_KeyFlg & PAD_INPUT_2) != 0) && Att.s_AttackStartKey == false)Att.s_AttackStartKey = true;
+	if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false && Att.s_AttackStartKey == false))Att.s_AttackStartKey = true;
 	if (Att.s_AttackStartKey == true) Player_Attack(ene, c_Rotation);
 
 	if (Collision_Player) {
