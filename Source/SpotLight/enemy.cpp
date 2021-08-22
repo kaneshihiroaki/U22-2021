@@ -98,12 +98,14 @@ void ENEMY::debug() {
 }
 
 void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
+	if (Key_Look)return;//勝敗が決したときなどに入らないようにするフラグ
 	if (num == 0) {//タイプがっきー
 		Ga_Move(num,player);
 		Ga_Attack(num, player);
 	}
-	if (num == 2) {//タイプアスカ
+	else if (num == 2) {//タイプアスカ
 		A_Move(num);
+		A_Attack(num, player);
 	}
 	else {//それ以外
 		Bot_Normal(num, player);
@@ -803,26 +805,99 @@ void ENEMY::Ga_Move(int num, PLAYER* player) {
 }
 void ENEMY::A_Move(int num) {
 	if (WaitTime == 0 || time >= 480) {//スポットライトの動きが止まっているまたは、8秒以上になっている
-		if (c_StmCount[num] >= 480) {//スタミナが480以上なら勝ちを取りに行こうと動く
-			if (check_1 == 0 && check_2 == 0) {//敵と味方両方とも範囲にいない場合行動に移る
+		if (c_StmCount[num] >= 240) {//スタミナが240以上なら勝ちを取りに行こうと動く
+			//if (check_1 == 0 && check_2 == 0) {//敵と味方両方とも範囲にいない場合行動に移る
 				c_EnemyState[num] = ENEMY_MOVE;
-			}
+			//}
 		}
-		else if (c_StmCount[num] < 180) {//スタミナが180以下なら回復に専念
+		else if (c_StmCount[num] < 10) {//スタミナが10以下なら回復に専念
 			c_EnemyState[num] = ENEMY_IDLE;
 		}
 	}
 	else {//スタートして0~8秒までの間は普通に動く
 		if (c_StmCount[num] >= 480) {//スタミナが480以上ならほぼ全回復と判断して移動に移る
-			if (check_1 == 0 && check_2 == 0) {//敵と味方両方とも範囲にいない場合行動に移る
-				c_EnemyState[num] = ENEMY_MOVE;
-			}
+			//if (check_1 == 0 && check_2 == 0) {//敵と味方両方とも範囲にいない場合行動に移る
+			//	
+			//}
+			c_EnemyState[num] = ENEMY_MOVE;
 		}
 		else if (c_StmCount[num] < 180) {//スタミナが180以下なら回復に専念
 			c_EnemyState[num] = ENEMY_IDLE;
 		}
 	}
 
+}
+void ENEMY::A_Attack(int num, PLAYER* player) {
+	if (Att[num].s_AttackStartKey == true) return; //攻撃中だと帰る
+	if (Ga_Interval[num] > 0) {//攻撃のインターバル
+		Ga_Interval[num]--;
+		return;
+	}
+	if (c_StmCount[num] < 16)return;//スタミナが15以下だと帰る
+
+	
+	if (((g_KeyFlg & PAD_INPUT_5) != 0)) {
+		Att[num].s_AttackStartKey = true;//今のところR1をおすと敵が攻撃
+		c_StmCount[num] = AttackStaminaCount(num);
+		return;
+	}
+
+	//他のエネミーが自分の周りにいるかどうか判定
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (i == num)continue;
+
+		
+		//自分の後ろや周りをみる
+		if (Collision_Cube(c_ObjPos[num], c_Rotation[num], c_ObjPos[i], 200,200, 55, 55) == true) {
+			float PosX = c_ObjPos[i].x - c_ObjPos[num].x;
+			float PosZ = c_ObjPos[i].z - c_ObjPos[num].z;
+			float rad = atan2f(c_ObjPos[i].z - c_ObjPos[num].z, c_ObjPos[i].x - c_ObjPos[num].x) * 180 / M_PI;
+			//向いている角度の調整
+			if ((rad >= -180 && rad < -135) || (rad >= 135)) {//左
+				c_Rotation[num].y = 270.0f;
+			}
+			else if (rad >= -135 && rad < -45) {//下
+				c_Rotation[num].y = 180.0f;
+			}
+			else if (rad >= -45 && rad < 45) {//右
+				c_Rotation[num].y = 90.0f;
+			}
+			else if (rad >= 45 && rad < 135) {//上
+				c_Rotation[num].y = 0.0f;
+			}
+
+			Ga_Interval[num] = 60;//攻撃のインターバル60フレーム
+			Att[num].s_AttackStartKey = true;//
+			c_StmCount[num] = AttackStaminaCount(num);
+			return;
+
+		}
+	}
+	//プレイヤーが自分の周りにいるかどうか判定
+	//自分の後ろや周りをみる
+	if (Collision_Cube(c_ObjPos[num], c_Rotation[num], player->c_Position, 200,200, 55, 55) == true) {
+		float PosX = player->c_Position.x - c_ObjPos[num].x;
+		float PosZ = player->c_Position.z - c_ObjPos[num].z;
+		float rad = atan2f(player->c_Position.z - c_ObjPos[num].z, player->c_Position.x - c_ObjPos[num].x) * 180 / M_PI;
+		//向いている角度の調整
+		if ((rad >= -180 && rad < -135) || (rad >= 135)) {//左
+			c_Rotation[num].y = 270.0f;
+		}
+		else if (rad >= -135 && rad < -45) {//下
+			c_Rotation[num].y = 180.0f;
+		}
+		else if (rad >= -45 && rad < 45) {//右
+			c_Rotation[num].y = 90.0f;
+		}
+		else if (rad >= 45 && rad < 135) {//上
+			c_Rotation[num].y = 0.0f;
+		}
+
+		Ga_Interval[num] = 60;//攻撃のインターバル60フレー
+		Att[num].s_AttackStartKey = true;//
+		c_StmCount[num] = AttackStaminaCount(num);
+		return;
+	}
 }
 
 void ENEMY::Bot_Normal(int num, PLAYER* player) {

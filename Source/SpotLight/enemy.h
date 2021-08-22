@@ -15,8 +15,8 @@ extern int ENEMY_WIN_COUNT1;//敵１の勝利数
 extern int ENEMY_WIN_COUNT2;//敵２の勝利数
 extern int ENEMY_WIN_COUNT3;//敵３の勝利数
 
-extern int check_1;//判定確認のための変数
-extern int check_2;
+//extern int check_1;//判定確認のための変数
+//extern int check_2;
 
 class PLAYER;
 class CAMERA;
@@ -91,8 +91,12 @@ public:
 
 	void Ga_Attack(int num, PLAYER* player);//がっきーの攻撃関数
 	void Ga_Move(int num, PLAYER* player);//移動関数
+	int Ga_Interval[ENEMY_MAX] = { 0,0,0 };//攻撃のインターバル60フレーム
+
 	void A_Move(int num);//アスカの移動関数
-	int Ga_Interval[ENEMY_MAX] = {0,0,0};//攻撃のインターバル60フレーム
+	void A_Attack(int num, PLAYER* player);//アスカの攻撃関数
+	//攻撃のインターバルはがっきーのGa_Intervalを使います
+	
 	void Bot_Normal(int num, PLAYER* player);//従来の敵ジャニーズ君
 
 private:

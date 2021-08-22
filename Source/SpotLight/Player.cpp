@@ -379,7 +379,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (Collision_Sphere(VAdd(c_Position, c_TempMoveVector), ene->c_ObjPos[i], 55) == true) {
+			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), ene->c_ObjPos[i], 55) == true) {
 				if (ene->CheckPara(i) == false) {
 					c_MoveFlag = false;
 				}
@@ -432,7 +432,7 @@ bool PLAYER::Player_Push(CAMERA* camera, VECTOR EnemyCol[ENEMY_MAX], VECTOR Push
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (Collision_Sphere(VAdd(c_Position, c_TempMoveVector), EnemyCol[i], 55) == true) {
+			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), EnemyCol[i], 55) == true) {
 				c_MoveFlag = false;
 			}
 		}
