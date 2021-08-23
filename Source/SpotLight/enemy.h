@@ -80,15 +80,7 @@ public:
 		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
 	}; Damage Damage[ENEMY_MAX];
 
-	/*・攻撃は移動中は移動しながら攻撃。立ち止まっているときは立ち止まって攻撃
-      ・移動は600～180になるまで行う。180からは回復→全回復するまではその場で待機。
-         もし秒数が8秒超えたら、300まで回復して、その後0になるまで消費する。その後また300まで回復。
-         待機中に他プレイヤーを見つけると攻撃
-      ・視界はボックスの横と後ろ3倍、前方4.0倍と仮定する
-         前方に見つけると即攻撃。
-         前方以外にとらえたら10フレーム後攻撃（調整必要）
-         攻撃のインターバルは打って、再度発射可能から60フレーム後（調整必要）*/
-
+	
 	void Ga_Attack(int num, PLAYER* player);//がっきーの攻撃関数
 	void Ga_Move(int num, PLAYER* player);//移動関数
 	int Ga_Interval[ENEMY_MAX] = { 0,0,0 };//攻撃のインターバル60フレーム
@@ -96,7 +88,11 @@ public:
 	void A_Move(int num);//アスカの移動関数
 	void A_Attack(int num, PLAYER* player);//アスカの攻撃関数
 	//攻撃のインターバルはがっきーのGa_Intervalを使います
-	
+
+	void San_Move(int num);//サングラスの移動関数
+	void San_Attack(int num, PLAYER* player);//サングラスの攻撃関数
+	//攻撃のインターバルはがっきーのGa_Intervalを使います
+
 	void Bot_Normal(int num, PLAYER* player);//従来の敵ジャニーズ君
 
 private:

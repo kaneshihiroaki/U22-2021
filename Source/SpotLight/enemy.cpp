@@ -103,6 +103,10 @@ void ENEMY::Enemy_State(int num, PLAYER* player, CAMERA* camera) {
 		Ga_Move(num,player);
 		Ga_Attack(num, player);
 	}
+	else if (num == 1) {//タイプサングラス
+		San_Move(num);
+		San_Attack(num, player);
+	}
 	else if (num == 2) {//タイプアスカ
 		A_Move(num);
 		A_Attack(num, player);
@@ -898,6 +902,118 @@ void ENEMY::A_Attack(int num, PLAYER* player) {
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
 	}
+}
+
+void ENEMY::San_Attack(int num, PLAYER* player) {
+	if (Att[num].s_AttackStartKey == true) return; //攻撃中だと帰る
+	if (Ga_Interval[num] > 0) {//攻撃のインターバル
+		Ga_Interval[num]--;
+		return;
+	}
+	if (c_StmCount[num] < 16)return;//スタミナが15以下だと帰る
+
+	VECTOR Check_Future_Pos = c_ObjPos[num];//前方に座標をうつすため。長さ123
+	Check_Future_Pos.x += 123.0f * sinf(c_Rotation[num].y)/* - c_MoveVector.z * sin(rad)*/;
+	Check_Future_Pos.z += 123.0f * cosf(c_Rotation[num].y) /*+ c_MoveVector.z * cos(rad)*/;
+	//DrawSphere3D(Check_Future_Pos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
+	if (((g_KeyFlg & PAD_INPUT_5) != 0)) {
+		Att[num].s_AttackStartKey = true;//今のところR1をおすと敵が攻撃
+		c_StmCount[num] = AttackStaminaCount(num);
+		return;
+	}
+
+	//他のエネミーが自分の周りにいるかどうか判定
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (i == num)continue;
+
+		//自分の前方をみる
+		if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], c_Rotation[i], 30, 96, 105, 55) == true) {
+
+			Ga_Interval[num] = 10;//攻撃のインターバル60フレーム
+			Att[num].s_AttackStartKey = true;//
+			c_StmCount[num] = AttackStaminaCount(num);
+			return;
+
+		}
+		//自分の後ろや周りをみる
+		if (Collision_Cube(c_ObjPos[num], c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH * 2, ENEMY_HEIGHT * 2, 55, 55) == true) {
+			float PosX = c_ObjPos[i].x - c_ObjPos[num].x;
+			float PosZ = c_ObjPos[i].z - c_ObjPos[num].z;
+			float rad = atan2f(c_ObjPos[i].z - c_ObjPos[num].z, c_ObjPos[i].x - c_ObjPos[num].x) * 180 / M_PI;
+			//向いている角度の調整
+			if ((rad >= -180 && rad < -135) || (rad >= 135)) {//左
+				c_Rotation[num].y = 270.0f;
+			}
+			else if (rad >= -135 && rad < -45) {//下
+				c_Rotation[num].y = 180.0f;
+			}
+			else if (rad >= -45 && rad < 45) {//右
+				c_Rotation[num].y = 90.0f;
+			}
+			else if (rad >= 45 && rad < 135) {//上
+				c_Rotation[num].y = 0.0f;
+			}
+
+			Ga_Interval[num] = 10;//攻撃のインターバル10フレーム
+			Att[num].s_AttackStartKey = true;//
+			c_StmCount[num] = AttackStaminaCount(num);
+			return;
+
+		}
+	}
+	//プレイヤーが自分の周りにいるかどうか判定
+	//自分の前方をみる
+	if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], player->c_Position, 30, 150, 105, 55) == true) {
+		Ga_Interval[num] = 10;//攻撃のインターバル60フレー
+		Att[num].s_AttackStartKey = true;//
+		c_StmCount[num] = AttackStaminaCount(num);
+		return;
+	}
+	//自分の後ろや周りをみる
+	if (Collision_Cube(c_ObjPos[num], c_Rotation[num], player->c_Position, ENEMY_WIDTH * 2, ENEMY_HEIGHT * 2, 55, 55) == true) {
+		float PosX = player->c_Position.x - c_ObjPos[num].x;
+		float PosZ = player->c_Position.z - c_ObjPos[num].z;
+		float rad = atan2f(player->c_Position.z - c_ObjPos[num].z, player->c_Position.x - c_ObjPos[num].x) * 180 / M_PI;
+		//向いている角度の調整
+		if ((rad >= -180 && rad < -135) || (rad >= 135)) {//左
+			c_Rotation[num].y = 270.0f;
+		}
+		else if (rad >= -135 && rad < -45) {//下
+			c_Rotation[num].y = 180.0f;
+		}
+		else if (rad >= -45 && rad < 45) {//右
+			c_Rotation[num].y = 90.0f;
+		}
+		else if (rad >= 45 && rad < 135) {//上
+			c_Rotation[num].y = 0.0f;
+		}
+
+		Ga_Interval[num] = 10;//攻撃のインターバル60フレー
+		Att[num].s_AttackStartKey = true;//
+		c_StmCount[num] = AttackStaminaCount(num);
+		return;
+	}
+}
+
+void ENEMY::San_Move(int num) {
+	if (WaitTime == 0 || time >= 540) {//スポットライトの動きが止まっているまたは、9秒以上になっている
+		if (c_StmCount[num] >= 90) {//スタミナが90以上なら勝ちを取りに行こうと動く
+			c_EnemyState[num] = ENEMY_MOVE;
+		}
+		else if (c_StmCount[num] < 10) {//スタミナが10以下なら回復に専念
+			c_EnemyState[num] = ENEMY_IDLE;
+		}
+	}
+	else {//スタートして0~8秒までの間は普通に動く
+		if (c_StmCount[num] >= 580) {//スタミナが580以上ならほぼ全回復と判断して移動に移る
+			c_EnemyState[num] = ENEMY_MOVE;
+		}
+		else if (c_StmCount[num] < 10) {//スタミナが110以下なら回復に専念
+			c_EnemyState[num] = ENEMY_IDLE;
+		}
+	}
+
 }
 
 void ENEMY::Bot_Normal(int num, PLAYER* player) {
