@@ -1,4 +1,4 @@
-#include "DxLib.h"
+ï»¿#include "DxLib.h"
 #include <math.h>
 #include <list>
 #include"Camera.h"
@@ -9,7 +9,7 @@
 #include "Debug.h"
 #include "Light.h"
 #include "Character.h"
-//ƒQ[ƒ€‚Ìó‘Ô
+//ã‚²ãƒ¼ãƒ ã®çŠ¶æ…‹
 //int GameState = 0;
 
 
@@ -25,13 +25,22 @@ bool judge_win = false;
 //int check_1 = 0;
 //int check_2 = 0;
 
-bool finish;	//ƒQ[ƒ€‚ªI‚í‚Á‚½‚©”»’èitrue:ƒQ[ƒ€ÄŠJ false:ƒ^ƒCƒgƒ‹‚Ö–ß‚é)
-bool judgefinish = false;	//Œˆ’…‚Â‚¢‚½‚©”»’è	true:I—¹ false:‘±‚¯‚é
-int round_count = 0;			//ƒ‰ƒEƒ“ƒh”
+bool finish;	//ã‚²ãƒ¼ãƒ ãŒçµ‚ã‚ã£ãŸã‹åˆ¤å®šï¼ˆtrue:ã‚²ãƒ¼ãƒ å†é–‹ false:ã‚¿ã‚¤ãƒˆãƒ«ã¸æˆ»ã‚‹)
+bool judgefinish = false;	//æ±ºç€ã¤ã„ãŸã‹åˆ¤å®š	true:çµ‚äº† false:ç¶šã‘ã‚‹
+int round_count = 0;			//ãƒ©ã‚¦ãƒ³ãƒ‰æ•°
+
+int image[18];
+int a = 255;
+int aSwitch = true;
+int imgC = 17;
+int button = false;
+
 
 MAIN::MAIN()
 {
 	GameState = 0;
+
+	LoadDivGraph("Image/pipo-curtain2.png", 18, 1, 18, 1280, 960, image); // ç”»åƒã®åˆ†å‰²èª­ã¿è¾¼ã¿
 
 	c_camera = new CAMERA();
 	c_player = new PLAYER();
@@ -51,18 +60,18 @@ void MAIN::Game_init() {
 	c_camera->init();
 	Light_init();
 
-	//Ÿ”s”»’è‰Šú‰»
+	//å‹æ•—åˆ¤å®šåˆæœŸåŒ–
 	finish = true;
 	judgefinish = false;
 	win_timer = 0;
 	WaitTime = 0;
 	round_count = 0;
 
-	//ƒQ[ƒ€ŠJn‚Ì‰‰oŠÖ˜A•Ï”‰Šú‰»
+	//ã‚²ãƒ¼ãƒ é–‹å§‹ã®æ¼”å‡ºé–¢é€£å¤‰æ•°åˆæœŸåŒ–
 	c_ready = false;
 	c_dispTime = c_readyMaxTime;
 
-	//ƒ‰ƒCƒgEƒŠƒUƒ‹ƒg—p•Ï”‰Šú‰»
+	//ãƒ©ã‚¤ãƒˆãƒ»ãƒªã‚¶ãƒ«ãƒˆç”¨å¤‰æ•°åˆæœŸåŒ–
 	LightFlg = false;
 	Key_Look = false;
 	Win = false;
@@ -77,17 +86,17 @@ void MAIN::Game_init() {
 	/*check_1 = 0;
 	check_2 = 0;*/
 
-	//‰Šú‰»‚µ‚½‚çƒQ[ƒ€ƒƒCƒ“‚Ö
+	//åˆæœŸåŒ–ã—ãŸã‚‰ã‚²ãƒ¼ãƒ ãƒ¡ã‚¤ãƒ³ã¸
 	GameState = 2;
 
 }
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	// ”wŒi‚ÌF
+	// èƒŒæ™¯ã®è‰²
 	SetBackgroundColor(250, 250, 250);
 
-	SetMainWindowText("‚R‚c");
+	SetMainWindowText("ï¼“ï¼¤");
 	ChangeWindowMode(TRUE);
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
 
@@ -101,24 +110,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	SetCameraNearFar(100.0f, 50000.0f);
 
-	//	 ‚yƒoƒbƒtƒ@‚ğ—LŒø‚É‚·‚é
+	//	 ï¼ºãƒãƒƒãƒ•ã‚¡ã‚’æœ‰åŠ¹ã«ã™ã‚‹
 	SetUseZBuffer3D(TRUE);
 
-	// ‚yƒoƒbƒtƒ@‚Ö‚Ì‘‚«‚İ‚ğ—LŒø‚É‚·‚é
+	// ï¼ºãƒãƒƒãƒ•ã‚¡ã¸ã®æ›¸ãè¾¼ã¿ã‚’æœ‰åŠ¹ã«ã™ã‚‹
 	SetWriteZBuffer3D(TRUE);
 
 	MAIN* c_main = new MAIN();
 
-	//ƒQ[ƒ€ƒXƒe[ƒ^ƒX‚ğƒ^ƒCƒgƒ‹‚Ö
+	//ã‚²ãƒ¼ãƒ ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’ã‚¿ã‚¤ãƒˆãƒ«ã¸
 	c_main->GameState = 0;
 
-	// ƒƒCƒ“ƒ‹[ƒv(‰½‚©ƒL[‚ª‰Ÿ‚³‚ê‚½‚çƒ‹[ƒv‚ğ”²‚¯‚é)
+	// ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—(ä½•ã‹ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‚‰ãƒ«ãƒ¼ãƒ—ã‚’æŠœã‘ã‚‹)
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
-		// ‰æ–Ê‚ÌƒNƒŠƒA
+		// ç”»é¢ã®ã‚¯ãƒªã‚¢
 		ClearDrawScreen();
 
-		//“ü—ÍƒL[æ“¾
+		//å…¥åŠ›ã‚­ãƒ¼å–å¾—
 		g_OldKey = g_NowKey;
 		g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 		g_KeyFlg = g_NowKey & ~g_OldKey;
@@ -136,7 +145,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		switch (c_main->GameState)
 		{
 		case 0:
-			// ”wŒi‚ÌF
+			// èƒŒæ™¯ã®è‰²
 			SetBackgroundColor(250, 250, 250);
 			c_main->Game_Title();
 			break;
@@ -144,7 +153,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			c_main->Game_init();
 			break;
 		case 2:
-			// ”wŒi‚ÌF
+			// èƒŒæ™¯ã®è‰²
 			SetBackgroundColor(35, 35, 35);
 			c_main->Game_Main();
 			break;
@@ -157,17 +166,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		}
 
-		//ƒfƒoƒbƒNƒRƒ}ƒ“ƒh•\¦
+		//ãƒ‡ãƒãƒƒã‚¯ã‚³ãƒãƒ³ãƒ‰è¡¨ç¤º
 		if (DebugCom() == -1) {
-			//ƒfƒoƒbƒN‚·‚é‚È‚ç“ü‚é
+			//ãƒ‡ãƒãƒƒã‚¯ã™ã‚‹ãªã‚‰å…¥ã‚‹
 		}
-		// — ‰æ–Ê‚Ì“à—e‚ğ•\‰æ–Ê‚É”½‰f‚·‚é
+		// è£ç”»é¢ã®å†…å®¹ã‚’è¡¨ç”»é¢ã«åæ˜ ã™ã‚‹
 		ScreenFlip();
 	}
-	// ƒL[“ü—Í‘Ò‚¿‚ğ‚·‚é
+	// ã‚­ãƒ¼å…¥åŠ›å¾…ã¡ã‚’ã™ã‚‹
 	WaitKey();
 
-	// ‚c‚wƒ‰ƒCƒuƒ‰ƒŠ‚ÌŒãn––
+	// ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®å¾Œå§‹æœ«
 	DxLib_End();
 
 	return 0;
@@ -175,14 +184,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 void MAIN::Game_Main() {
 	SetFontSize(100);
-
-	//ƒIƒuƒWƒFƒNƒg‚Ì•\¦
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®è¡¨ç¤º
 	c_stage->Stage_Make(c_enemy, c_player);
 	c_player->Player_Controller();
 	if (!Collision_Player)c_enemy->Enemy_Creat();
 	c_camera->Camera_Control(c_stage);
 
-	//Å‰‚ÉBƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚ÄƒQ[ƒ€ŠJn
+	//æœ€åˆã«Bãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ã‚²ãƒ¼ãƒ é–‹å§‹
 	if (c_ready == true) {
 
 		//c_stage->Stage_Make(c_enemy, c_player);
@@ -194,7 +202,7 @@ void MAIN::Game_Main() {
 			//c_enemy->Enemy_Creat();
 		}
 
-		//ƒvƒŒƒCƒ„[‚Ì•\¦‚Æ“®‚«‚Ì§Œä
+		//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¡¨ç¤ºã¨å‹•ãã®åˆ¶å¾¡
 		//c_player->Player_Controller();
 		c_player->Player_Move(c_camera, c_enemy);
 
@@ -290,7 +298,7 @@ void MAIN::Game_Main() {
 			}
 		}
 
-		if (finish == false) GameState = 3;	//Œˆ’…‚Â‚¢‚½‚çƒ^ƒCƒgƒ‹‚Ö–ß‚é
+		if (finish == false) GameState = 3;	//æ±ºç€ã¤ã„ãŸã‚‰ã‚¿ã‚¤ãƒˆãƒ«ã¸æˆ»ã‚‹
 
 		//if (!Collision_Player) {
 		//	MV1DrawModel(c_player->c_PlayerModel);
@@ -303,8 +311,8 @@ void MAIN::Game_Main() {
 			DrawString(570, 5, "Judge", GetColor(0x00, 0x00, 0x00));
 			SetFontSize(20);
 			DrawFormatString(20, 40, 0xFFFFFF, "win_timer:%d", win_timer);
-		/*	DrawFormatString(20, 60, 0xFFFFFF, "check_1:%d", check_1);
-			DrawFormatString(20, 80, 0xFFFFFF, "check_2:%d", check_2);*/
+			/*	DrawFormatString(20, 60, 0xFFFFFF, "check_1:%d", check_1);
+				DrawFormatString(20, 80, 0xFFFFFF, "check_2:%d", check_2);*/
 			DrawFormatString(20, 100, 0xFFFFFF, "ENEMYWIN:%d", ENEMY_WIN);
 			DrawFormatString(20, 120, 0xFFFFFF, "judge:%d", judge_count);
 			Game_Judge();
@@ -316,51 +324,78 @@ void MAIN::Game_Main() {
 
 		Light();
 
-		//ŠJn‚ÉGO!‚ğ•\¦
+		//é–‹å§‹æ™‚ã«GO!ã‚’è¡¨ç¤º
 		if (--c_dispTime >= 0)DrawFormatString(525, 250, 0x0000FF, "GO!");
 
 	}
-	//3•b—§‚Á‚½‚çn‚ß‚é
+	//3ç§’ç«‹ã£ãŸã‚‰å§‹ã‚ã‚‹
 	else {
 		SetFontSize(100);
 		DrawFormatString(470, 250, 0xFF0000, "READY?");
 		DrawFormatString(580, 350, 0xFF0000, "%d", c_dispTime / 60);
 	}
 
-	//ƒ{ƒ^ƒ“‰Ÿ‚µ‚½‚çƒQ[ƒ€ŠJn
+	//ãƒœã‚¿ãƒ³æŠ¼ã—ãŸã‚‰ã‚²ãƒ¼ãƒ é–‹å§‹
 	if (--c_dispTime <= 60 && c_ready == false) {
 		c_ready = true;
-		c_dispTime = c_dispTimeMax;	//GO‚Ì•\¦ŠÔ‚ğ‘ã“ü
+		c_dispTime = c_dispTimeMax;	//GOã®è¡¨ç¤ºæ™‚é–“ã‚’ä»£å…¥
 	}
 }
 
 void MAIN::Game_Title() {
-	SetFontSize(100);
-	DrawFormatString(400, 100, 0x000000, "SpotLight");
+	static int c = 0;
+	c++;
+	
+	DrawGraph(0, 0, image[imgC], TRUE);      // ç”»åƒã‚’è¡¨ç¤º
+	SetFontSize(150);
+	DrawFormatString(100, 200, 0x000000, "%d", c);
+	DrawFormatString(300, 200, 0x000000, "SpotLight");
+	// æç”»ãƒ¢ãƒ¼ãƒ‰ã‚’ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰ã«ã—ã¦é€æ˜åº¦ã‚’å¤‰æ›´ã™ã‚‹
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
 	SetFontSize(30);
+	// æ–‡å­—åˆ—ã®æç”»
+	DrawFormatString(550, 500, 0xffff00, "Press B");
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
 	//GameJudge = false;
-	DrawFormatString(460, 300, 0x000000, "Bƒ{ƒ^ƒ“‚ÅƒQ[ƒ€ƒXƒ^[ƒg");
 	if (((g_KeyFlg & PAD_INPUT_2) != 0) || CheckHitKey(KEY_INPUT_I)) {
-		GameState = 1;
+		button = true;
 		//LightFlg = false;
-		//Key_Look = false;
-		//Win = false;
-		//Lose = false;
-		//GameJudge = false;
-		//judge_win = false;
-		//PLAYER_WIN_COUNT = 0;
-		//ENEMY_WIN = 0;
-		//ENEMY_WIN_COUNT1 = 0;
-		//ENEMY_WIN_COUNT2 = 0;
-		//ENEMY_WIN_COUNT3 = 0;
-		//check_1 = 0;
-		//check_2 = 0;
+				//Key_Look = false;
+				//Win = false;
+				//Lose = false;
+				//GameJudge = false;
+				//judge_win = false;
+				//PLAYER_WIN_COUNT = 0;
+				//ENEMY_WIN = 0;
+				//ENEMY_WIN_COUNT1 = 0;
+				//ENEMY_WIN_COUNT2 = 0;
+				//ENEMY_WIN_COUNT3 = 0;
+				//check_1 = 0;
+				//check_2 = 0;
 	}
-
+	if (a <= 50) {
+		aSwitch = false;
+	}
+	if (a >= 255) {
+		aSwitch = true;
+	}
+	if (aSwitch == true) {
+		a = a - 10;
+	}
+	if (aSwitch == false) {
+		a = a + 10;
+	}
+	if (button == true) {
+		imgC--;
+	}
+	if (imgC < 0) {
+		button = false;
+		GameState = 1;
+	}
 }
 
 void MAIN::Game_Result() {
-	int score[4];	//ƒXƒRƒAŠi”[—p‚Ì•Ï”@‚O‚ÍƒvƒŒƒCƒ„[—p@‚P`‚R‚Í“K—p
+	int score[4];	//ã‚¹ã‚³ã‚¢æ ¼ç´ç”¨ã®å¤‰æ•°ã€€ï¼ã¯ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç”¨ã€€ï¼‘ï½ï¼“ã¯é©ç”¨
 
 	score[0] = PLAYER_WIN_COUNT * c_pointcal;
 	score[1] = ENEMY_WIN_COUNT1 * c_pointcal;
