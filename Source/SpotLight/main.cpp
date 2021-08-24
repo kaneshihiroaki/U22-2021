@@ -343,12 +343,8 @@ void MAIN::Game_Main() {
 }
 
 void MAIN::Game_Title() {
-	static int c = 0;
-	c++;
-	
 	DrawGraph(0, 0, image[imgC], TRUE);      // 画像を表示
 	SetFontSize(150);
-	DrawFormatString(100, 200, 0x000000, "%d", c);
 	DrawFormatString(300, 200, 0x000000, "SpotLight");
 	// 描画モードをアルファブレンドにして透明度を変更する
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
