@@ -11,7 +11,7 @@ STAGE::STAGE()
 	//c_StageScale = { 0.5f,0.5f,0.5f };
 
 	// ÇRÇcÉÇÉfÉãÇÃì«Ç›çûÇ›
-	c_StageModel = MV1LoadModel("Model/Stage3.mv1");
+	c_StageModel = MV1LoadModel("Model/stage_ex.mv1");
 
 	//MV1SetPosition(c_StageModel, c_StagePosition);
 	//MV1SetScale(c_StageModel, c_StageScale);
