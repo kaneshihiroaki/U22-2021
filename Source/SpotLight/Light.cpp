@@ -227,6 +227,4 @@ void Light()
 	//10カウント表示
 	SetFontSize(100);
 	DrawFormatString(500, 10, 0x25525000, "%d秒", time / 60);
-	DrawFormatString(500, 100, 0x25525000, "%d", count);
-	DrawFormatString(500, 150, 0x25525000, "%d", rc);
 }
