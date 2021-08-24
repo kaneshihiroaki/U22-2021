@@ -47,17 +47,17 @@ void STAGE::Stage_Make(ENEMY* enemy, PLAYER* player) {
 
 void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
 	//上
-	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
-		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)), 0xFFFFFF);
+	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (250) + (c_depth / 2)),
+		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (250) + (c_depth / 2)), 0xFFFFFF);
 	//下
-	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)),
-		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
+	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (250) - (c_depth / 2)),
+		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (250) - (c_depth / 2)), 0xFFFFFF);
 	//左
-	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
-		VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
+	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (250) + (c_depth / 2)),
+		VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (250) - (c_depth / 2)), 0xFFFFFF);
 	//右
-	DrawLine3D(VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
-		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
+	DrawLine3D(VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (250) + (c_depth / 2)),
+		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (250) - (c_depth / 2)), 0xFFFFFF);
 
 	//右上の点：VGet(c_StagePosition.x + 2000.0f, c_StagePosition.y + 50.0f, c_StagePosition.z + 2000.0f);
 	//左上の点：VGet(c_StagePosition.x - 2000.0f, c_StagePosition.y + 50.0f, c_StagePosition.z + 2000.0f);
@@ -69,10 +69,10 @@ void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
 	*****************************************/
 
 	//中心点割り出し
-	float halfx = (c_StagePosition.x + 2000.0f + c_StagePosition.x + 2000.0f +
-		c_StagePosition.x - 2000.0f + c_StagePosition.x - 2000.0f) / 4;
-	float halfz = (c_StagePosition.z + 2000.0f + c_StagePosition.z - 2000.0f +
-		c_StagePosition.z + 2000.0f + c_StagePosition.z - 2000.0f) / 4;
+	float halfx = (c_StagePosition.x + 2000.0f + (250) + c_StagePosition.x + 2000.0f + (250) +
+		c_StagePosition.x - 2000.0f + (250) + c_StagePosition.x - 2000.0f + (250)) / 4;
+	float halfz = (c_StagePosition.z + 2000.0f + (250) + c_StagePosition.z - 2000.0f + (250) +
+		c_StagePosition.z + 2000.0f + (250) + c_StagePosition.z - 2000.0f + (250)) / 4;
 
 	//中心点とプレイヤーの座標の距離
 	float playerdistx = player->GetFuturePos().x - halfx;

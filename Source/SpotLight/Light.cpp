@@ -22,12 +22,12 @@ int time = 600;
 int count;
 int cntFlg = 4;
 int rc = 4;
-float distance = 1200.0f;
-int WaitTime = 1;
+float distance = 600.0f;
+int WaitTime = 0;
 
 bool LightFlg;
 
-VECTOR dis[9];
+VECTOR dis[6];
 VECTOR LightPos;
 VECTOR LightPos2;
 
@@ -56,7 +56,7 @@ void Light_SetUp() {
 
 	//ライトの処理を1ピクセルごとに行う（処理が重くなる）
 	SetUsePixelLighting(TRUE);
-	
+
 	// スポットライトを作成する
 	SpotLightHandle = CreateSpotLightHandle(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, -1.0f, 0.0f), 0.28f, 0.0f, 2000.0f, 0.0f, 0.006f, 0.0f);
 
@@ -67,13 +67,13 @@ void Light_SetUp() {
 	SetLightDifColorHandle(SpotLightHandle, GetColorF(10.0f, 10.0f, 0.0f, 0.0f));
 
 	// ポイントライトを作成する
-	PointLightHandle = CreatePointLightHandle(VGet(0.0f, 0.0f, 0.0f), 7000.0f, 1.016523f, 0.0001f, 0.00001f);
+	PointLightHandle = CreatePointLightHandle(VGet(0.0f, 0.0f, 0.0f), 7000.0f, 2.016523f, 0.0001f, 0.00001f);
 
 	// ポイントライトのアンビエントカラーを無効にする
-	SetLightAmbColorHandle(PointLightHandle, GetColorF(10.0f, 10.0f, 10.0f, 0.0f));
+	SetLightAmbColorHandle(PointLightHandle, GetColorF(20.0f, 20.0f, 20.0f, 0.0f));
 
 	// ポイントライトのディフューズカラーを強い色にする
-	SetLightDifColorHandle(PointLightHandle, GetColorF(9.0f, 9.0f, 9.0f, 0.0f));
+	SetLightDifColorHandle(PointLightHandle, GetColorF(20.0f, 20.0f, 20.0f, 0.0f));
 }
 
 void Light_init() {
@@ -108,13 +108,13 @@ void Light_init() {
 	//SetLightDifColorHandle(PointLightHandle, GetColorF(9.0f, 9.0f, 9.0f, 0.0f));
 
 	//ポイントライトの初期値を設定
-	SetLightPositionHandle(PointLightHandle, VGet(0.0f, 1200.0f, 0.0f));
+	SetLightPositionHandle(PointLightHandle, VGet(0.0f,0.0f, 0.0f));
 
 	LightFlg = true;
 
 	// ライトの位置の回転値を加算
 	LightPos = VGet(0.0f, 800.0f, 0.0f);
-	LightPos2 = VGet(0.0f, 1100.0f, 0.0f);
+	LightPos2 = VGet(0.0f, 1500.0f, 0.0f);
 
 	dis[0] = VGet(-distance, 0.0f, distance);
 	dis[1] = VGet(0.0f, 0.0f, distance);
@@ -122,10 +122,7 @@ void Light_init() {
 	dis[3] = VGet(-distance, 0.0f, 0.0f);
 	dis[4] = VGet(0.0f, 0.0f, 0.0f);
 	dis[5] = VGet(distance, 0.0f, 0.0f);
-	dis[6] = VGet(-distance, 0.0f, -distance);
-	dis[7] = VGet(0.0f, 0.0f, -distance);
-	dis[8] = VGet(distance, 0.0f, -distance);
-
+	
 	//角度を初期化
 	LightRotateAngle = 0;
 	LightRotateAngle2 = 0;
@@ -142,18 +139,18 @@ void Light_init() {
 	WaitTime = 0;
 	cntFlg = 4;
 	rc = 4;
-	while (count == 0 || count == 2 || count == 4 || count == 6 || count == 8)
+	while (count == 0 || count == 2 || count == 4)
 	{
-		count = GetRand(8);
+		count = GetRand(5);
 	}
 }
 void Light()
 {
 	Point_t
-		cp1 = { 0, 0, 0, distance / 2, -180, distance / 2 },
-		cp2 = { 0, 0, 0, -distance / 2, -180, distance / 2 },
-		cp3 = { 0, 0, distance / 2, 0, -180, distance / 2 },
-		cp4 = { 0, 0, -distance / 2, 0, -180, distance / 2 };
+		cp1 = { dis[rc].x,-dis[rc].z, 0, distance / 2, -180, distance / 2 },
+		cp2 = { dis[rc].x,dis[rc].z, 0, -distance / 2, -180, distance / 2 },
+		cp3 = { -dis[rc].x,dis[rc].z, distance / 2, 0, -180, distance / 2 },
+		cp4 = { dis[rc].x,dis[rc].z, -distance / 2, 0, -180, distance / 2 };
 
 	//10秒経過したら方向転換
 	if (time < 600) {
@@ -167,10 +164,10 @@ void Light()
 		round_count++;
 	}
 	else if (time >= 600 && WaitTime == 0) {
-		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count || cntFlg + 5 == count || cntFlg - 5 == count || cntFlg + 6 == count || cntFlg - 6 == count
-			|| cntFlg + 7 == count || cntFlg - 7 == count || cntFlg + 8 == count || cntFlg - 8 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2) || (cntFlg == 5) && (count == 6) || (cntFlg == 6) && (count == 5))
+		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
+			   cntFlg + 5 == count || cntFlg - 5 == count||(cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
 		{
-			count = GetRand(8);
+			count = GetRand(5);
 			rc = cntFlg;
 		}
 		cntFlg = count;
@@ -182,8 +179,8 @@ void Light()
 		if (round_count >= 6) finish = false;		//6ラウンドやったら終わる
 	}
 
-	if (WaitTime == 1 && count < 9) {
-		if (count == rc - 3 && LightPos.z < dis[count].z) {
+	if (WaitTime == 1 && count < 6) {
+		if (count == rc - 3) {
 			cp1.x += cp1.ox + sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
 			cp1.z += cp1.oz + -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range;
 			LightRotateAngle += 0.6f;
@@ -191,7 +188,7 @@ void Light()
 			DrawX = cp1.x;
 			DrawZ = cp1.z;
 		}
-		else if (count == rc + 3 && LightPos.z > dis[count].z) {
+		else if (count == rc + 3) {
 			cp2.x += cp2.ox + sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
 			cp2.z += cp2.oz + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range;
 			LightRotateAngle += 0.6f;
@@ -199,7 +196,7 @@ void Light()
 			DrawX = cp2.x;
 			DrawZ = cp2.z;
 		}
-		if (count == rc + 1 && LightPos.x < dis[count].x) {
+		if (count == rc + 1) {
 			cp3.x += cp3.ox + -cos(PI / cp1.T * LightRotateAngle) * cp3.Range;
 			cp3.z += cp3.oz + sin(PI / cp1.T * LightRotateAngle2) * cp3.Range;
 			LightRotateAngle += 0.3f;
@@ -207,7 +204,7 @@ void Light()
 			DrawX = cp3.x;
 			DrawZ = cp3.z;
 		}
-		else if (count == rc - 1 && LightPos.x > dis[count].x) {
+		else if (count == rc - 1) {
 			cp4.x += cp4.ox + cos(PI / cp4.T * LightRotateAngle) * cp4.Range;
 			cp4.z += cp4.oz + sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
 			LightRotateAngle += 0.3f;
@@ -219,7 +216,7 @@ void Light()
 
 	//ライトの位置の回転値を加算
 	LightPos = VGet(DrawX, 600.0f, DrawZ);
-	LightPos2 = VGet(DrawX, 1200.0f, DrawZ);
+	LightPos2 = VGet(DrawX, 1500.0f, DrawZ);
 
 	// スポットライトの位置の更新
 	SetLightPositionHandle(SpotLightHandle, LightPos);
@@ -230,4 +227,6 @@ void Light()
 	//10カウント表示
 	SetFontSize(100);
 	DrawFormatString(500, 10, 0x25525000, "%d秒", time / 60);
+	DrawFormatString(500, 100, 0x25525000, "%d", count);
+	DrawFormatString(500, 150, 0x25525000, "%d", rc);
 }

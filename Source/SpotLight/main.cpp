@@ -382,7 +382,11 @@ void MAIN::Game_Title() {
 		a = a + 10;
 	}
 	if (button == true) {
-		imgC--;
+		static int c = 0;
+		c++;
+		if (c % 3 == 0) {
+			imgC--;
+		}
 	}
 	if (imgC < 0) {
 		button = false;
