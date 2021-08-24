@@ -7,6 +7,7 @@
 //#include "Main.h"
 #include "Debug.h"
 #include "Light.h"
+#include "GameSound.h"
 
 int PLAYER_WIN_COUNT = 0;
 
@@ -403,7 +404,12 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 
 
 	//çUåÇ
-	if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false && Att.s_AttackStartKey == false))Att.s_AttackStartKey = true;
+	if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false && Att.s_AttackStartKey == false)) {
+		if (CheckSoundMem(player_attack_sound) == 0) {
+			PlaySoundMem(player_attack_sound, DX_PLAYTYPE_BACK);
+		}
+		Att.s_AttackStartKey = true;
+	}
 	if (Att.s_AttackStartKey == true) Player_Attack(ene, c_Rotation);
 
 	if (Collision_Player) {

@@ -2,6 +2,7 @@
 #include <math.h>
 #include "Debug.h"
 #include "Light.h"
+#include "GameSound.h"
 #include <cmath>
 
 #define DRAW_NUM	(3)
@@ -162,6 +163,11 @@ void Light()
 		LightFlg = false;
 		//finish = false;
 		round_count++;
+		StopSoundMem(drum);
+		PlaySoundMem(drum_finish, DX_PLAYTYPE_LOOP);
+		// 1•b‘Ò‚Á‚Ä”»’è‚ðŽæ‚é(WaitTimer)
+		WaitTimer(1000);
+		StopSoundMem(drum_finish);
 	}
 	else if (time >= 600 && WaitTime == 0) {
 		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
@@ -170,6 +176,9 @@ void Light()
 			count = GetRand(5);
 			rc = cntFlg;
 		}
+		
+		PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
+
 		cntFlg = count;
 		time = 0;
 		WaitTime = 1;
@@ -213,6 +222,8 @@ void Light()
 			DrawZ = cp4.z;
 		}
 	}
+
+	
 
 	//ƒ‰ƒCƒg‚ÌˆÊ’u‚Ì‰ñ“]’l‚ð‰ÁŽZ
 	LightPos = VGet(DrawX, 600.0f, DrawZ);

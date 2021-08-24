@@ -41,6 +41,8 @@ private:
 	const int c_readyMaxTime = 240;		//READYの表示時間いっぱい
 	const int c_pointcal = 10;		//リザルトのポイント計算
 
+	int LoadSound();
+
 	CAMERA* c_camera;
 	PLAYER* c_player;
 	STAGE* c_stage;

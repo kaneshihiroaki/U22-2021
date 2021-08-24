@@ -24,6 +24,16 @@ bool enemy_win = false;
 bool judge_win = false;
 //int check_1 = 0;
 //int check_2 = 0;
+//ゲームサウンド関係
+int bgm_title;//タイトル
+int bgm_main;//ゲーム中
+int drum;//スポットライト動作中
+int drum_finish;//スポットライト停止中
+int win_sound;//勝利者SE
+int player_win_sound;//playerが１位の時のBGM
+int enemy_win_sound;//enemyが１位の時のBGM
+int player_attack_sound;//playerが攻撃するときのSE
+
 
 bool finish;	//ゲームが終わったか判定（true:ゲーム再開 false:タイトルへ戻る)
 bool judgefinish = false;	//決着ついたか判定	true:終了 false:続ける
@@ -42,7 +52,7 @@ int state = 0;
 MAIN::MAIN()
 {
 	GameState = 0;
-
+	LoadSound();
 	LoadDivGraph("Image/pipo-curtain2.png", 18, 1, 18, 1280, 960, maku); // 画像の分割読み込み
 	LoadDivGraph("Image/mes01_f01_d03_c10_05.png", 64, 4, 17, 240, 60, menu); // 画像の分割読み込み
 	LoadDivGraph("Image/mes01_f01_d03_c09_05.png", 64, 4, 17, 240, 60, menu2); // 画像の分割読み込み
@@ -197,6 +207,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 void MAIN::Game_Main() {
 	SetFontSize(100);
+	if (CheckSoundMem(bgm_main) == 0) {
+		PlaySoundMem(bgm_main, DX_PLAYTYPE_LOOP);
+	}
 	//オブジェクトの表示
 	c_stage->Stage_Make(c_enemy, c_player);
 	c_player->Player_Controller();
@@ -244,6 +257,9 @@ void MAIN::Game_Main() {
 			check_2 = 1;
 		}*/
 		if (judge_count == 1) {
+			if (CheckSoundMem(win_sound) == 0) {
+				PlaySoundMem(win_sound, DX_PLAYTYPE_LOOP);
+			}
 			if (player_win) {
 				if (judge_win == false)
 				{
@@ -257,6 +273,7 @@ void MAIN::Game_Main() {
 					DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
 				}
 				if (win_timer == 120) {
+					StopSoundMem(win_sound);
 					time = 600;
 					win_timer = 0;
 				}
@@ -305,6 +322,7 @@ void MAIN::Game_Main() {
 					}
 				}
 				if (win_timer == 120) {
+					StopSoundMem(win_sound);
 					time = 600;
 					win_timer = 0;
 				}
@@ -343,6 +361,7 @@ void MAIN::Game_Main() {
 	}
 	//3秒立ったら始める
 	else {
+	    StopSoundMem(bgm_title);
 		SetFontSize(100);
 		DrawFormatString(470, 250, 0xFF0000, "READY?");
 		DrawFormatString(580, 350, 0xFF0000, "%d", c_dispTime / 60);
@@ -356,6 +375,9 @@ void MAIN::Game_Main() {
 }
 
 void MAIN::Game_Title() {
+	if (CheckSoundMem(bgm_title) == 0) {
+		PlaySoundMem(bgm_title, DX_PLAYTYPE_LOOP);
+	}
 	DrawGraph(0, 0, maku[imgC], TRUE);      // 画像を表示
 	DrawGraph(500, 400, menu[1], TRUE);
 	DrawGraph(500, 500, menu[2], TRUE);
@@ -420,12 +442,30 @@ void MAIN::Game_Title() {
 }
 
 void MAIN::Game_Result() {
-	int score[4];	//スコア格納用の変数　０はプレイヤー用　１～３は適用
+	StopSoundMem(drum);
+	StopSoundMem(bgm_main);
 
+	if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT1) {
+		if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT2) {
+			if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT3) {
+				if (CheckSoundMem(player_win_sound) == 0) {
+					PlaySoundMem(player_win_sound, DX_PLAYTYPE_BACK);
+				}
+			}
+		}
+	}
+	else {
+		if (CheckSoundMem(enemy_win_sound) == 0) {
+			PlaySoundMem(enemy_win_sound, DX_PLAYTYPE_BACK);
+		}
+	}
+	int score[4];	//スコア格納用の変数　０はプレイヤー用　１～３は適用
+	
 	score[0] = PLAYER_WIN_COUNT * c_pointcal;
 	score[1] = ENEMY_WIN_COUNT1 * c_pointcal;
 	score[2] = ENEMY_WIN_COUNT2 * c_pointcal;
 	score[3] = ENEMY_WIN_COUNT3 * c_pointcal;
+
 
 	SetFontSize(20);
 	DrawFormatString(100, 100, 0xFFFFFF, "PLAYER_WIN_NUM:%d", PLAYER_WIN_COUNT);
@@ -447,4 +487,29 @@ void WIN_Text() {
 	DrawFormatString(20, 180, 0xFFFFFF, "ENEMY_WIN_2:%d", ENEMY_WIN_COUNT2);
 	DrawFormatString(20, 200, 0xFFFFFF, "ENEMY_WIN_3:%d", ENEMY_WIN_COUNT3);
 
+}
+
+int MAIN::LoadSound() {
+	//ゲーム音読み込み
+	if ((bgm_title = LoadSoundMem("GameSound/GameTitle.mp3")) == -1)return -1;
+	if ((bgm_main = LoadSoundMem("GameSound/CandyCrush.mp3")) == -1)return -1;
+	if ((drum = LoadSoundMem("GameSound/drum.mp3")) == -1)return -1;
+	if ((drum_finish = LoadSoundMem("GameSound/drum_finish.mp3")) == -1)return -1;
+	if ((win_sound = LoadSoundMem("GameSound/win_sound.mp3")) == -1)return -1;
+	if ((player_win_sound = LoadSoundMem("GameSound/player_win.mp3")) == -1)return-1;
+	if ((enemy_win_sound = LoadSoundMem("GameSound/enemy_win.mp3")) == -1)return-1;
+	if ((player_attack_sound = LoadSoundMem("GameSound/player_attack.mp3")) == -1)return -1;
+	//音量調整
+	// BGM
+	ChangeVolumeSoundMem(100, bgm_title);
+	ChangeVolumeSoundMem(60, bgm_main);
+	ChangeVolumeSoundMem(80, drum);
+	ChangeVolumeSoundMem(80, drum_finish);
+	ChangeVolumeSoundMem(100, player_win_sound);
+	ChangeVolumeSoundMem(100, enemy_win_sound);
+	// SE
+	ChangeVolumeSoundMem(80, win_sound);
+	ChangeVolumeSoundMem(80, player_attack_sound);
+
+	return 0;
 }
