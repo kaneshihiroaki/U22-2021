@@ -629,8 +629,9 @@ bool ENEMY::Enemy_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD, V
 	float distz = YouPos.z - halfz;
 
 	//当たり判定の計算
-	float posx = cos(ang) * distx + sin(ang) * distz;
-	float posz = -sin(ang) * distx + cos(ang) * distz;
+	float posz = cos(ang) * distz + sin(ang) * distx;
+	float posx = -sin(ang) * distz + cos(ang) * distx;
+
 
 	//矩形と点の当たり判定を行う
 	if (-Att[num].s_width /*/ 2.0f*/ <= posx && Att[num].s_width /*/ 2.0f*/ >= posx &&
