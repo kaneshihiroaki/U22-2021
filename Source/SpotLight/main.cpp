@@ -29,18 +29,31 @@ bool finish;	//ゲームが終わったか判定（true:ゲーム再開 false:�
 bool judgefinish = false;	//決着ついたか判定	true:終了 false:続ける
 int round_count = 0;			//ラウンド数
 
-int image[18];
-int a = 255;
-int aSwitch = true;
-int imgC = 17;
-int button = false;
+int maku[18];
+int menu[68];
+int menu2[68];
 
+int imgC = 17;
+
+int g_play = false;
+int g_exit = false;
+int state = 0;
 
 MAIN::MAIN()
 {
 	GameState = 0;
 
-	LoadDivGraph("Image/pipo-curtain2.png", 18, 1, 18, 1280, 960, image); // 画像の分割読み込み
+	LoadDivGraph("Image/pipo-curtain2.png", 18, 1, 18, 1280, 960, maku); // 画像の分割読み込み
+	LoadDivGraph("Image/mes01_f01_d03_c10_05.png", 64, 4, 17, 240, 60, menu); // 画像の分割読み込み
+	LoadDivGraph("Image/mes01_f01_d03_c09_05.png", 64, 4, 17, 240, 60, menu2); // 画像の分割読み込み
+	
+	LPCSTR font_path = "Fonts/Pretendo.ttf"; // 読み込むフォントファイルのパス
+	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0) {
+	}
+	else {
+		// フォント読込エラー処理
+		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
+	}
 
 	c_camera = new CAMERA();
 	c_player = new PLAYER();
@@ -343,18 +356,39 @@ void MAIN::Game_Main() {
 }
 
 void MAIN::Game_Title() {
-	DrawGraph(0, 0, image[imgC], TRUE);      // 画像を表示
+	DrawGraph(0, 0, maku[imgC], TRUE);      // 画像を表示
+	DrawGraph(500, 400, menu[1], TRUE);
+	DrawGraph(500, 500, menu[2], TRUE);
+	
+	// 描画する文字列の文字セットを変更します
+	ChangeFont("Pretendo");
 	SetFontSize(150);
-	DrawFormatString(300, 200, 0x000000, "SpotLight");
-	// 描画モードをアルファブレンドにして透明度を変更する
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, a);
-	SetFontSize(30);
-	// 文字列の描画
-	DrawFormatString(550, 500, 0xffff00, "Press B");
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255);
-	//GameJudge = false;
+	DrawFormatString(250, 100, 0xffff00, "SpotLight");
+	if (((g_KeyFlg & PAD_INPUT_DOWN) != 0)) {
+		state += 1;
+		if (state >= 2) {
+			state = 0;
+		}
+	}
+	else if (((g_KeyFlg & PAD_INPUT_UP) != 0)) {
+		state -= 1;
+		if (state < 0) {
+			state = 1;
+		}
+	}	
+	if (state == 0) {
+		DrawGraph(500, 405, menu2[1], TRUE);
+	}
+	else if (state == 1) {
+		DrawGraph(500, 505, menu2[2], TRUE);
+	}
 	if (((g_KeyFlg & PAD_INPUT_2) != 0) || CheckHitKey(KEY_INPUT_I)) {
-		button = true;
+		if (state == 0) {
+			g_play = true;
+		}
+		else if (state == 1) {
+			g_exit = true;
+		}
 		//LightFlg = false;
 				//Key_Look = false;
 				//Win = false;
@@ -369,27 +403,18 @@ void MAIN::Game_Title() {
 				//check_1 = 0;
 				//check_2 = 0;
 	}
-	if (a <= 50) {
-		aSwitch = false;
-	}
-	if (a >= 255) {
-		aSwitch = true;
-	}
-	if (aSwitch == true) {
-		a = a - 10;
-	}
-	if (aSwitch == false) {
-		a = a + 10;
-	}
-	if (button == true) {
+	if (g_play == true) {
 		static int c = 0;
 		c++;
 		if (c % 3 == 0) {
 			imgC--;
 		}
 	}
+	else if (g_exit == true) {
+		DxLib_End();
+	}
 	if (imgC < 0) {
-		button = false;
+		g_play = false;
 		GameState = 1;
 	}
 }
