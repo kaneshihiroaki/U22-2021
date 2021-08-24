@@ -170,15 +170,11 @@ bool PLAYER::Player_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD,
 	DrawLine3D(VGet(-Att.s_width, 150.0f, -Att.s_heigt), VGet(Att.s_width, 150.0f, -Att.s_heigt), GetColor(255, 255, 255));
 	
 
-	int i = 0;
 	//‹éŒ`‚Æ“_‚Ì“–‚½‚è”»’è‚ğs‚¤
-	if (-Att.s_heigt /*/ 2.0f*/ <= posz && Att.s_heigt/* / 2.0f*/ >= posz) {
-		i++;
+	if (-Att.s_heigt /*/ 2.0f*/ <= posz && Att.s_heigt/* / 2.0f*/ >= posz) {	
 		if (-Att.s_width/* / 2.0f*/ <= posx && Att.s_width /*/ 2.0f*/ >= posx) {
-			i++;
 			return true;
 		}
-		
 	}
 
 	return false;
