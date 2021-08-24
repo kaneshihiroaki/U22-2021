@@ -38,7 +38,7 @@ void STAGE::init() {
 
 void STAGE::Stage_Make(ENEMY* enemy, PLAYER* player) {
 	//ステージの当たり判定
-	Stage_Col(enemy,player);
+	Stage_Col(enemy, player);
 
 	//床の描画
 	MV1DrawModel(c_StageModel);
@@ -69,8 +69,8 @@ void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
 	*****************************************/
 
 	//中心点割り出し
-	float halfx = (c_StagePosition.x + 2000.0f + (250) + c_StagePosition.x + 2000.0f + (250) +
-		c_StagePosition.x - 2000.0f + (250) + c_StagePosition.x - 2000.0f + (250)) / 4;
+	float halfx = (c_StagePosition.x + 2000.0f + c_StagePosition.x + 2000.0f +
+		c_StagePosition.x - 2000.0f + c_StagePosition.x - 2000.0f) / 4;
 	float halfz = (c_StagePosition.z + 2000.0f + (250) + c_StagePosition.z - 2000.0f + (250) +
 		c_StagePosition.z + 2000.0f + (250) + c_StagePosition.z - 2000.0f + (250)) / 4;
 
