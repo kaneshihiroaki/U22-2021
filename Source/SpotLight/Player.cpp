@@ -29,7 +29,7 @@ PLAYER::PLAYER()
 	//c_Acc = 0.0f;
 
 	// ÇRÇcÉÇÉfÉãÇÃì«Ç›çûÇ›
-	c_PlayerModel = MV1LoadModel("Model/MyPlayer.mv1");
+	c_PlayerModel = MV1LoadModel("Model/Player2.mv1");
 	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
 
 	//c_enemyCol = new ENEMY();

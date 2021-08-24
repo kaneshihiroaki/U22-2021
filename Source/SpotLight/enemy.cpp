@@ -28,7 +28,8 @@ ENEMY::ENEMY()
 			c_EnemyModel[i] = MV1LoadModel("Model/EnMe.mv1");
 		}
 		else {
-			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
+//			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
+			c_EnemyModel[i] = MV1LoadModel("Model/EnMe2.mv1");
 		}
 		
 		//c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
