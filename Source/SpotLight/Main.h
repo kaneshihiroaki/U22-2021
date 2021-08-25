@@ -36,12 +36,18 @@ public:
 private:
 	bool c_ready;		//ボタンを押してメインを開始する変数
 	int c_dispTime;		//READYとGOの表示時間カウント
+	int c_resultdispTime;	//リザルトで文字の表示に使用するカウント
+	bool OnePass;
+	bool onecheck = false;
+	int c_VictorNum = 0;	//勝者格納よう変数
 
 	const int c_dispTimeMax = 60;	//GO表示時間
 	const int c_readyMaxTime = 240;		//READYの表示時間いっぱい
-	const int c_pointcal = 10;		//リザルトのポイント計算
+	const int c_resultdispMaxTime = 180;	//リザルトの表示時間
+	//const int c_pointcal = 10;		//リザルトのポイント計算
 
 	int LoadSound();
+	int CountMaxPoint(int point[4]);	//リザルトでだれが一番ポイントを取得したのか計算
 
 	CAMERA* c_camera;
 	PLAYER* c_player;

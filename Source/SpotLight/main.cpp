@@ -92,6 +92,7 @@ void MAIN::Game_init() {
 	win_timer = 0;
 	WaitTime = 0;
 	round_count = 0;
+	OnePass = false;
 
 	//ゲーム開始の演出関連変数初期化
 	c_ready = false;
@@ -462,7 +463,7 @@ void MAIN::Game_Result() {
 						PlaySoundMem(player_win_sound, DX_PLAYTYPE_BACK);
 						BGM_flg = true;
 					}
-					
+
 				}
 			}
 		}
@@ -470,31 +471,111 @@ void MAIN::Game_Result() {
 	else {
 		if (CheckSoundMem(enemy_win_sound) == 0) {
 			if (BGM_flg == false) {
-			PlaySoundMem(enemy_win_sound, DX_PLAYTYPE_BACK);
-			BGM_flg = true;
+				PlaySoundMem(enemy_win_sound, DX_PLAYTYPE_BACK);
+				BGM_flg = true;
 			}
-			
+
 		}
 	}
+
+	//スコアの表示（リザルト画面の描画）
 	int score[4];	//スコア格納用の変数　０はプレイヤー用　１～３は適用
-	
-	score[0] = PLAYER_WIN_COUNT * c_pointcal;
-	score[1] = ENEMY_WIN_COUNT1 * c_pointcal;
-	score[2] = ENEMY_WIN_COUNT2 * c_pointcal;
-	score[3] = ENEMY_WIN_COUNT3 * c_pointcal;
 
+	score[0] = PLAYER_WIN_COUNT;
+	score[1] = ENEMY_WIN_COUNT1;
+	score[2] = ENEMY_WIN_COUNT2;
+	score[3] = ENEMY_WIN_COUNT3;
 
-	SetFontSize(20);
-	DrawFormatString(100, 100, 0xFFFFFF, "PLAYER_WIN_NUM:%d", PLAYER_WIN_COUNT);
-	DrawFormatString(100, 120, 0xFFFFFF, "PLAYER_POINT:%d", score[0]);
-	DrawFormatString(500, 100, 0xFFFFFF, "ENEMY1_WIN_NUM:%d", ENEMY_WIN_COUNT1);
-	DrawFormatString(500, 120, 0xFFFFFF, "ENEMY1_POINT:%d", score[1]);
-	DrawFormatString(120, 140, 0xFFFFFF, "ENEMY2_WIN_NUM:%d", ENEMY_WIN_COUNT2);
-	DrawFormatString(120, 160, 0xFFFFFF, "ENEMY2_POINT:%d", score[2]);
-	DrawFormatString(520, 140, 0xFFFFFF, "ENEMY3_WIN_NUM:%d", ENEMY_WIN_COUNT3);
-	DrawFormatString(520, 160, 0xFFFFFF, "ENEMY3_POINT:%d", score[3]);
+	//ステージの描画
+	MV1SetPosition(c_stage->c_StageModel, VGet(80.0f, 650.0f, -1200.0f));
+	MV1SetRotationXYZ(c_stage->c_StageModel, VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
+	MV1SetScale(c_stage->c_StageModel, c_stage->c_StageScale);
+	MV1DrawModel(c_stage->c_StageModel);
+
+	SetFontSize(100);
+	DrawFormatString(350, 100, 0xFFFFFF, "WINNER IS");
+
+	//c_camera->Camera_Control(c_stage);
+
+	//if (onecheck == false) {
+	//	c_player->c_PlayerModel = MV1LoadModel("Model/Player2.mv1");
+	//	onecheck = true;
+	//}
+
+	SetFontSize(50);
+	if (c_resultdispTime++ >= c_resultdispMaxTime) {
+		if (OnePass == false) {
+			c_VictorNum = CountMaxPoint(score);
+			OnePass = true;
+		}
+		//VictorNum = 0;
+
+		// スポットライトの位置の更新
+		SetLightPositionHandle(SpotLightHandle, VGet(80.0f, 1450.0f, -1200.0f));
+
+		//ポイントライトの初期値を設定
+		SetLightPositionHandle(PointLightHandle, VGet(80.0f, 1550.0f, -1200.0f));
+		switch (c_VictorNum)
+		{
+		case 0:
+			DrawFormatString(500, 220, 0xFFFFFF, "PLAYER!");
+			MV1SetPosition(c_player->c_PlayerModel, VGet(80.0f, 750.0f, -1200.0f));
+			MV1SetRotationXYZ(c_player->c_PlayerModel, VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
+			MV1SetScale(c_player->c_PlayerModel, c_player->c_AddPosPlay);
+
+			MV1DrawModel(c_player->c_PlayerModel);
+			break;
+		case 1:
+			DrawFormatString(500, 200, 0xFFFFFF, "ENEMY1!");
+			MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
+			MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
+			MV1SetScale(c_enemy->c_EnemyModel[c_VictorNum - 1], c_player->c_AddPosPlay);
+
+			MV1DrawModel(c_enemy->c_EnemyModel[c_VictorNum - 1]);
+			break;
+		case 2:
+			DrawFormatString(500, 200, 0xFFFFFF, "ENEMY2!");
+			MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
+			MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
+			MV1SetScale(c_enemy->c_EnemyModel[c_VictorNum - 1], c_player->c_AddPosPlay);
+
+			MV1DrawModel(c_enemy->c_EnemyModel[c_VictorNum - 1]);
+			break;
+		case 3:
+			DrawFormatString(500, 200, 0xFFFFFF, "ENEMY3!");
+			MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
+			MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
+			MV1SetScale(c_enemy->c_EnemyModel[c_VictorNum - 1], c_player->c_AddPosPlay);
+
+			MV1DrawModel(c_enemy->c_EnemyModel[c_VictorNum - 1]);
+			break;
+		default:
+			break;
+		}
+	}
+
+	//DrawFormatString(100, 100, 0xFFFFFF, "PLAYER_WIN_NUM:%d", PLAYER_WIN_COUNT);
+	//DrawFormatString(100, 120, 0xFFFFFF, "PLAYER_POINT:%d", score[0]);
+	//DrawFormatString(500, 100, 0xFFFFFF, "ENEMY1_WIN_NUM:%d", ENEMY_WIN_COUNT1);
+	//DrawFormatString(500, 120, 0xFFFFFF, "ENEMY1_POINT:%d", score[1]);
+	//DrawFormatString(120, 140, 0xFFFFFF, "ENEMY2_WIN_NUM:%d", ENEMY_WIN_COUNT2);
+	//DrawFormatString(120, 160, 0xFFFFFF, "ENEMY2_POINT:%d", score[2]);
+	//DrawFormatString(520, 140, 0xFFFFFF, "ENEMY3_WIN_NUM:%d", ENEMY_WIN_COUNT3);
+	//DrawFormatString(520, 160, 0xFFFFFF, "ENEMY3_POINT:%d", score[3]);
 
 	if ((g_KeyFlg & PAD_INPUT_2) != 0) GameState = 0;
+}
+
+int MAIN::CountMaxPoint(int point[4])
+{
+	int Vic = 0;	//誰が勝ったのかを格納する変数
+	for (int i = 0; i < 3; i++) {
+		if (point[i] < point[i++]) {
+			Vic = i;
+		}
+	}
+
+	return Vic;
 }
 
 void WIN_Text() {
