@@ -34,6 +34,8 @@ int player_win_sound;//playerが１位の時のBGM
 int enemy_win_sound;//enemyが１位の時のBGM
 int player_attack_sound;//playerが攻撃するときのSE
 
+int BGM_flg;//BGMをとめるflg;
+
 
 bool finish;	//ゲームが終わったか判定（true:ゲーム再開 false:タイトルへ戻る)
 bool judgefinish = false;	//決着ついたか判定	true:終了 false:続ける
@@ -109,6 +111,8 @@ void MAIN::Game_init() {
 	ENEMY_WIN_COUNT3 = 0;
 	/*check_1 = 0;
 	check_2 = 0;*/
+
+	BGM_flg=false;//BGMをとめるflg;
 
 	//初期化したらゲームメインへ
 	GameState = 2;
@@ -376,6 +380,7 @@ void MAIN::Game_Main() {
 }
 
 void MAIN::Game_Title() {
+	
 	if (CheckSoundMem(bgm_title) == 0) {
 		PlaySoundMem(bgm_title, DX_PLAYTYPE_LOOP);
 	}
@@ -451,14 +456,22 @@ void MAIN::Game_Result() {
 		if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT2) {
 			if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT3) {
 				if (CheckSoundMem(player_win_sound) == 0) {
-					PlaySoundMem(player_win_sound, DX_PLAYTYPE_BACK);
+					if (BGM_flg == false) {
+						PlaySoundMem(player_win_sound, DX_PLAYTYPE_BACK);
+						BGM_flg = true;
+					}
+					
 				}
 			}
 		}
 	}
 	else {
 		if (CheckSoundMem(enemy_win_sound) == 0) {
+			if (BGM_flg == false) {
 			PlaySoundMem(enemy_win_sound, DX_PLAYTYPE_BACK);
+			BGM_flg = true;
+			}
+			
 		}
 	}
 	int score[4];	//スコア格納用の変数　０はプレイヤー用　１～３は適用

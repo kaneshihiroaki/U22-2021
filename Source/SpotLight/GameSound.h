@@ -9,3 +9,5 @@ extern	int win_sound;//Ÿ—˜ÒSE
 extern	int player_win_sound;//player‚ª‚PˆÊ‚Ì‚ÌBGM
 extern	int enemy_win_sound;//enemy‚ª‚PˆÊ‚Ì‚ÌBGM
 extern  int player_attack_sound;//player‚ªUŒ‚‚·‚é‚Æ‚«‚ÌSE
+
+extern  int BGM_flg;//BGM‚ğ‚Æ‚ß‚éflg;
