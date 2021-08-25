@@ -40,6 +40,7 @@ typedef struct {
 }Point_t;
 
 void Light_SetUp() {
+
 	//頂点シェーダーを読み込む
 	VertexShaderHandle = LoadVertexShader("Shader/NormalMesh_SpotPointLightVS.vso");
 
@@ -59,22 +60,22 @@ void Light_SetUp() {
 	SetUsePixelLighting(TRUE);
 
 	// スポットライトを作成する
-	SpotLightHandle = CreateSpotLightHandle(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, -1.0f, 0.0f), 0.28f, 0.0f, 2000.0f, 0.0f, 0.006f, 0.0f);
+	SpotLightHandle = CreateSpotLightHandle(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, -1.0f, 0.0f), 0.25f, 0.5f, 2000.0f, 0.0f, 0.007f, 0.0f);
 
 	// スポットライトのアンビエントカラーを黄色にする
-	SetLightAmbColorHandle(SpotLightHandle, GetColorF(0.0f, 0.0f, 0.0f, 0.0f));
+	SetLightAmbColorHandle(SpotLightHandle, GetColorF(15.0f, 15.0f, 0.0f, 0.0f));
 
 	// スポットライトのディフューズカラーを黄色にする
 	SetLightDifColorHandle(SpotLightHandle, GetColorF(10.0f, 10.0f, 0.0f, 0.0f));
 
 	// ポイントライトを作成する
-	PointLightHandle = CreatePointLightHandle(VGet(0.0f, 0.0f, 0.0f), 7000.0f, 2.016523f, 0.0001f, 0.00001f);
+	PointLightHandle = CreatePointLightHandle(VGet(0.0f, 0.0f, 0.0f), 7000.0f, 1.016523f, 0.0f, 0.000015f);
 
 	// ポイントライトのアンビエントカラーを無効にする
-	SetLightAmbColorHandle(PointLightHandle, GetColorF(20.0f, 20.0f, 20.0f, 0.0f));
+	SetLightAmbColorHandle(PointLightHandle, GetColorF(0.0f, 0.0f, 0.0f, 0.0f));
 
 	// ポイントライトのディフューズカラーを強い色にする
-	SetLightDifColorHandle(PointLightHandle, GetColorF(20.0f, 20.0f, 20.0f, 0.0f));
+	SetLightDifColorHandle(PointLightHandle, GetColorF(4.0f, 4.0f, 4.0f, 0.0f));
 }
 
 void Light_init() {
@@ -114,8 +115,8 @@ void Light_init() {
 	LightFlg = true;
 
 	// ライトの位置の回転値を加算
-	LightPos = VGet(0.0f, 800.0f, 0.0f);
-	LightPos2 = VGet(0.0f, 1500.0f, 0.0f);
+	LightPos = VGet(0.0f, 600.0f, 0.0f);
+	LightPos2 = VGet(0.0f, 800.0f, 0.0f);
 
 	dis[0] = VGet(-distance, 0.0f, distance);
 	dis[1] = VGet(0.0f, 0.0f, distance);
@@ -227,7 +228,7 @@ void Light()
 
 	//ライトの位置の回転値を加算
 	LightPos = VGet(DrawX, 600.0f, DrawZ);
-	LightPos2 = VGet(DrawX, 1500.0f, DrawZ);
+	LightPos2 = VGet(DrawX, 800.0f, DrawZ);
 
 	// スポットライトの位置の更新
 	SetLightPositionHandle(SpotLightHandle, LightPos);
@@ -237,5 +238,5 @@ void Light()
 
 	//10カウント表示
 	SetFontSize(100);
-	DrawFormatString(500, 10, 0x25525000, "%d秒", time / 60);
+	DrawFormatString(500, 10, 0x25525000, "%d", time / 60);
 }
