@@ -390,6 +390,8 @@ void MAIN::Game_Title() {
 	
 	// 描画する文字列の文字セットを変更します
 	ChangeFont("Pokemon Solid");
+	SetFontSize(155);
+	DrawFormatString(245, 100, 0x000000, "SpotLight");
 	SetFontSize(150);
 	DrawFormatString(250, 100, 0xffff00, "SpotLight");
 	if (((g_KeyFlg & PAD_INPUT_DOWN) != 0)) {
