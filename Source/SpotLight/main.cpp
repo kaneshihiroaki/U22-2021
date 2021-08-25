@@ -59,7 +59,7 @@ MAIN::MAIN()
 	LoadDivGraph("Image/mes01_f01_d03_c10_05.png", 64, 4, 17, 240, 60, menu); // 画像の分割読み込み
 	LoadDivGraph("Image/mes01_f01_d03_c09_05.png", 64, 4, 17, 240, 60, menu2); // 画像の分割読み込み
 	
-	LPCSTR font_path = "Fonts/Pokemon Solid.ttf"; // 読み込むフォントファイルのパス
+	LPCSTR font_path = "Fonts/Wolski.ttf"; // 読み込むフォントファイルのパス
 	
 	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0) {
 	}
@@ -389,9 +389,9 @@ void MAIN::Game_Title() {
 	DrawGraph(500, 500, menu[2], TRUE);
 	
 	// 描画する文字列の文字セットを変更します
-	ChangeFont("Pokemon Solid");
-	SetFontSize(155);
-	DrawFormatString(245, 100, 0x000000, "SpotLight");
+	ChangeFont("Wolski");
+	SetFontSize(150);
+	DrawFormatString(255, 100, 0x000000, "SpotLight");
 	SetFontSize(150);
 	DrawFormatString(250, 100, 0xffff00, "SpotLight");
 	if (((g_KeyFlg & PAD_INPUT_DOWN) != 0)) {
