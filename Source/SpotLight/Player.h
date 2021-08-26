@@ -82,7 +82,7 @@ private:
 	{
 		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
 		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
-		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
+		const int s_MaxTimeParalyze = 60;		//プレイヤーが痺れている時間
 	}; Damage Damage;
 
 	struct Attack {
