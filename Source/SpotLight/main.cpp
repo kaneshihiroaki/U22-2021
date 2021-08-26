@@ -86,6 +86,12 @@ void MAIN::Game_init() {
 	c_camera->init();
 	Light_init();
 
+	//タイトルで使う変数初期化
+	imgC = 17;
+	g_play = false;
+	g_exit = false;
+	state = 0;
+
 	//勝敗判定初期化
 	finish = true;
 	judgefinish = false;
@@ -503,12 +509,12 @@ void MAIN::Game_Result() {
 	//}
 
 	SetFontSize(50);
+	//2秒待って勝者を映す
 	if (c_resultdispTime++ >= c_resultdispMaxTime) {
 		if (OnePass == false) {
-			c_VictorNum = CountMaxPoint(score);
+			c_VictorNum = CountMaxPoint(score);	//勝者を判定
 			OnePass = true;
 		}
-		//VictorNum = 0;
 
 		// スポットライトの位置の更新
 		SetLightPositionHandle(SpotLightHandle, VGet(80.0f, 1450.0f, -1200.0f));
@@ -566,16 +572,19 @@ void MAIN::Game_Result() {
 	if ((g_KeyFlg & PAD_INPUT_2) != 0) GameState = 0;
 }
 
-int MAIN::CountMaxPoint(int point[4])
+int MAIN::CountMaxPoint(int* point)
 {
-	int Vic = 0;	//誰が勝ったのかを格納する変数
-	for (int i = 0; i < 3; i++) {
-		if (point[i] < point[i++]) {
-			Vic = i;
+	int max_score = 0;
+	int win_num = 0;
+
+	for (int i = 0; i < 4; i++) {
+		if (max_score < point[i]) {
+			max_score = point[i];
+			win_num = i;
 		}
 	}
 
-	return Vic;
+	return win_num;
 }
 
 void WIN_Text() {

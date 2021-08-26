@@ -47,7 +47,7 @@ private:
 	//const int c_pointcal = 10;		//リザルトのポイント計算
 
 	int LoadSound();
-	int CountMaxPoint(int point[4]);	//リザルトでだれが一番ポイントを取得したのか計算
+	int CountMaxPoint(int* point);	//リザルトでだれが一番ポイントを取得したのか計算
 
 	CAMERA* c_camera;
 	PLAYER* c_player;
