@@ -529,7 +529,7 @@ bool PLAYER::CheckHit(VECTOR c_Position, VECTOR LightPos) {
 
 	// player‚Ælight‚Ì“–‚½‚è”»’è( TRUE:“–‚½‚Á‚Ä‚¢‚é FALSE:“–‚½‚Á‚Ä‚¢‚È‚¢ )
 	if (cr <= lr2 && LightFlg == false) {
-		Key_Look = true;
+		
 		c_MoveFlag = false;
 		return true;
 	}

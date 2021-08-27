@@ -17,11 +17,19 @@ int g_KeyFlg;
 int g_NowKey;
 int g_OldKey;
 char key[256];
-int judge_count = 0;
-int win_timer = 0;
-bool player_win = false;
-bool enemy_win = false;
+
+//勝敗関係
+int judge_count = 0;//スポットライトに入っている人数
+int win_timer = 0;//勝利テキストを見せる秒数
+bool player_win = false;//playerがスポットライトに入った時のflg
+bool enemy_win = false;//敵がスポットライトに入った時のflg
 bool judge_win = false;
+
+int judge_count2;//プレイヤーがスポットライトに入ったら数える
+int judge_count3;//敵がスポットライトに入ったら数える
+bool player_judge;//プレイヤーがスポットライトに入ったときのflg
+bool enemy_judge;//敵がスポットライトに入ったら入ったときのflg
+
 //int check_1 = 0;
 //int check_2 = 0;
 //ゲームサウンド関係
@@ -249,15 +257,34 @@ void MAIN::Game_Main() {
 		enemy_win = false;
 		/*check_1 = 0;
 		check_2 = 0;*/
+		if (LightFlg == true) {
+			player_judge = false;
+			enemy_judge = false;
+			judge_count2 = 0;
+			judge_count3 = 0;
+		}
+
 		if (c_player->CheckHit(c_player->c_Position, LightPos)) {
 			judge_count++;
 			player_win = true;
+			if (player_judge == false) {
+				judge_count2 = (judge_count2 + 1) % 181;
+			}
 
+		}
+		else{
+			judge_count2 = 0;
 		}
 
 		if (c_enemy->EnemyCheckHit(c_enemy->c_ObjPos, LightPos)) {
 			judge_count++;
 			enemy_win = true;
+			if (enemy_judge == false) {
+				judge_count3 = (judge_count3 + 1) % 181;
+			}
+		}
+		else{
+			judge_count3 = 0;
 		}
 		/*if (c_enemy->EnemyCheckHit2(c_enemy->c_ObjPos)) {
 			check_1 = 1;
@@ -265,7 +292,7 @@ void MAIN::Game_Main() {
 		if (c_enemy->EnemyCheckHit3(c_enemy->c_ObjPos, c_player->c_Position)) {
 			check_2 = 1;
 		}*/
-		if (judge_count == 1) {
+		if (judge_count == 1 && judge_count2 > 60) {
 			if (CheckSoundMem(win_sound) == 0) {
 				PlaySoundMem(win_sound, DX_PLAYTYPE_LOOP);
 			}
@@ -278,6 +305,7 @@ void MAIN::Game_Main() {
 
 				win_timer = (win_timer + 1) % 121;
 				if (win_timer < 119) {
+					Key_Look = true;
 					SetFontSize(100);
 					DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
 				}
@@ -285,9 +313,17 @@ void MAIN::Game_Main() {
 					StopSoundMem(win_sound);
 					time = 600;
 					win_timer = 0;
+					enemy_judge = true;
+					player_judge = true;
 				}
 			}
+		}
+		if (judge_count == 1 && judge_count3 > 60) {
 			if (enemy_win) {
+				if (CheckSoundMem(win_sound) == 0) {
+					PlaySoundMem(win_sound, DX_PLAYTYPE_LOOP);
+				}
+
 				if (ENEMY_WIN == 1) {
 					Key_Look = true;
 					if (judge_win == false)
@@ -298,8 +334,9 @@ void MAIN::Game_Main() {
 
 					win_timer = (win_timer + 1) % 121;
 					if (win_timer < 119) {
+						Key_Look = true;
 						SetFontSize(100);
-						DrawString(360, 120, "enemy0_WIN", GetColor(0x00, 0x00, 0xff));
+						DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
 					}
 				}
 				if (ENEMY_WIN == 2) {
@@ -312,8 +349,9 @@ void MAIN::Game_Main() {
 
 					win_timer = (win_timer + 1) % 121;
 					if (win_timer < 119) {
+						Key_Look = true;
 						SetFontSize(100);
-						DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
+						DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
 					}
 				}
 				if (ENEMY_WIN == 3) {
@@ -326,17 +364,21 @@ void MAIN::Game_Main() {
 
 					win_timer = (win_timer + 1) % 121;
 					if (win_timer < 119) {
+						Key_Look = true;
 						SetFontSize(100);
-						DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
+						DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
 					}
 				}
 				if (win_timer == 120) {
 					StopSoundMem(win_sound);
 					time = 600;
 					win_timer = 0;
+					enemy_judge = true;
+					player_judge = true;
 				}
 			}
 		}
+		
 
 		if (finish == false) GameState = 3;	//決着ついたらタイトルへ戻る
 
@@ -351,8 +393,8 @@ void MAIN::Game_Main() {
 			DrawString(570, 5, "Judge", GetColor(0x00, 0x00, 0x00));
 			SetFontSize(20);
 			DrawFormatString(20, 40, 0xFFFFFF, "win_timer:%d", win_timer);
-			/*	DrawFormatString(20, 60, 0xFFFFFF, "check_1:%d", check_1);
-				DrawFormatString(20, 80, 0xFFFFFF, "check_2:%d", check_2);*/
+			DrawFormatString(20, 60, 0xFFFFFF, "judge_count2:%d", judge_count2);
+			DrawFormatString(20, 80, 0xFFFFFF, "judge_count3:%d", judge_count3);
 			DrawFormatString(20, 100, 0xFFFFFF, "ENEMYWIN:%d", ENEMY_WIN);
 			DrawFormatString(20, 120, 0xFFFFFF, "judge:%d", judge_count);
 			Game_Judge();

@@ -20,6 +20,11 @@ extern int win_timer;//勝利を表示し続けるカウント
 extern bool player_win;
 extern bool enemy_win;
 
+extern int judge_count2;//プレイヤーがスポットライトに入ったら数える
+extern int judge_count3;//敵がスポットライトに入ったら数える
+extern bool player_judge;//プレイヤーがスポットライトに入ったときのflg
+extern bool enemy_judge;//敵がスポットライトに入ったら入ったときのflg
+
 class MAIN 
 {
 public:

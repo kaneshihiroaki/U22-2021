@@ -165,10 +165,8 @@ void Light()
 		//finish = false;
 		round_count++;
 		StopSoundMem(drum);
-		PlaySoundMem(drum_finish, DX_PLAYTYPE_LOOP);
-		// 1•b‘Ò‚Á‚Ä”»’è‚ðŽæ‚é(WaitTimer)
-		WaitTimer(1000);
-		StopSoundMem(drum_finish);
+		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
+	
 	}
 	else if (time >= 600 && WaitTime == 0) {
 		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
