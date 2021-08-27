@@ -129,7 +129,7 @@ void MAIN::Game_init() {
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	// 背景の色
-	SetBackgroundColor(250, 250, 250);
+	SetBackgroundColor(35, 35, 35);
 
 	SetMainWindowText("３Ｄ");
 	ChangeWindowMode(TRUE);
@@ -180,8 +180,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		switch (c_main->GameState)
 		{
 		case 0:
-			// 背景の色
-			SetBackgroundColor(250, 250, 250);
 			c_main->Game_Title();
 			break;
 		case 1:
@@ -189,8 +187,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 2:
 			// 背景の色
-			SetBackgroundColor(35, 35, 35);
-			c_main->Game_Main();
+				c_main->Game_Main();
 			break;
 
 		case 3:
@@ -426,19 +423,6 @@ void MAIN::Game_Title() {
 		else if (state == 1) {
 			g_exit = true;
 		}
-		//LightFlg = false;
-				//Key_Look = false;
-				//Win = false;
-				//Lose = false;
-				//GameJudge = false;
-				//judge_win = false;
-				//PLAYER_WIN_COUNT = 0;
-				//ENEMY_WIN = 0;
-				//ENEMY_WIN_COUNT1 = 0;
-				//ENEMY_WIN_COUNT2 = 0;
-				//ENEMY_WIN_COUNT3 = 0;
-				//check_1 = 0;
-				//check_2 = 0;
 	}
 	if (g_play == true) {
 		static int c = 0;
