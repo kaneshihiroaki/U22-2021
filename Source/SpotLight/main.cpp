@@ -309,7 +309,7 @@ void MAIN::Game_Main() {
 					SetFontSize(100);
 					DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
 				}
-				if (win_timer == 120) {
+				else if (win_timer >= 120) {
 					StopSoundMem(win_sound);
 					time = 600;
 					win_timer = 0;
@@ -369,7 +369,7 @@ void MAIN::Game_Main() {
 						DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
 					}
 				}
-				if (win_timer == 120) {
+				else if (win_timer >= 120) {
 					StopSoundMem(win_sound);
 					time = 600;
 					win_timer = 0;
