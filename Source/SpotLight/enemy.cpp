@@ -25,11 +25,11 @@ ENEMY::ENEMY()
 	// ‚R‚cƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (i == 0) {
-			c_EnemyModel[i] = MV1LoadModel("Model/EnMe.mv1");
+			c_EnemyModel[i] = MV1LoadModel("Model/EnMe3.mv1");
 		}
 		else {
 //			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
-			c_EnemyModel[i] = MV1LoadModel("Model/EnMe2.mv1");
+			c_EnemyModel[i] = MV1LoadModel("Model/EnMe3.mv1");
 		}
 		
 		//c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
