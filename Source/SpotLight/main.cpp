@@ -111,6 +111,7 @@ void MAIN::Game_init() {
 	//ゲーム開始の演出関連変数初期化
 	c_ready = false;
 	c_dispTime = c_readyMaxTime;
+	c_resultdispTime = 0;
 
 	//ライト・リザルト用変数初期化
 	LightFlg = false;
