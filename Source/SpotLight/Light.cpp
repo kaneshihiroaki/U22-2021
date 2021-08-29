@@ -75,7 +75,7 @@ void Light_SetUp() {
 	SetLightAmbColorHandle(PointLightHandle, GetColorF(0.0f, 0.0f, 0.0f, 0.0f));
 
 	// ポイントライトのディフューズカラーを強い色にする
-	SetLightDifColorHandle(PointLightHandle, GetColorF(4.0f, 4.0f, 4.0f, 0.0f));
+	SetLightDifColorHandle(PointLightHandle, GetColorF(10.0f, 10.0f, 10.0f, 0.0f));
 }
 
 void Light_init() {
@@ -110,13 +110,13 @@ void Light_init() {
 	//SetLightDifColorHandle(PointLightHandle, GetColorF(9.0f, 9.0f, 9.0f, 0.0f));
 
 	//ポイントライトの初期値を設定
-	SetLightPositionHandle(PointLightHandle, VGet(0.0f,0.0f, 0.0f));
+	SetLightPositionHandle(PointLightHandle, VGet(0.0f, 0.0f, 0.0f));
 
 	LightFlg = true;
 
 	// ライトの位置の回転値を加算
-	LightPos = VGet(0.0f, 600.0f, 0.0f);
-	LightPos2 = VGet(0.0f, 800.0f, 0.0f);
+	LightPos = VGet(0.0f, 600.0f, -300.0f);
+	LightPos2 = VGet(0.0f, 1000.0f, 0.0f);
 
 	dis[0] = VGet(-distance, 0.0f, distance);
 	dis[1] = VGet(0.0f, 0.0f, distance);
@@ -124,7 +124,7 @@ void Light_init() {
 	dis[3] = VGet(-distance, 0.0f, 0.0f);
 	dis[4] = VGet(0.0f, 0.0f, 0.0f);
 	dis[5] = VGet(distance, 0.0f, 0.0f);
-	
+
 	//角度を初期化
 	LightRotateAngle = 0;
 	LightRotateAngle2 = 0;
@@ -149,10 +149,10 @@ void Light_init() {
 void Light()
 {
 	Point_t
-		cp1 = { dis[rc].x,-dis[rc].z, 0, distance / 2, -180, distance / 2 },
-		cp2 = { dis[rc].x,dis[rc].z, 0, -distance / 2, -180, distance / 2 },
-		cp3 = { -dis[rc].x,dis[rc].z, distance / 2, 0, -180, distance / 2 },
-		cp4 = { dis[rc].x,dis[rc].z, -distance / 2, 0, -180, distance / 2 };
+		cp1 = { 0,0, 0, distance / 2, -180, distance / 2 },
+		cp2 = { 0,0, 0, -distance / 2, -180, distance / 2 },
+		cp3 = { 0,0, distance / 2, 0, -180, distance / 2 },
+		cp4 = { 0,0, -distance / 2, 0, -180, distance / 2 };
 
 	//10秒経過したら方向転換
 	if (time < 600) {
@@ -166,16 +166,15 @@ void Light()
 		round_count++;
 		StopSoundMem(drum);
 		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
-	
 	}
 	else if (time >= 600 && WaitTime == 0) {
 		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
-			   cntFlg + 5 == count || cntFlg - 5 == count||(cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
+			cntFlg + 5 == count || cntFlg - 5 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
 		{
 			count = GetRand(5);
 			rc = cntFlg;
 		}
-		
+
 		PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
 
 		cntFlg = count;
@@ -191,42 +190,39 @@ void Light()
 		if (count == rc - 3) {
 			cp1.x += cp1.ox + sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
 			cp1.z += cp1.oz + -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range;
-			LightRotateAngle += 0.6f;
-			LightRotateAngle2 += 0.3f;
+			LightRotateAngle += 1.2f;
+			LightRotateAngle2 += 1.5f;
 			DrawX = cp1.x;
 			DrawZ = cp1.z;
 		}
 		else if (count == rc + 3) {
 			cp2.x += cp2.ox + sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
 			cp2.z += cp2.oz + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range;
-			LightRotateAngle += 0.6f;
-			LightRotateAngle2 += 0.3f;
+			LightRotateAngle += 1.2f;
+			LightRotateAngle2 += 1.5f;
 			DrawX = cp2.x;
 			DrawZ = cp2.z;
 		}
 		if (count == rc + 1) {
 			cp3.x += cp3.ox + -cos(PI / cp1.T * LightRotateAngle) * cp3.Range;
 			cp3.z += cp3.oz + sin(PI / cp1.T * LightRotateAngle2) * cp3.Range;
-			LightRotateAngle += 0.3f;
-			LightRotateAngle2 += 0.6f;
+			LightRotateAngle += 1.5f;
+			LightRotateAngle2 += 1.2f;
 			DrawX = cp3.x;
 			DrawZ = cp3.z;
 		}
 		else if (count == rc - 1) {
 			cp4.x += cp4.ox + cos(PI / cp4.T * LightRotateAngle) * cp4.Range;
 			cp4.z += cp4.oz + sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
-			LightRotateAngle += 0.3f;
-			LightRotateAngle2 += 0.6f;
+			LightRotateAngle += 1.5f;
+			LightRotateAngle2 += 1.2f;
 			DrawX = cp4.x;
 			DrawZ = cp4.z;
 		}
 	}
 
-	
-
 	//ライトの位置の回転値を加算
-	LightPos = VGet(DrawX, 600.0f, DrawZ);
-	LightPos2 = VGet(DrawX, 800.0f, DrawZ);
+	LightPos = VGet(DrawX, 600.0f, DrawZ - 300);
 
 	// スポットライトの位置の更新
 	SetLightPositionHandle(SpotLightHandle, LightPos);
@@ -237,4 +233,5 @@ void Light()
 	//10カウント表示
 	SetFontSize(100);
 	DrawFormatString(500, 10, 0x25525000, "%d", time / 60);
+	DrawFormatString(500, 100, 0x25525000, "%d", count);
 }
