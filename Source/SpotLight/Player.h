@@ -74,7 +74,7 @@ private:
 	VECTOR c_TempMoveVector; //移動先を計算する変数
 
 
-	const float c_movespeed = 5.0f;	//プレイヤー移動スピード
+	const float c_movespeed = 10.0f;	//プレイヤー移動スピード
 	float c_Acc;	//加速を制御
 
 		//痺れ（ダメージ関連）
@@ -96,7 +96,7 @@ private:
 		float s_RotCos = 0.0f;
 		float s_Posx = 0.0f;
 		float s_Posz = 0.0f;
-		const float s_width = 200.0f;
+		const float s_width = 80.0f;
 		const float s_heigt = 100.0f;
 
 		//攻撃速度(終了地点)
