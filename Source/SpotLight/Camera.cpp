@@ -113,23 +113,26 @@ void CAMERA::Camera_Control(STAGE* stage) {
 	//	}
 	//}
 
-	
+	//
 
 	////カメラとプレイヤーの距離
 	//if (CheckHitKey(KEY_INPUT_A) == 1)
 	//{
-	//	if (c_CameraPosDist >= 350.0f)
-	//	{
-	//		c_CameraPosDist -= 10.0f;
-	//	}
+	//	//if (cko >= 350.0f)
+	//	//{
+	//		cko -= 10.0f;
+	//	//}
 	//}
 	//if (CheckHitKey(KEY_INPUT_D) == 1)
 	//{
-	//	if (c_CameraPosDist <= 4000.0f)
-	//	{
-	//		c_CameraPosDist += 10.0f;
-	//	}
+	//	//if (cko <= 4000.0f)
+	//	//{
+	//		cko += 10.0f;
+	//	//}
 	//}
+
+	//DrawFormatString(300, 110, 0xFFFFFF, "%f", cko);
+	//DrawFormatString(300, 130, 0xFFFFFF, "%f", c_CameraVAngle);
 
 	//カメラの計算のための変数宣言
 	VECTOR TempPosition1;
@@ -156,5 +159,5 @@ void CAMERA::Camera_Control(STAGE* stage) {
 
 	CameraPosition = VAdd(TempPosition2, CameraLookAtPosition);
 
-	SetCameraPositionAndTarget_UpVecY(CameraPosition, CameraLookAtPosition);
+	SetCameraPositionAndTarget_UpVecY(VGet(CameraPosition.x,CameraPosition.y+50,CameraPosition.z+ cko), CameraLookAtPosition);
 }

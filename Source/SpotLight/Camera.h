@@ -14,6 +14,7 @@ private:
 	float  c_CosParam;
 	float  c_CameraHAngle;		//Šp“x
 	float  c_CameraVAngle;		//Šp“x
+	float cko = -170;
 	
 
 public:

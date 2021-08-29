@@ -11,7 +11,7 @@ STAGE::STAGE()
 	//c_StageScale = { 0.5f,0.5f,0.5f };
 
 	// ３Ｄモデルの読み込み
-	c_StageModel = MV1LoadModel("Model/stage_ex.mv1");
+	c_StageModel = MV1LoadModel("Model/stage_honban.mv1");
 
 	//MV1SetPosition(c_StageModel, c_StagePosition);
 	//MV1SetScale(c_StageModel, c_StageScale);
@@ -29,8 +29,8 @@ void STAGE::init() {
 	c_StageScale = { 1.0f,1.0f,1.0f };
 
 	//横幅と奥行き
-	c_width = 2600;
-	c_depth = 1300;
+	c_width = 3000;
+	c_depth = 1500;
 
 	//MV1SetPosition(c_StageModel, c_StagePosition);
 	//MV1SetScale(c_StageModel, c_StageScale);
@@ -50,18 +50,18 @@ void STAGE::Stage_Make(ENEMY* enemy, PLAYER* player) {
 }
 
 void STAGE::Stage_Col(ENEMY* enemy, PLAYER* player) {
-	////上
-	//DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
-	//	VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)), 0xFFFFFF);
-	////下
-	//DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)),
-	//	VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
-	////左
-	//DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
-	//	VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
-	////右
-	//DrawLine3D(VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
-	//	VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
+	//上
+	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
+		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)), 0xFFFFFF);
+	//下
+	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)),
+		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
+	//左
+	DrawLine3D(VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
+		VGet(c_StagePosition.x - (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
+	//右
+	DrawLine3D(VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z + (c_depth / 2)),
+		VGet(c_StagePosition.x + (c_width / 2), c_StagePosition.y + 50.0f, c_StagePosition.z - (c_depth / 2)), 0xFFFFFF);
 
 	//右上の点：VGet(c_StagePosition.x + 2000.0f, c_StagePosition.y + 50.0f, c_StagePosition.z + 2000.0f);
 	//左上の点：VGet(c_StagePosition.x - 2000.0f, c_StagePosition.y + 50.0f, c_StagePosition.z + 2000.0f);
