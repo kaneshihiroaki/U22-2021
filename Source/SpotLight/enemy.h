@@ -44,8 +44,8 @@ public:
 	bool c_EnemyWin[ENEMY_MAX] = { false,false,false };//ƒGƒlƒ~[‚ª—”»’θ‚³‚κ‚Δ‚Ά‚ι‚©‚Η‚¤‚©
 
 	void Enemy_Creat();
-	void Enemy_Move(int num, PLAYER* player, CAMERA* camera);
-	bool Enemy_Push(int num, PLAYER* player, CAMERA* camera, VECTOR PushVec);
+	void Enemy_Move(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera);
+	bool Enemy_Push(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera,  VECTOR PushVec);
 
 	//“G‚παƒ‚κ‚³‚Ή‚ιƒZƒbƒ^[
 	void SetEnemyParaKey(int num) {
@@ -63,7 +63,7 @@ public:
 	bool c_MoveKey[ENEMY_MAX];//ƒXƒe[ƒW“ΰ‚Μ“G‚Μ“®‚«‚πΗ— true:“®‚Ά‚Δ‚Ά‚ι false:~‚ά‚Α‚Δ‚Ά‚ι
 	
 	int c_EnemyState[ENEMY_MAX];//“G‚Μσ‘Τ‚π§δ#define‚Ι‘‚Ά‚Δ‚ά‚·B
-	void Enemy_State(int num, PLAYER* player, CAMERA* camera);//“G‚Μσ‘Τ‚π§δΦ”
+	void Enemy_State(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera);//“G‚Μσ‘Τ‚π§δΦ”
 	bool EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos);//enemy‚Μ”»’θ
 	bool EnemyCheckHit2(VECTOR c_ObjPos[ENEMY_MAX]);//enemy“―m‚Μ”»’θ
 	bool EnemyCheckHit3(VECTOR c_ObjPos[ENEMY_MAX], VECTOR c_Position);//player‚Ζenemy‚Μ”»’θ

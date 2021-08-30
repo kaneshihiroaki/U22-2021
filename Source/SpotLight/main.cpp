@@ -241,14 +241,14 @@ void MAIN::Game_Main() {
 
 		if (!Collision_Player) {
 			for (int i = 0; i < ENEMY_MAX; i++) {
-				c_enemy->Enemy_State(i, c_player, c_camera);
+				c_enemy->Enemy_State(i, c_player,c_enemy, c_camera);
 			}
 			//c_enemy->Enemy_Creat();
 		}
 
 		//プレイヤーの表示と動きの制御
 		//c_player->Player_Controller();
-		c_player->Player_Move(c_camera, c_enemy,c_player);
+		c_player->Player_Move(c_player, c_enemy,c_camera);
 
 		//c_camera->Camera_Control(c_stage);
 
@@ -271,7 +271,7 @@ void MAIN::Game_Main() {
 			if (player_judge == false) {
 				judge_count2 = (judge_count2 + 1) % 181;
 			}
-
+			
 		}
 		else{
 			judge_count2 = 0;
@@ -287,6 +287,7 @@ void MAIN::Game_Main() {
 		else{
 			judge_count3 = 0;
 		}
+		
 		/*if (c_enemy->EnemyCheckHit2(c_enemy->c_ObjPos)) {
 			check_1 = 1;
 		}

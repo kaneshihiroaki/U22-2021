@@ -244,7 +244,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 	}
 }
 
-void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene,PLAYER* player)
+void PLAYER::Player_Move(PLAYER* player,ENEMY* ene, CAMERA* camera)
 {
 	//移動場所の確認
 	VECTOR TempRotVector;
@@ -387,7 +387,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene,PLAYER* player)
 				if (ene->CheckPara(i) == false) {
 					c_MoveFlag = false;
 				}
-				else if ((ene->Enemy_Push(i, player,camera, c_TempMoveVector)) == false) {//falseなら動かせなかった。
+				else if ((ene->Enemy_Push(i, player,ene,camera, c_TempMoveVector)) == false) {//falseなら動かせなかった。
 					c_MoveFlag = false;
 				}
 			}
@@ -408,7 +408,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene,PLAYER* player)
 	c_Rotation.x = 0.0f;
 	c_Rotation.y = c_PlayerAng * (M_PI / 180);
 	c_Rotation.z = 0.0f;
-
+	
 	//攻撃
 	if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false && Att.s_AttackStartKey == false)) {
 		if (CheckSoundMem(player_attack_sound) == 0) {
@@ -423,7 +423,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene,PLAYER* player)
 	}
 }
 
-bool PLAYER::Player_Push(CAMERA* camera, VECTOR EnemyCol[ENEMY_MAX], VECTOR PushVec)
+bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy, CAMERA* camera,  VECTOR PushVec)
 {
 	//しびれているかどうか。しびれていないならfalseで帰る
 	if (Damage.s_paralyzeKey == false) {
@@ -445,11 +445,19 @@ bool PLAYER::Player_Push(CAMERA* camera, VECTOR EnemyCol[ENEMY_MAX], VECTOR Push
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), EnemyCol[i], 55) == true) {
+			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), enemy->c_ObjPos[i], 55) == true) {
 				c_MoveFlag = false;
+				if (enemy->Enemy_Push(i, player, enemy, camera, c_TempMoveVector) == false) {//falseなら動かせなかった
+					c_MoveFlag = false;
+				}
 			}
 		}
-		if (c_MoveFlag) {//移動できるときにのみとおる
+
+		if (c_StageIn == false) {
+			c_MoveFlag = false;
+		}
+	
+		if (c_MoveFlag ) {//移動できるときにのみとおる
 			c_Position = VAdd(c_Position, c_TempMoveVector);		//移動
 			//c_Rotation = VAdd(c_Rotation, TempRotVector);
 		}
