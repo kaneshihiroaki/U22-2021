@@ -341,7 +341,12 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene, CAMERA* camera)
 
 	//Gキーを押したらプレイヤーが一定時間止まる
 	if (CheckHitKey(KEY_INPUT_G)) SetParalyzeKey();/*Damage.s_paralyzeKey = true;*/
-	if (Damage.s_paralyzeKey == true) Player_Paralyze();
+	if (Damage.s_paralyzeKey == true) {
+		if (CheckSoundMem(damage_sound) == 0) {
+			PlaySoundMem(damage_sound, DX_PLAYTYPE_BACK);
+		}
+		Player_Paralyze();
+	}
 
 	if(Key_Look == false)c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmCount,c_StmMax);        //スタミナ管理
 

@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Camera.h"
 #include "debug.h"
+#include "GameSound.h"
 
 
 int ENEMY_WIN;//どの敵が勝ったか調べる変数
@@ -123,7 +124,12 @@ void ENEMY::Enemy_State(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera) {
 	}
 	
 	
-	if (Damage[num].s_paralyzeKey == true)Enemy_Paralyze(num);//しびれているならカウントしないといけない
+	if (Damage[num].s_paralyzeKey == true) {
+		if (CheckSoundMem(damage_sound) == 0) {
+			PlaySoundMem(damage_sound, DX_PLAYTYPE_BACK);
+		}
+		Enemy_Paralyze(num);//しびれているならカウントしないといけない
+	}
 	
 	SetFontSize(20);
 	switch (c_EnemyState[num])
@@ -727,7 +733,14 @@ bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 
 
 void ENEMY::Ga_Attack(int num, PLAYER* player) {
-	if (Att[num].s_AttackStartKey == true) return; //攻撃中だと帰る
+	if (Att[num].s_AttackStartKey == true) {
+		if (Enemy_Sound_flg == false) {
+			if (CheckSoundMem(enemy1_attack_sound) == 0) {
+				PlaySoundMem(enemy1_attack_sound, DX_PLAYTYPE_BACK);
+			}
+		}
+		return; //攻撃中だと帰る
+	}
 	if (Ga_Interval[num] > 0) {//攻撃のインターバル
 		Ga_Interval[num]--;
 		return;
@@ -862,7 +875,14 @@ void ENEMY::A_Move(int num) {
 
 }
 void ENEMY::A_Attack(int num, PLAYER* player) {
-	if (Att[num].s_AttackStartKey == true) return; //攻撃中だと帰る
+	if (Att[num].s_AttackStartKey == true) {
+		if (Enemy_Sound_flg == false) {
+			if (CheckSoundMem(enemy3_attack_sound) == 0) {
+				PlaySoundMem(enemy3_attack_sound, DX_PLAYTYPE_BACK);
+			}
+		}
+		return; //攻撃中だと帰る
+	}
 	if (Ga_Interval[num] > 0) {//攻撃のインターバル
 		Ga_Interval[num]--;
 		return;
@@ -935,7 +955,15 @@ void ENEMY::A_Attack(int num, PLAYER* player) {
 }
 
 void ENEMY::San_Attack(int num, PLAYER* player) {
-	if (Att[num].s_AttackStartKey == true) return; //攻撃中だと帰る
+	if (Att[num].s_AttackStartKey == true) {
+		if (Enemy_Sound_flg == false) {
+			if (CheckSoundMem(enemy2_attack_sound) == 0) {
+				PlaySoundMem(enemy2_attack_sound, DX_PLAYTYPE_BACK);
+			}
+		}
+
+		return; //攻撃中だと帰る
+	}
 	if (Ga_Interval[num] > 0) {//攻撃のインターバル
 		Ga_Interval[num]--;
 		return;

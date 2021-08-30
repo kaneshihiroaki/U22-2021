@@ -9,6 +9,7 @@
 #include "Debug.h"
 #include "Light.h"
 #include "Character.h"
+#include "GameSound.h"
 //ゲームの状態
 //int GameState = 0;
 
@@ -41,9 +42,14 @@ int win_sound;//勝利者SE
 int player_win_sound;//playerが１位の時のBGM
 int enemy_win_sound;//enemyが１位の時のBGM
 int player_attack_sound;//playerが攻撃するときのSE
+int enemy1_attack_sound;//enemy1が攻撃するときのSE
+int enemy2_attack_sound;//enemy2が攻撃するときのSE
+int enemy3_attack_sound;//enemy3が攻撃するときのSE
+int damage_sound;//被弾した時のSE
+int cursor_sound;//カーソルのSE
 
 int BGM_flg;//BGMをとめるflg;
-
+int Enemy_Sound_flg;//enemyの攻撃音をとめるflg;//true:止める false:止めない
 
 bool finish;	//ゲームが終わったか判定（true:ゲーム再開 false:タイトルへ戻る)
 bool judgefinish = false;	//決着ついたか判定	true:終了 false:続ける
@@ -130,6 +136,7 @@ void MAIN::Game_init() {
 	check_2 = 0;*/
 
 	BGM_flg=false;//BGMをとめるflg;
+	Enemy_Sound_flg = false;//enemyの攻撃音をとめるflg;//true:止める false:止めない
 
 	//初期化したらゲームメインへ
 	GameState = 2;
@@ -444,12 +451,18 @@ void MAIN::Game_Title() {
 	SetFontSize(150);
 	DrawFormatString(250, 100, 0xffff00, "SpotLight");
 	if (((g_KeyFlg & PAD_INPUT_DOWN) != 0)) {
+		if (CheckSoundMem(cursor_sound) == 0) {
+			PlaySoundMem(cursor_sound, DX_PLAYTYPE_BACK);
+		}
 		state += 1;
 		if (state >= 2) {
 			state = 0;
 		}
 	}
 	else if (((g_KeyFlg & PAD_INPUT_UP) != 0)) {
+		if (CheckSoundMem(cursor_sound) == 0) {
+			PlaySoundMem(cursor_sound, DX_PLAYTYPE_BACK);
+		}
 		state -= 1;
 		if (state < 0) {
 			state = 1;
@@ -489,6 +502,7 @@ void MAIN::Game_Title() {
 void MAIN::Game_Result() {
 	StopSoundMem(drum);
 	StopSoundMem(bgm_main);
+	StopSoundMem(damage_sound);
 
 	if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT1) {
 		if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT2) {
@@ -638,12 +652,17 @@ int MAIN::LoadSound() {
 	//ゲーム音読み込み
 	if ((bgm_title = LoadSoundMem("GameSound/GameTitle.mp3")) == -1)return -1;
 	if ((bgm_main = LoadSoundMem("GameSound/CandyCrush.mp3")) == -1)return -1;
-	if ((drum = LoadSoundMem("GameSound/drum.mp3")) == -1)return -1;
+	if ((drum = LoadSoundMem("GameSound/drum1.mp3")) == -1)return -1;
 	if ((drum_finish = LoadSoundMem("GameSound/drum_finish.mp3")) == -1)return -1;
 	if ((win_sound = LoadSoundMem("GameSound/win_sound.mp3")) == -1)return -1;
 	if ((player_win_sound = LoadSoundMem("GameSound/player_win.mp3")) == -1)return-1;
 	if ((enemy_win_sound = LoadSoundMem("GameSound/enemy_win.mp3")) == -1)return-1;
 	if ((player_attack_sound = LoadSoundMem("GameSound/player_attack.mp3")) == -1)return -1;
+	if ((enemy1_attack_sound = LoadSoundMem("GameSound/enemy1.mp3")) == -1)return -1;
+	if ((enemy2_attack_sound = LoadSoundMem("GameSound/enemy2.mp3")) == -1)return -1;
+	if ((enemy3_attack_sound = LoadSoundMem("GameSound/enemy3.mp3")) == -1)return -1;
+	if ((damage_sound = LoadSoundMem("GameSound/damage.mp3")) == -1)return-1;
+	if ((cursor_sound = LoadSoundMem("GameSound/cursor.mp3")) == -1)return-1;
 	//音量調整
 	// BGM
 	ChangeVolumeSoundMem(100, bgm_title);
@@ -655,6 +674,11 @@ int MAIN::LoadSound() {
 	// SE
 	ChangeVolumeSoundMem(80, win_sound);
 	ChangeVolumeSoundMem(80, player_attack_sound);
+	ChangeVolumeSoundMem(80, enemy1_attack_sound);
+	ChangeVolumeSoundMem(80, enemy2_attack_sound);
+	ChangeVolumeSoundMem(80, enemy3_attack_sound);
+	ChangeVolumeSoundMem(80, damage_sound);
+	ChangeVolumeSoundMem(80, cursor_sound);
 
 	return 0;
 }
