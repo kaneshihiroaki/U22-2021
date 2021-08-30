@@ -106,7 +106,6 @@ void MAIN::Game_init() {
 	win_timer = 0;
 	WaitTime = 0;
 	round_count = 0;
-	OnePass = false;
 
 	//ゲーム開始の演出関連変数初期化
 	c_ready = false;
@@ -125,6 +124,8 @@ void MAIN::Game_init() {
 	ENEMY_WIN_COUNT1 = 0;
 	ENEMY_WIN_COUNT2 = 0;
 	ENEMY_WIN_COUNT3 = 0;
+	c_OnePass = false;
+	c_ResultBack = false;
 	/*check_1 = 0;
 	check_2 = 0;*/
 
@@ -539,9 +540,9 @@ void MAIN::Game_Result() {
 	SetFontSize(50);
 	//2秒待って勝者を映す
 	if (c_resultdispTime++ >= c_resultdispMaxTime) {
-		if (OnePass == false) {
+		if (c_OnePass == false) {
 			c_VictorNum = CountMaxPoint(score);	//勝者を判定
-			OnePass = true;
+			c_OnePass = true;
 		}
 
 		// スポットライトの位置の更新
@@ -586,6 +587,16 @@ void MAIN::Game_Result() {
 		default:
 			break;
 		}
+
+		if (CheckSoundMem(player_win_sound) != 1 && CheckSoundMem(enemy_win_sound) != 1)
+		{
+			c_ResultBack = true;
+		}
+		if (c_ResultBack == true) {
+			DrawFormatString(530, 550, 0x880000, "Press B");
+		}
+
+		if ((g_KeyFlg & PAD_INPUT_2) != 0 && c_ResultBack == true) GameState = 0;
 	}
 
 	//DrawFormatString(100, 100, 0xFFFFFF, "PLAYER_WIN_NUM:%d", PLAYER_WIN_COUNT);
@@ -597,7 +608,6 @@ void MAIN::Game_Result() {
 	//DrawFormatString(520, 140, 0xFFFFFF, "ENEMY3_WIN_NUM:%d", ENEMY_WIN_COUNT3);
 	//DrawFormatString(520, 160, 0xFFFFFF, "ENEMY3_POINT:%d", score[3]);
 
-	if ((g_KeyFlg & PAD_INPUT_2) != 0) GameState = 0;
 }
 
 int MAIN::CountMaxPoint(int* point)
