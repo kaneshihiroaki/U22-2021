@@ -393,15 +393,19 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 		if (c_MoveFlag && c_StageIn == true) {//ˆÚ“®‚Å‚«‚é‚Æ‚«‚É‚Ì‚İ‚Æ‚¨‚é
 			c_Position = VAdd(c_Position, c_TempMoveVector);		//ˆÚ“®
 		}
-		//Šp“x‘ã“ü
-		c_Rotation.x = 0.0f;
-		c_Rotation.y = c_PlayerAng * (M_PI / 180);
-		c_Rotation.z = 0.0f;
+		////Šp“x‘ã“ü
+		//c_Rotation.x = 0.0f;
+		//c_Rotation.y = c_PlayerAng * (M_PI / 180);
+		//c_Rotation.z = 0.0f;
 	}
 	else {
 		c_Acc = 0.0f;
 	}
 
+	//Šp“x‘ã“ü
+	c_Rotation.x = 0.0f;
+	c_Rotation.y = c_PlayerAng * (M_PI / 180);
+	c_Rotation.z = 0.0f;
 
 	//UŒ‚
 	if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false && Att.s_AttackStartKey == false)) {
