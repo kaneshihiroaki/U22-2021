@@ -68,7 +68,9 @@ void PLAYER::Player_Controller() {
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 
 	if (!Collision_Player) {
-		MV1DrawModel(c_PlayerModel);
+		if (Damage.s_ParaTime % 20 < 10) {//0~9までは描画10~19までは描画しない
+			MV1DrawModel(c_PlayerModel);			 //プレイヤーのモデル描画
+		}
 	}
 
 	//プレイヤーのスタミナのUI
@@ -242,7 +244,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 	}
 }
 
-void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
+void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene,PLAYER* player)
 {
 	//移動場所の確認
 	VECTOR TempRotVector;
@@ -385,7 +387,7 @@ void PLAYER::Player_Move(CAMERA* camera, ENEMY* ene)
 				if (ene->CheckPara(i) == false) {
 					c_MoveFlag = false;
 				}
-				else if ((ene->Enemy_Push(i, c_Position, c_TempMoveVector)) == false) {//falseなら動かせなかった。
+				else if ((ene->Enemy_Push(i, player,camera, c_TempMoveVector)) == false) {//falseなら動かせなかった。
 					c_MoveFlag = false;
 				}
 			}

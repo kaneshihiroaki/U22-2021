@@ -248,7 +248,7 @@ void MAIN::Game_Main() {
 
 		//プレイヤーの表示と動きの制御
 		//c_player->Player_Controller();
-		c_player->Player_Move(c_camera, c_enemy);
+		c_player->Player_Move(c_camera, c_enemy,c_player);
 
 		//c_camera->Camera_Control(c_stage);
 

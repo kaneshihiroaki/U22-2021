@@ -41,10 +41,11 @@ public:
 
 	VECTOR c_SpotPos;//スポットライトの場所
 	float c_SpotRadius = 30.0f;//スポットライトの半径
+	bool c_EnemyWin[ENEMY_MAX] = { false,false,false };//エネミーが勝利判定されているかどうか
 
 	void Enemy_Creat();
 	void Enemy_Move(int num, PLAYER* player, CAMERA* camera);
-	bool Enemy_Push(int num, VECTOR PlayerCol, VECTOR PushVec);
+	bool Enemy_Push(int num, PLAYER* player, CAMERA* camera, VECTOR PushVec);
 
 	//敵を痺れさせるセッター
 	void SetEnemyParaKey(int num) {
