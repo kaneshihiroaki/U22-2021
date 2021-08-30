@@ -370,7 +370,7 @@ void MAIN::Game_Main() {
 						DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
 					}
 				}
-				else if (win_timer >= 120) {
+				if (win_timer >= 120) {
 					StopSoundMem(win_sound);
 					time = 600;
 					win_timer = 0;
