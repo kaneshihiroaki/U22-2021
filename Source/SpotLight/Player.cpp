@@ -68,7 +68,7 @@ void PLAYER::Player_Controller() {
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 
 	if (!Collision_Player) {
-		if (Damage.s_ParaTime % 20 < 10) {//0~9‚Ü‚Å‚Í•`‰æ10~19‚Ü‚Å‚Í•`‰æ‚µ‚È‚¢
+		if (Damage.s_ParaTime % 20 < 10 || Key_Look) {//0~9‚Ü‚Å‚Í•`‰æ10~19‚Ü‚Å‚Í•`‰æ‚µ‚È‚¢
 			MV1DrawModel(c_PlayerModel);			 //ƒvƒŒƒCƒ„[‚Ìƒ‚ƒfƒ‹•`‰æ
 		}
 	}

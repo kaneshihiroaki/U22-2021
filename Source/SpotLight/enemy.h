@@ -59,7 +59,7 @@ public:
 	void SetEnemyStageInKey(int num) {
 		c_MoveKey[num] = true;
 	}
-	VECTOR GetEnemyMoveKey(int i) { return VAdd(c_ObjPos[i], c_TempMoveVector); }
+	VECTOR GetEnemyMoveKey(int i) { return VAdd(c_ObjPos[i], c_TempMoveVector[i]); }
 	bool c_MoveKey[ENEMY_MAX];//ステージ内の敵の動きを管理 true:動いている false:止まっている
 	
 	int c_EnemyState[ENEMY_MAX];//敵の状態を制御#defineに書いてます。
@@ -102,7 +102,7 @@ private:
 	const int c_StmMax = 600;	//体力の最大値
 
 	VECTOR c_MoveVector;	//移動変数
-	VECTOR c_TempMoveVector;	//移動先計算用変数
+	VECTOR c_TempMoveVector[ENEMY_MAX];	//移動先計算用変数
 
 	float c_EnemySpeed[ENEMY_MAX];//現在のスピード
 	const float c_movespeed = 10.0f;	//エネミー最大移動スピード
