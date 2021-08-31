@@ -44,8 +44,8 @@ public:
 	bool c_EnemyWin[ENEMY_MAX] = { false,false,false };//エネミーが勝利判定されているかどうか
 
 	void Enemy_Creat();
-	void Enemy_Move(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera);
-	bool Enemy_Push(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera,  VECTOR PushVec);
+	void Enemy_Move(int num, PLAYER* player, ENEMY* enemy);
+	bool Enemy_Push(int num, PLAYER* player, ENEMY* enemy,  VECTOR PushVec);
 
 	//敵を痺れさせるセッター
 	void SetEnemyParaKey(int num) {
@@ -63,10 +63,9 @@ public:
 	bool c_MoveKey[ENEMY_MAX];//ステージ内の敵の動きを管理 true:動いている false:止まっている
 	
 	int c_EnemyState[ENEMY_MAX];//敵の状態を制御#defineに書いてます。
-	void Enemy_State(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera);//敵の状態を制御関数
+	void Enemy_State(int num, PLAYER* player, ENEMY* enemy);//敵の状態を制御関数
 	bool EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos);//enemyの判定
-	bool EnemyCheckHit2(VECTOR c_ObjPos[ENEMY_MAX]);//enemy同士の判定
-	bool EnemyCheckHit3(VECTOR c_ObjPos[ENEMY_MAX], VECTOR c_Position);//playerとenemyの判定
+
 	void debug();		//デバッグ用、用がなくなったら消します
 	void init();		//初期化
 
@@ -84,14 +83,17 @@ public:
 	
 	void Ga_Attack(int num, PLAYER* player);//がっきーの攻撃関数
 	void Ga_Move(int num, PLAYER* player);//移動関数
-	int Ga_Interval[ENEMY_MAX] = { 0,0,0 };//攻撃のインターバル60フレーム
+	int Ga_Interval[ENEMY_MAX] = { 0,0,0 };//攻撃のインターバル
+	int Ga_Debug_Interval = 90;//がっきーのインターバル数
 
 	void A_Move(int num);//アスカの移動関数
 	void A_Attack(int num, PLAYER* player);//アスカの攻撃関数
+	int A_Debug_Interval = 90;//アスカのインターバル数
 	//攻撃のインターバルはがっきーのGa_Intervalを使います
 
 	void San_Move(int num);//サングラスの移動関数
 	void San_Attack(int num, PLAYER* player);//サングラスの攻撃関数
+	int San_Debug_Interval = 40;//サングラスのインターバル数
 	//攻撃のインターバルはがっきーのGa_Intervalを使います
 
 	void Bot_Normal(int num, PLAYER* player);//従来の敵ジャニーズ君

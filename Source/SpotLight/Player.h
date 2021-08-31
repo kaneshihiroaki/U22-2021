@@ -31,8 +31,8 @@ public:
 	}
 
 	void Player_Controller();
-	void Player_Move( PLAYER* player, ENEMY* ene, CAMERA* camera );
-	bool Player_Push(PLAYER* player, ENEMY* enemy, CAMERA* camera, VECTOR PushVec);
+	void Player_Move( PLAYER* player, ENEMY* ene);
+	bool Player_Push(PLAYER* player, ENEMY* enemy,  VECTOR PushVec);
 	bool CheckHit(VECTOR Player, VECTOR LightPos);
 	void init();	//èâä˙âª
 

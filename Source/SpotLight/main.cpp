@@ -249,14 +249,14 @@ void MAIN::Game_Main() {
 
 		if (!Collision_Player) {
 			for (int i = 0; i < ENEMY_MAX; i++) {
-				c_enemy->Enemy_State(i, c_player,c_enemy, c_camera);
+				c_enemy->Enemy_State(i, c_player,c_enemy);
 			}
 			//c_enemy->Enemy_Creat();
 		}
 
 		//プレイヤーの表示と動きの制御
 		//c_player->Player_Controller();
-		c_player->Player_Move(c_player, c_enemy,c_camera);
+		c_player->Player_Move(c_player, c_enemy);
 
 		//c_camera->Camera_Control(c_stage);
 

@@ -244,7 +244,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 	}
 }
 
-void PLAYER::Player_Move(PLAYER* player,ENEMY* ene, CAMERA* camera)
+void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 {
 	//移動場所の確認
 	VECTOR TempRotVector;
@@ -392,7 +392,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene, CAMERA* camera)
 				if (ene->CheckPara(i) == false) {
 					c_MoveFlag = false;
 				}
-				else if ((ene->Enemy_Push(i, player,ene,camera, c_TempMoveVector)) == false) {//falseなら動かせなかった。
+				else if ((ene->Enemy_Push(i, player,ene, c_TempMoveVector)) == false) {//falseなら動かせなかった。
 					c_MoveFlag = false;
 				}
 			}
@@ -428,7 +428,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene, CAMERA* camera)
 	}
 }
 
-bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy, CAMERA* camera,  VECTOR PushVec)
+bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy,   VECTOR PushVec)
 {
 	//しびれているかどうか。しびれていないならfalseで帰る
 	if (Damage.s_paralyzeKey == false) {
@@ -452,7 +452,7 @@ bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy, CAMERA* camera,  VECTOR P
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), enemy->c_ObjPos[i], 55) == true) {
 				c_MoveFlag = false;
-				if (enemy->Enemy_Push(i, player, enemy, camera, c_TempMoveVector) == false) {//falseなら動かせなかった
+				if (enemy->Enemy_Push(i, player, enemy, c_TempMoveVector) == false) {//falseなら動かせなかった
 					c_MoveFlag = false;
 				}
 			}

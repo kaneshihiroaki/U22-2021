@@ -105,7 +105,7 @@ void ENEMY::debug() {
 	//printfDx("%d\n", GetEnemyMoveKey(2));
 }
 
-void ENEMY::Enemy_State(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera) {
+void ENEMY::Enemy_State(int num, PLAYER* player, ENEMY* enemy) {
 	if (Key_Look)return;//勝敗が決したときなどに入らないようにするフラグ
 	if (num == 0) {//タイプがっきー
 		Ga_Move(num, player);
@@ -141,7 +141,7 @@ void ENEMY::Enemy_State(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera) {
 		}
 		break;
 	case ENEMY_MOVE:
-		Enemy_Move(num, player, enemy,camera);
+		Enemy_Move(num, player, enemy);
 		if (Debug_Enemy) {
 			DrawFormatString(1100, 420 + 20 * num, 0xFFFFFF, "%d MOVE\n", num);
 		}
@@ -168,7 +168,7 @@ void ENEMY::Enemy_State(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera) {
 	}
 }
 
-void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera)
+void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 {
 	int p_Enemy_MoveAng = 0;//エネミーの向かう角度
 	//移動してるかどうか
@@ -362,19 +362,19 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera)
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
 			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-				if (Enemy_Push(i, player,enemy,camera, c_TempMoveVector[num]) == false) {//falseなら動かせなかった
+				if (Enemy_Push(i, player,enemy, c_TempMoveVector[num]) == false) {//falseなら動かせなかった
 					VECTOR Reserve_Vect = c_TempMoveVector[num];//X座標を0にしてみる
 
 					float Reserve = Reserve_Vect.x;//X座標を0にしてみる
 					Reserve_Vect.x = 0.0f;//
 					
 					if (Coefficient!=1.0f) {
-						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) && (Enemy_Push(i, player, enemy, camera, Reserve_Vect) == false)) {
+						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) && (Enemy_Push(i, player, enemy,  Reserve_Vect) == false)) {
 							Reserve_Vect.x = Reserve;//
 							Reserve = Reserve_Vect.z;//
 							Reserve_Vect.z = 0.0f;//
 							if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-								if (Enemy_Push(i, player,enemy, camera, Reserve_Vect) == false) {//falseなら動かせなかった
+								if (Enemy_Push(i, player,enemy, Reserve_Vect) == false) {//falseなら動かせなかった
 									c_MoveFlag = false;
 								}
 							}
@@ -394,19 +394,19 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera)
 			}
 		}
 		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-			if (player->Player_Push(player,enemy,camera,c_TempMoveVector[num]) == false) {//falseなら動かせなかった
+			if (player->Player_Push(player,enemy,c_TempMoveVector[num]) == false) {//falseなら動かせなかった
 				VECTOR Reserve_Vect = c_TempMoveVector[num];//X座標を0にしてみる
 
 				float Reserve = Reserve_Vect.x;//X座標を0にしてみる
 				Reserve_Vect.x = 0.0f;//
 				if (Coefficient != 1.0) {
-					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true && player->Player_Push(player, enemy, camera, Reserve_Vect) == false) {//falseなら動かせなかった
+					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true && player->Player_Push(player, enemy,  Reserve_Vect) == false) {//falseなら動かせなかった
 
 						Reserve_Vect.x = Reserve;//
 						Reserve = Reserve_Vect.z;//
 						Reserve_Vect.z = 0.0f;//
 						if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-							if (player->Player_Push(player, enemy, camera, Reserve_Vect) == false) {//falseなら動かせなかった
+							if (player->Player_Push(player, enemy, Reserve_Vect) == false) {//falseなら動かせなかった
 								c_MoveFlag = false;
 							}
 						}
@@ -445,7 +445,7 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera)
 
 
 //numは押される側
-bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera, VECTOR PushVec)
+bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, VECTOR PushVec)
 {
 	//しびれているかどうか。しびれていないならfalseで帰る
 	if (Damage[num].s_paralyzeKey == false) {
@@ -478,13 +478,13 @@ bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, CAMERA* camera, VE
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
 			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-				if (Enemy_Push(i, player, enemy, camera, c_TempMoveVector[num]) == false) {//falseなら動かせなかった
+				if (Enemy_Push(i, player, enemy,  c_TempMoveVector[num]) == false) {//falseなら動かせなかった
 					c_MoveFlag = false;
 				}
 			}
 		}
 		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-			if (player->Player_Push(player, enemy, camera, c_TempMoveVector[num]) == false) {//falseなら動かせなかった
+			if (player->Player_Push(player, enemy,  c_TempMoveVector[num]) == false) {//falseなら動かせなかった
 				c_MoveFlag = false;
 			}
 		}
@@ -765,7 +765,7 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 		//自分の前方をみる
 		if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], c_Rotation[i], 30, 96, 105, 55) == true) {
 
-			Ga_Interval[num] = 60;//攻撃のインターバル60フレーム
+			Ga_Interval[num] = Ga_Debug_Interval;//攻撃のインターバル60フレーム
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -790,7 +790,7 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 				c_Rotation[num].y = 0.0f;
 			}
 
-			Ga_Interval[num] = 60;//攻撃のインターバル60フレーム
+			Ga_Interval[num] = Ga_Debug_Interval;//攻撃のインターバル60フレーム
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -800,7 +800,7 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 	//プレイヤーが自分の周りにいるかどうか判定
 	//自分の前方をみる
 	if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], player->c_Position, 30, 150, 105, 55) == true) {
-		Ga_Interval[num] = 60;//攻撃のインターバル60フレー
+		Ga_Interval[num] = Ga_Debug_Interval;//攻撃のインターバル60フレー
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
@@ -824,7 +824,7 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 			c_Rotation[num].y = 0.0f;
 		}
 
-		Ga_Interval[num] = 60;//攻撃のインターバル60フレー
+		Ga_Interval[num] = Ga_Debug_Interval;//攻撃のインターバル60フレー
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
@@ -920,7 +920,7 @@ void ENEMY::A_Attack(int num, PLAYER* player) {
 				c_Rotation[num].y = 0.0f;
 			}
 
-			Ga_Interval[num] = 60;//攻撃のインターバル60フレーム
+			Ga_Interval[num] = A_Debug_Interval;//攻撃のインターバル60フレーム
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -947,7 +947,7 @@ void ENEMY::A_Attack(int num, PLAYER* player) {
 			c_Rotation[num].y = 0.0f;
 		}
 
-		Ga_Interval[num] = 60;//攻撃のインターバル60フレー
+		Ga_Interval[num] = A_Debug_Interval;//攻撃のインターバル60フレー
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
@@ -988,7 +988,7 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 		//自分の前方をみる
 		if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], c_Rotation[i], 30, 96, 105, 55) == true) {
 
-			Ga_Interval[num] = 10;//攻撃のインターバル60フレーム
+			Ga_Interval[num] = San_Debug_Interval;//攻撃のインターバル10フレーム
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -1013,7 +1013,7 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 				c_Rotation[num].y = 0.0f;
 			}
 
-			Ga_Interval[num] = 10;//攻撃のインターバル10フレーム
+			Ga_Interval[num] = San_Debug_Interval;//攻撃のインターバル10フレーム
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -1023,7 +1023,7 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 	//プレイヤーが自分の周りにいるかどうか判定
 	//自分の前方をみる
 	if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], player->c_Position, 30, 150, 105, 55) == true) {
-		Ga_Interval[num] = 10;//攻撃のインターバル60フレー
+		Ga_Interval[num] = San_Debug_Interval;//攻撃のインターバル10フレー
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
@@ -1047,7 +1047,7 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 			c_Rotation[num].y = 0.0f;
 		}
 
-		Ga_Interval[num] = 10;//攻撃のインターバル60フレー
+		Ga_Interval[num] = San_Debug_Interval;//攻撃のインターバル10フレー
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
