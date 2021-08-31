@@ -18,6 +18,8 @@ int PointLightHandle;
 int DirLightHandle;
 float DrawX = 0.0f;
 float DrawZ = 0.0f;
+float DrawX2 = 0.0f;
+float DrawZ2 = 0.0f;
 
 int time = 600;
 int count;
@@ -149,10 +151,10 @@ void Light_init() {
 void Light()
 {
 	Point_t
-		cp1 = { 0,0, 0, distance / 2, -180, distance / 2 },
-		cp2 = { 0,0, 0, -distance / 2, -180, distance / 2 },
-		cp3 = { 0,0, distance / 2, 0, -180, distance / 2 },
-		cp4 = { 0,0, -distance / 2, 0, -180, distance / 2 };
+		cp1 = { 0,dis[rc].z, 0, distance, -180, distance / 2 },
+		cp2 = { 0,dis[rc].z, 0, -distance, -180, distance / 2 },
+		cp3 = { dis[rc].x,0, distance, 0, -180, distance / 2 },
+		cp4 = { dis[rc].x,0, -distance, 0, -180, distance / 2 };
 
 	//10秒経過したら方向転換
 	if (time < 600) {
@@ -188,36 +190,28 @@ void Light()
 
 	if (WaitTime == 1 && count < 6) {
 		if (count == rc - 3) {
-			cp1.x += cp1.ox + sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
-			cp1.z += cp1.oz + -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range;
-			LightRotateAngle += 1.2f;
+			LightRotateAngle += 0.9f;
 			LightRotateAngle2 += 1.5f;
-			DrawX = cp1.x;
-			DrawZ = cp1.z;
+			DrawX = cp1.x+ sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
+			DrawZ = cp1.z+ -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range;
 		}
 		else if (count == rc + 3) {
-			cp2.x += cp2.ox + sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
-			cp2.z += cp2.oz + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range;
-			LightRotateAngle += 1.2f;
+			LightRotateAngle += 0.9f;
 			LightRotateAngle2 += 1.5f;
-			DrawX = cp2.x;
-			DrawZ = cp2.z;
+			DrawX = cp2.x + sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
+			DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range;
 		}
 		if (count == rc + 1) {
-			cp3.x += cp3.ox + -cos(PI / cp1.T * LightRotateAngle) * cp3.Range;
-			cp3.z += cp3.oz + sin(PI / cp1.T * LightRotateAngle2) * cp3.Range;
 			LightRotateAngle += 1.5f;
-			LightRotateAngle2 += 1.2f;
-			DrawX = cp3.x;
-			DrawZ = cp3.z;
+			LightRotateAngle2 += 0.9f;
+			DrawX = cp3.x + -cos(PI / cp1.T * LightRotateAngle) * cp3.Range;
+			DrawZ = cp3.z + sin(PI / cp1.T * LightRotateAngle2) * cp3.Range;
 		}
 		else if (count == rc - 1) {
-			cp4.x += cp4.ox + cos(PI / cp4.T * LightRotateAngle) * cp4.Range;
-			cp4.z += cp4.oz + sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
 			LightRotateAngle += 1.5f;
-			LightRotateAngle2 += 1.2f;
-			DrawX = cp4.x;
-			DrawZ = cp4.z;
+			LightRotateAngle2 += 0.9f;
+			DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range;
+			DrawZ = cp4.z + sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
 		}
 	}
 
@@ -233,5 +227,4 @@ void Light()
 	//10カウント表示
 	SetFontSize(100);
 	DrawFormatString(500, 10, 0x25525000, "%d", time / 60);
-	DrawFormatString(500, 100, 0x25525000, "%d", count);
 }
