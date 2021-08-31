@@ -4,6 +4,13 @@
 #define SCREEN_HEIGHT 700
 #define SCREEN_WIDTH 1280
 
+#define NO_NAME 0
+
+#define ENEMY1_NAME 1
+#define ENEMY2_NAME 2
+#define ENEMY3_NAME 3
+
+#define PLAYER_NAME 4
 
 void GameInit();
 void GameMain();
@@ -15,15 +22,16 @@ class PLAYER;
 class STAGE;
 class ENEMY;
 
-extern int judge_count;
+extern int Number_count;
 extern int win_timer;//勝利を表示し続けるカウント
 extern bool player_win;
 extern bool enemy_win;
 
-extern int judge_count2;//プレイヤーがスポットライトに入ったら数える
-extern int judge_count3;//敵がスポットライトに入ったら数える
+extern int Time_IN_count;//敵がスポットライトに入ったら数える
 extern bool player_judge;//プレイヤーがスポットライトに入ったときのflg
 extern bool enemy_judge;//敵がスポットライトに入ったら入ったときのflg
+extern int Win_NameOld;//誰がスポットライトに入っていたか#defineで数字管理
+extern int Win_NameNow;//誰がスポットライトに入っていたか#defineで数字管理
 
 class MAIN 
 {

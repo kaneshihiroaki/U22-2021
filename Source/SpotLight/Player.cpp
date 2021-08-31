@@ -31,6 +31,8 @@ PLAYER::PLAYER()
 
 	// ３Ｄモデルの読み込み
 	c_PlayerModel = MV1LoadModel("Model/Player3.mv1");
+	c_WinPlayerModel = MV1LoadModel("Model/Player4.mv1");
+	
 	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
 
 	//c_enemyCol = new ENEMY();
@@ -58,18 +60,31 @@ void PLAYER::init() {
 	c_StmCount = 600;		//プレイヤーの体力
 
 	c_Acc = 0.0f;
+
+	c_Player_win = false;
+	MV1SetScale(c_PlayerModel, c_AddPosPlay);
+	MV1SetScale(c_WinPlayerModel, c_AddPosPlay);
 }
 
 void PLAYER::Player_Controller() {
 	//プレイヤー
 	// 画面に映る位置に３Ｄモデルを移動
-	MV1SetPosition(c_PlayerModel, c_Position);
-	MV1SetRotationXYZ(c_PlayerModel, c_Rotation);
-	MV1SetScale(c_PlayerModel, c_AddPosPlay);
+	
+	
 
 	if (!Collision_Player) {
 		if (Damage.s_ParaTime % 20 < 10 || Key_Look) {//0~9までは描画10~19までは描画しない
-			MV1DrawModel(c_PlayerModel);			 //プレイヤーのモデル描画
+			if (c_Player_win) {
+				MV1SetPosition(c_WinPlayerModel, c_Position);
+				MV1SetRotationXYZ(c_WinPlayerModel, c_Rotation);
+				MV1DrawModel(c_WinPlayerModel);			 //プレイヤーのモデル描画
+			}
+			else {
+				MV1SetPosition(c_PlayerModel, c_Position);
+				MV1SetRotationXYZ(c_PlayerModel, c_Rotation);
+				MV1DrawModel(c_PlayerModel);			 //プレイヤーのモデル描画
+			}
+			
 		}
 	}
 
@@ -392,7 +407,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 				if (ene->CheckPara(i) == false) {
 					c_MoveFlag = false;
 				}
-				else if ((ene->Enemy_Push(i, player,ene, c_TempMoveVector)) == false) {//falseなら動かせなかった。
+				else if ((ene->Enemy_Push(i, player,ene, c_TempMoveVector,0)) == false) {//falseなら動かせなかった。
 					c_MoveFlag = false;
 				}
 			}
@@ -428,10 +443,10 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 	}
 }
 
-bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy,   VECTOR PushVec)
+bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy,   VECTOR PushVec,int count)
 {
 	//しびれているかどうか。しびれていないならfalseで帰る
-	if (Damage.s_paralyzeKey == false) {
+	if (Damage.s_paralyzeKey == false||count>2) {
 		return false;
 	}
 
@@ -452,7 +467,7 @@ bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy,   VECTOR PushVec)
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), enemy->c_ObjPos[i], 55) == true) {
 				c_MoveFlag = false;
-				if (enemy->Enemy_Push(i, player, enemy, c_TempMoveVector) == false) {//falseなら動かせなかった
+				if (enemy->Enemy_Push(i, player, enemy, c_TempMoveVector,count+1) == false) {//falseなら動かせなかった
 					c_MoveFlag = false;
 				}
 			}
@@ -545,11 +560,13 @@ bool PLAYER::CheckHit(VECTOR c_Position, VECTOR LightPos) {
 
 	/*DrawSphere3D(Player,10.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 	DrawSphere3D(Light,70.0f, 32, GetColor(255,0, 255), GetColor(255, 255, 255), TRUE);*/
-
+	c_Player_win = false;
 	// playerとlightの当たり判定( TRUE:当たっている FALSE:当たっていない )
-	if (cr <= lr2 && LightFlg == false) {
-		
-		c_MoveFlag = false;
+	if (cr <= lr2) {
+		c_Player_win = true;
+		if (LightFlg == false) {
+			c_MoveFlag = false;
+		}
 		return true;
 	}
 

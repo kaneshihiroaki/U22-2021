@@ -21,6 +21,7 @@ public:
 	~PLAYER();
 
 	int c_PlayerModel;	//プレイヤーのインポート用変数
+	int c_WinPlayerModel;	//プレイヤーのインポート用変数
 	VECTOR c_AddPosPlay;	//プレイヤーの大きさ
 	VECTOR c_Rotation;		//プレイヤーの回転
 	VECTOR c_Position;	//プレイヤーの位置
@@ -32,7 +33,7 @@ public:
 
 	void Player_Controller();
 	void Player_Move( PLAYER* player, ENEMY* ene);
-	bool Player_Push(PLAYER* player, ENEMY* enemy,  VECTOR PushVec);
+	bool Player_Push(PLAYER* player, ENEMY* enemy,  VECTOR PushVec, int count);
 	bool CheckHit(VECTOR Player, VECTOR LightPos);
 	void init();	//初期化
 
@@ -73,6 +74,7 @@ private:
 	VECTOR c_MoveVector;	//移動変数
 	VECTOR c_TempMoveVector; //移動先を計算する変数
 
+	bool c_Player_win = false;//プレイヤーがスポットライトに入っているときモデルを変更するようの変数
 
 	const float c_movespeed = 7.0f;	//プレイヤー移動スピード
 	float c_Acc;	//加速を制御

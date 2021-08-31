@@ -28,10 +28,12 @@ ENEMY::ENEMY()
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (i == 0) {
 			c_EnemyModel[i] = MV1LoadModel("Model/EnMe3.mv1");
+			c_WinEnemyModel[i] = MV1LoadModel("Model/EnMe4.mv1");
 		}
 		else {
 //			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
 			c_EnemyModel[i] = MV1LoadModel("Model/EnMe3.mv1");
+			c_WinEnemyModel[i] = MV1LoadModel("Model/EnMe4.mv1");
 		}
 		
 		//c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
@@ -73,6 +75,7 @@ void ENEMY::init() {
 		c_EnemySpeed[i] = 0.0f;//エネミーのスピード
 		c_EnemyState[i] = ENEMY_IDLE;//エネミーの初期状態
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
+		MV1SetScale(c_WinEnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
 
 		c_EnemyAddVect[i] = VGet(0.0f, 0.0f, 0.0f);//追い越す処理のときに加算するベクトルを保存
 		c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
@@ -89,10 +92,17 @@ void ENEMY::init() {
 
 void ENEMY::Enemy_Creat() {
 	for (int i = 0; i < ENEMY_MAX; i++) {
-		MV1SetPosition(c_EnemyModel[i], c_ObjPos[i]);//エネミーの移動後位置をいれてる
-		MV1SetRotationXYZ(c_EnemyModel[i], c_Rotation[i]);//エネミーの角度をいれている
 		if (Damage[i].s_ParaTime%20<10 || Key_Look) {//0~9までは描画10~19までは描画しない。決着後消えるのはおかしいので表示する
-			MV1DrawModel(c_EnemyModel[i]);				 //エネミーのモデル描画
+			if (c_EnemyWin[i]) {//勝利判定しているとき
+				MV1SetPosition(c_WinEnemyModel[i], c_ObjPos[i]);//エネミーの移動後位置をいれてる
+				MV1SetRotationXYZ(c_WinEnemyModel[i], c_Rotation[i]);//エネミーの角度をいれている
+				MV1DrawModel(c_WinEnemyModel[i]);				 //エネミーのモデル描画
+			}
+			else {
+				MV1SetPosition(c_EnemyModel[i], c_ObjPos[i]);//エネミーの移動後位置をいれてる
+				MV1SetRotationXYZ(c_EnemyModel[i], c_Rotation[i]);//エネミーの角度をいれている
+				MV1DrawModel(c_EnemyModel[i]);				 //エネミーのモデル描画
+			}
 		}
 	}
 	//オブジェクト描画
@@ -159,13 +169,15 @@ void ENEMY::Enemy_State(int num, PLAYER* player, ENEMY* enemy) {
 			DrawFormatString(1100, 520 + 20 * num, 0xFFFFFF, "%d False\n", num);
 		}
 		DrawFormatString(500, 520 + 20 * num, 0xFFFFFF, "x:%lf y:%lf z:%lf\n", c_ObjPos[num].x, c_ObjPos[num].y, c_ObjPos[num].z);
-		if (c_MoveKey[num]) {
+		if (c_EnemyWin[num]) {
 			DrawFormatString(100, 520 + 20 * num, 0xFFFFFF, "true\n");
 		}
 		else {
 			DrawFormatString(100, 520 + 20 * num, 0xFFFFFF, "false\n");
 		}
+		
 	}
+	
 }
 
 void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
@@ -362,19 +374,19 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
 			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-				if (Enemy_Push(i, player,enemy, c_TempMoveVector[num]) == false) {//falseなら動かせなかった
+				if (Enemy_Push(i, player,enemy, c_TempMoveVector[num], 0) == false) {//falseなら動かせなかった
 					VECTOR Reserve_Vect = c_TempMoveVector[num];//X座標を0にしてみる
 
 					float Reserve = Reserve_Vect.x;//X座標を0にしてみる
 					Reserve_Vect.x = 0.0f;//
 					
 					if (Coefficient!=1.0f) {
-						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) && (Enemy_Push(i, player, enemy,  Reserve_Vect) == false)) {
+						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) && (Enemy_Push(i, player, enemy,  Reserve_Vect,0) == false)) {
 							Reserve_Vect.x = Reserve;//
 							Reserve = Reserve_Vect.z;//
 							Reserve_Vect.z = 0.0f;//
 							if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-								if (Enemy_Push(i, player,enemy, Reserve_Vect) == false) {//falseなら動かせなかった
+								if (Enemy_Push(i, player,enemy, Reserve_Vect, 0) == false) {//falseなら動かせなかった
 									c_MoveFlag = false;
 								}
 							}
@@ -394,19 +406,19 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 			}
 		}
 		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-			if (player->Player_Push(player,enemy,c_TempMoveVector[num]) == false) {//falseなら動かせなかった
+			if (player->Player_Push(player,enemy,c_TempMoveVector[num], 0) == false) {//falseなら動かせなかった
 				VECTOR Reserve_Vect = c_TempMoveVector[num];//X座標を0にしてみる
 
 				float Reserve = Reserve_Vect.x;//X座標を0にしてみる
 				Reserve_Vect.x = 0.0f;//
 				if (Coefficient != 1.0) {
-					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true && player->Player_Push(player, enemy,  Reserve_Vect) == false) {//falseなら動かせなかった
+					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true && player->Player_Push(player, enemy,  Reserve_Vect, 0) == false) {//falseなら動かせなかった
 
 						Reserve_Vect.x = Reserve;//
 						Reserve = Reserve_Vect.z;//
 						Reserve_Vect.z = 0.0f;//
 						if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-							if (player->Player_Push(player, enemy, Reserve_Vect) == false) {//falseなら動かせなかった
+							if (player->Player_Push(player, enemy, Reserve_Vect, 0) == false) {//falseなら動かせなかった
 								c_MoveFlag = false;
 							}
 						}
@@ -445,10 +457,10 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 
 
 //numは押される側
-bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, VECTOR PushVec)
+bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, VECTOR PushVec,int count)
 {
-	//しびれているかどうか。しびれていないならfalseで帰る
-	if (Damage[num].s_paralyzeKey == false) {
+	//しびれているかどうか。しびれていないならfalseで帰るまたはカウントが3回目以上ならfalseでかえるオーバーフロー対策
+	if (Damage[num].s_paralyzeKey == false||count>2) {
 		return false;
 	}
 
@@ -478,13 +490,13 @@ bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, VECTOR PushVec)
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
 			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-				if (Enemy_Push(i, player, enemy,  c_TempMoveVector[num]) == false) {//falseなら動かせなかった
+				if (Enemy_Push(i, player, enemy,  c_TempMoveVector[num],count+1) == false) {//falseなら動かせなかった
 					c_MoveFlag = false;
 				}
 			}
 		}
 		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-			if (player->Player_Push(player, enemy,  c_TempMoveVector[num]) == false) {//falseなら動かせなかった
+			if (player->Player_Push(player, enemy,  c_TempMoveVector[num], count + 1) == false) {//falseなら動かせなかった
 				c_MoveFlag = false;
 			}
 		}
@@ -681,7 +693,7 @@ void ENEMY::Enemy_Paralyze(int num) {
 }
 
 
-bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
+int ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 	int Win_Count = 0;
 
 	for (int i = 0; i < ENEMY_MAX; i++) {
@@ -694,31 +706,26 @@ bool ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 		float elr2 = (elr * elr);
 		//DrawSphere3D(c_ObjPos[i], 10.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 		// enemyとlightの当たり判定
-		if (er <= elr2 && LightFlg == false) {
+		if (er <= elr2) {
 			c_EnemyWin[i] = true;
 			Win_Count++;
-			if (i == 0) {
-				ENEMY_WIN = 1;
-			}
-			if (i == 1) {
-				ENEMY_WIN = 2;
-			}
-			if (i == 2) {
-				ENEMY_WIN = 3;
+			if (LightFlg == false) {
+				if (i == 0) {
+					ENEMY_WIN = 1;
+				}
+				else if (i == 1) {
+					ENEMY_WIN = 2;
+				}
+				else if (i == 2) {
+					ENEMY_WIN = 3;
+				}
 			}
 		}
 
 	}
 
-	if (Win_Count > 0) {//1人以上勝利判定入っている
-		return true;
-	}
-	else {
-		return false;
-	}
-
-
-	return false;
+	return Win_Count;
+	
 
 	/*SetFontSize(20);
 	DrawFormatString(10, 100, 0x888888, "x:%f", Player.x);

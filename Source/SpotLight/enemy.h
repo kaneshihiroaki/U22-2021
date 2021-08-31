@@ -32,6 +32,7 @@ public:
 	VECTOR c_Rotation[ENEMY_MAX];		//エネミーの回転rad = 度*π/180
 	int c_Enemy_MoveAng[ENEMY_MAX];		//エネミーの現在の角度をいれる変数0~359
 	int c_EnemyModel[ENEMY_MAX];	//エネミーのインポート用変数
+	int c_WinEnemyModel[ENEMY_MAX];	//勝利エネミーのインポート用変数
 
 
 	VECTOR c_EnemyAddVect[ENEMY_MAX];//15フレの間横にベクトルを加えるようにする
@@ -45,7 +46,7 @@ public:
 
 	void Enemy_Creat();
 	void Enemy_Move(int num, PLAYER* player, ENEMY* enemy);
-	bool Enemy_Push(int num, PLAYER* player, ENEMY* enemy,  VECTOR PushVec);
+	bool Enemy_Push(int num, PLAYER* player, ENEMY* enemy,  VECTOR PushVec,int count);
 
 	//敵を痺れさせるセッター
 	void SetEnemyParaKey(int num) {
@@ -64,7 +65,7 @@ public:
 	
 	int c_EnemyState[ENEMY_MAX];//敵の状態を制御#defineに書いてます。
 	void Enemy_State(int num, PLAYER* player, ENEMY* enemy);//敵の状態を制御関数
-	bool EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos);//enemyの判定
+	int EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos);//enemyの判定
 
 	void debug();		//デバッグ用、用がなくなったら消します
 	void init();		//初期化
