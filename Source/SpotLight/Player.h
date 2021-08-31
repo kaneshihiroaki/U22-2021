@@ -74,7 +74,7 @@ private:
 	VECTOR c_TempMoveVector; //移動先を計算する変数
 
 
-	const float c_movespeed = 10.0f;	//プレイヤー移動スピード
+	const float c_movespeed = 7.0f;	//プレイヤー移動スピード
 	float c_Acc;	//加速を制御
 
 		//痺れ（ダメージ関連）
@@ -82,7 +82,7 @@ private:
 	{
 		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
 		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
-		const int s_MaxTimeParalyze = 60;		//プレイヤーが痺れている時間
+		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
 	}; Damage Damage;
 
 	struct Attack {
@@ -96,7 +96,7 @@ private:
 		float s_RotCos = 0.0f;
 		float s_Posx = 0.0f;
 		float s_Posz = 0.0f;
-		const float s_width = 80.0f;
+		const float s_width = 100.0f;
 		const float s_heigt = 100.0f;
 
 		//攻撃速度(終了地点)

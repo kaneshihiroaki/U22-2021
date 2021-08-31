@@ -552,6 +552,9 @@ void MAIN::Game_Result() {
 	//}
 
 	SetFontSize(50);
+
+	//ポイントライトの初期値を設定
+	SetLightPositionHandle(PointLightHandle, VGet(80.0f, 1550.0f, -1200.0f));
 	//2秒待って勝者を映す
 	if (c_resultdispTime++ >= c_resultdispMaxTime) {
 		if (c_OnePass == false) {
@@ -563,7 +566,7 @@ void MAIN::Game_Result() {
 		SetLightPositionHandle(SpotLightHandle, VGet(80.0f, 1450.0f, -1200.0f));
 
 		//ポイントライトの初期値を設定
-		SetLightPositionHandle(PointLightHandle, VGet(80.0f, 1550.0f, -1200.0f));
+		//SetLightPositionHandle(PointLightHandle, VGet(80.0f, 1550.0f, -1200.0f));
 		switch (c_VictorNum)
 		{
 		case 0:
