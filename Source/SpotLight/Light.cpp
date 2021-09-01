@@ -30,6 +30,8 @@ int WaitTime = 0;
 
 bool LightFlg;
 
+bool g_DispTime;	//スポットライトが動いているときだけ時間を表示　true：表示　false:非表示
+
 VECTOR dis[6];
 VECTOR LightPos;
 VECTOR LightPos2;
@@ -149,6 +151,10 @@ void Light_init() {
 }
 void Light()
 {
+	//10カウント表示
+	SetFontSize(100);
+	if (g_DispTime == true)DrawFormatString(550, 10, 0xffff00, "%d", time / 60);
+
 	Point_t
 		cp1 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
 		cp2 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
@@ -165,6 +171,7 @@ void Light()
 		LightFlg = false;
 		//finish = false;
 		round_count++;
+		g_DispTime = false;
 		StopSoundMem(drum);
 		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
 	}
@@ -184,6 +191,7 @@ void Light()
 		Key_Look = false;
 		LightFlg = true;
 		judge_win = false;
+		g_DispTime = true;
 		LightRotateAngle = 0.0f;
 		LightRotateAngle2 = 0.0f;
 		if (round_count >= 6) finish = false;		//6ラウンドやったら終わる
@@ -224,8 +232,4 @@ void Light()
 
 	//ポイントライトの初期値を設定
 	SetLightPositionHandle(PointLightHandle, LightPos2);
-
-	//10カウント表示
-	SetFontSize(100);
-	DrawFormatString(600, 10, 0xffff00, "%d", time / 60);
 }
