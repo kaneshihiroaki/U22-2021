@@ -26,6 +26,10 @@ bool player_win = false;//playerがスポットライトに入った時のflg
 bool enemy_win = false;//敵がスポットライトに入った時のflg
 bool judge_win = false;
 
+bool DrawFlg;//drawcountをカウントするときのflg
+int draw_timer = 0;//drawを表示するタイマー
+int draw_count = 0;//drawを表示していい時に使う
+
 int Time_IN_count;//敵がスポットライトに入ったら数える
 bool player_judge;//プレイヤーがスポットライトに入ったときのflg
 bool enemy_judge;//敵がスポットライトに入ったら入ったときのflg
@@ -48,6 +52,7 @@ int enemy2_attack_sound;//enemy2が攻撃するときのSE
 int enemy3_attack_sound;//enemy3が攻撃するときのSE
 int damage_sound;//被弾した時のSE
 int cursor_sound;//カーソルのSE
+int draw_sound;//引き分けのSE
 
 int BGM_flg;//BGMをとめるflg;
 int Enemy_Sound_flg;//enemyの攻撃音をとめるflg;//true:止める false:止めない
@@ -113,6 +118,8 @@ void MAIN::Game_init() {
 	win_timer = 0;
 	WaitTime = 0;
 	round_count = 0;
+	
+
 
 	//ゲーム開始の演出関連変数初期化
 	c_ready = false;
@@ -126,6 +133,11 @@ void MAIN::Game_init() {
 	Lose = false;
 	GameJudge = false;
 	judge_win = false;
+
+	DrawFlg = false;
+	draw_timer = 0;
+	draw_count = 0;
+
 	PLAYER_WIN_COUNT = 0;
 	ENEMY_WIN = 0;
 	ENEMY_WIN_COUNT1 = 0;
@@ -267,8 +279,30 @@ void MAIN::Game_Main() {
 			judge_win = false;
 			player_judge = false;
 			enemy_judge = false;
+			DrawFlg = false;
 			Time_IN_count = 0;//1人がスポットライトに何秒入っているかどうか
 			Win_NameOld = NO_NAME;
+		}
+
+		if (LightFlg == false && time >= 598) {
+			if (DrawFlg == false) {
+				draw_count++;
+				DrawFlg = true;
+			}
+			draw_timer = (draw_timer + 1) % 121;
+			time = 599;
+			if (draw_count >= 2 && draw_timer < 119) {
+				if (CheckSoundMem(draw_sound) == 0) {
+					PlaySoundMem(draw_sound, DX_PLAYTYPE_BACK);
+				}
+				Key_Look = true;
+				SetFontSize(100);
+				DrawString(520, 140, "Draw", GetColor(0xff, 0xff, 0x00));
+			}
+			else if (draw_timer >= 120) {
+				time = 600;
+				draw_timer = 0;
+			}
 		}
 
 		
@@ -682,6 +716,7 @@ int MAIN::LoadSound() {
 	if ((enemy3_attack_sound = LoadSoundMem("GameSound/enemy3.mp3")) == -1)return -1;
 	if ((damage_sound = LoadSoundMem("GameSound/damage.mp3")) == -1)return-1;
 	if ((cursor_sound = LoadSoundMem("GameSound/cursor.mp3")) == -1)return-1;
+	if ((draw_sound = LoadSoundMem("GameSound/draw.mp3")) == -1)return-1;
 	//音量調整
 	// BGM
 	ChangeVolumeSoundMem(100, bgm_title);
@@ -698,6 +733,7 @@ int MAIN::LoadSound() {
 	ChangeVolumeSoundMem(80, enemy3_attack_sound);
 	ChangeVolumeSoundMem(80, damage_sound);
 	ChangeVolumeSoundMem(80, cursor_sound);
+	ChangeVolumeSoundMem(80, draw_sound);
 
 	return 0;
 }

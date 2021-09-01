@@ -27,6 +27,11 @@ extern int win_timer;//勝利を表示し続けるカウント
 extern bool player_win;
 extern bool enemy_win;
 
+extern bool DrawFlg;//drawcountをカウントするときのflg
+extern int draw_timer;//drawを表示し続ける秒数
+extern int draw_count;//drawを表示していい時に使うカウント
+
+
 extern int Time_IN_count;//敵がスポットライトに入ったら数える
 extern bool player_judge;//プレイヤーがスポットライトに入ったときのflg
 extern bool enemy_judge;//敵がスポットライトに入ったら入ったときのflg

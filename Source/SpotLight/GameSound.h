@@ -15,7 +15,7 @@ extern  int enemy2_attack_sound;//enemy2‚ªUŒ‚‚·‚é‚Æ‚«‚ÌSE
 extern  int enemy3_attack_sound;//enemy3‚ªUŒ‚‚·‚é‚Æ‚«‚ÌSE
 extern  int damage_sound;//”í’e‚µ‚½‚ÌSE
 extern  int cursor_sound;//ƒJ[ƒ\ƒ‹‚ÌSE
-
+extern  int draw_sound;//ˆø‚«•ª‚¯‚ÌSE
 
 extern  int BGM_flg;//BGM‚ğ‚Æ‚ß‚éflg;
 extern  int Enemy_Sound_flg;//enemy‚ÌUŒ‚‰¹‚ğ‚Æ‚ß‚éflg;
