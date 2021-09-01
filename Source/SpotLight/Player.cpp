@@ -59,6 +59,7 @@ void PLAYER::init() {
 
 	c_StmCount = 300;		//プレイヤーの体力
 	c_StmMax = 300;		//プレイヤーの体力最大値
+	Att.s_AttackCons = 60;	//プレイヤーの攻撃時消費体力
 
 	c_Acc = 0.0f;
 
@@ -209,7 +210,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 		Att.s_Posx = c_Position.x;
 		Att.s_Posz = c_Position.z;
 		Att.s_GetOneRot = true;
-		c_StmCount -= 60;		//プレイヤーの体力
+		c_StmCount -= Att.s_AttackCons;		//プレイヤーの体力消費
 	}
 
 	//プレイヤーの前方方向取得
@@ -431,7 +432,8 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 	c_Rotation.z = 0.0f;
 	
 	//攻撃
-	if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false && Att.s_AttackStartKey == false)) {
+	if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false &&
+		Att.s_AttackStartKey == false && c_StmCount >= Att.s_AttackCons)) {
 		if (CheckSoundMem(player_attack_sound) == 0) {
 			PlaySoundMem(player_attack_sound, DX_PLAYTYPE_BACK);
 		}

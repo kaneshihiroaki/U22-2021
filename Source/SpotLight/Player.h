@@ -90,6 +90,7 @@ private:
 	struct Attack {
 		//攻撃を行うかどうか判定変数
 		bool s_AttackStartKey = false;
+		int s_AttackCons;		//プレイヤーの攻撃時消費体力
 		bool s_GetOneRot = false;
 		float s_Rang = 0.0f;	//攻撃時間(範囲)
 
