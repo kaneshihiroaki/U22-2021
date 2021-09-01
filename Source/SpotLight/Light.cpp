@@ -151,10 +151,10 @@ void Light_init() {
 void Light()
 {
 	Point_t
-		cp1 = { 0,dis[rc].z, 0, distance, -180, distance / 2 },
-		cp2 = { 0,dis[rc].z, 0, -distance, -180, distance / 2 },
-		cp3 = { dis[rc].x,0, distance, 0, -180, distance / 2 },
-		cp4 = { dis[rc].x,0, -distance, 0, -180, distance / 2 };
+		cp1 = { dis[rc].x,dis[rc].z, 0, distance, -180, distance / 2 },
+		cp2 = { dis[rc].x,dis[rc].z, 0, -distance, -180, distance / 2 },
+		cp3 = { dis[rc].x,dis[rc].z, distance, 0, -180, distance / 2 },
+		cp4 = { dis[rc].x,dis[rc].z, -distance, 0, -180, distance / 2 };
 
 	//10秒経過したら方向転換
 	if (time < 600) {
@@ -185,33 +185,47 @@ void Light()
 		Key_Look = false;
 		LightFlg = true;
 		judge_win = false;
+		LightRotateAngle = 0.0f;
+		LightRotateAngle2 = 0.0f;
 		if (round_count >= 6) finish = false;		//6ラウンドやったら終わる
 	}
 
 	if (WaitTime == 1 && count < 6) {
-		if (count == rc - 3) {
+		if (count == rc - 3) {//2にいきたい、５から
 			LightRotateAngle += 0.9f;
 			LightRotateAngle2 += 1.5f;
-			DrawX = cp1.x+ sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
-			DrawZ = cp1.z+ -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range;
+			DrawX = cp1.x+ sin(PI / cp1.T * LightRotateAngle) * cp1.Range ;
+			DrawZ = cp1.z+ -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range + cp1.Range;
+			DrawSphere3D(VGet(cp1.x, 0, cp1.z - 300.0f + cp1.Range), 55.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+			DrawSphere3D(VGet(dis[count].x, 0, dis[count].z - 300.0f), 55.0f, 32, GetColor(0, 255, 0), GetColor(255, 255, 255), TRUE);
+			DrawSphere3D(VGet(cp1.x, 0, cp1.z - 300.0f), 55.0f, 32, GetColor(0, 0, 255), GetColor(255, 255, 255), TRUE);
 		}
 		else if (count == rc + 3) {
 			LightRotateAngle += 0.9f;
 			LightRotateAngle2 += 1.5f;
 			DrawX = cp2.x + sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
-			DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range;
+			DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range - cp1.Range;
+			DrawSphere3D(VGet(cp2.x, 0, cp2.z - 300.0f - cp1.Range), 55.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+			DrawSphere3D(VGet(dis[count].x, 0, dis[count].z - 300.0f), 55.0f, 32, GetColor(0, 255, 0), GetColor(255, 255, 255), TRUE);
+			DrawSphere3D(VGet(cp2.x, 0, cp2.z - 300.0f), 55.0f, 32, GetColor(0, 0, 255), GetColor(255, 255, 255), TRUE);
 		}
 		if (count == rc + 1) {
 			LightRotateAngle += 1.5f;
 			LightRotateAngle2 += 0.9f;
-			DrawX = cp3.x + -cos(PI / cp1.T * LightRotateAngle) * cp3.Range;
+			DrawX = cp3.x + -cos(PI / cp1.T * LightRotateAngle) * cp3.Range+ cp1.Range;
 			DrawZ = cp3.z + sin(PI / cp1.T * LightRotateAngle2) * cp3.Range;
+			DrawSphere3D(VGet(cp3.x + cp1.Range, 0, cp3.z - 300.0f), 55.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+			DrawSphere3D(VGet(dis[count].x, 0, dis[count].z -300.0f), 55.0f, 32, GetColor(0, 255, 0), GetColor(255, 255, 255), TRUE);
+			DrawSphere3D(VGet(cp3.x, 0, cp3.z - 300.0f), 55.0f, 32, GetColor(0, 0, 255), GetColor(255, 255, 255), TRUE);
 		}
-		else if (count == rc - 1) {
+		else if (count == rc - 1) {//4~3 1~0
 			LightRotateAngle += 1.5f;
 			LightRotateAngle2 += 0.9f;
-			DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range;
+			DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range - cp1.Range;
 			DrawZ = cp4.z + sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
+			DrawSphere3D(VGet(cp4.x - cp1.Range, 0, cp4.z- 300.0f), 55.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+			DrawSphere3D(VGet(dis[count].x, 0, dis[count].z-300.0f), 55.0f, 32, GetColor(0, 255, 0), GetColor(255, 255, 255), TRUE);
+			DrawSphere3D(VGet(cp4.x, 0, cp4.z - 300.0f), 55.0f, 32, GetColor(0, 0, 255), GetColor(255, 255, 255), TRUE);
 		}
 	}
 
@@ -226,5 +240,12 @@ void Light()
 
 	//10カウント表示
 	SetFontSize(100);
-	DrawFormatString(500, 10, 0x25525000, "%d", time / 60);
+	DrawFormatString(500, 10, 0xffff00, "%d", time / 60);
+	/*SetFontSize(20);
+	DrawFormatString(500, 50, 0xffff00, "DrawX:%lf DrawZ:%lf",DrawX,DrawZ);
+	DrawFormatString(500, 100, 0xffff00, "%lf %lf", cp1.x,cp1.z);
+	DrawFormatString(500, 150, 0xffff00, "%lf %lf", cp2.x, cp2.z);
+	DrawFormatString(500, 200, 0xffff00, "%lf %lf", cp3.x, cp3.z);
+	DrawFormatString(500, 250, 0xffff00, "%lf %lf", cp4.x, cp4.z);
+	DrawFormatString(500, 300, 0xffff00, "緑：count:%d 青：rc:%d", count, rc);*/
 }
