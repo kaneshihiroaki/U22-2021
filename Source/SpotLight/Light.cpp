@@ -62,7 +62,7 @@ void Light_SetUp() {
 	SetUsePixelLighting(TRUE);
 
 	// スポットライトを作成する
-	SpotLightHandle = CreateSpotLightHandle(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, -1.0f, 0.0f), 0.25f, 0.5f, 2000.0f, 0.0f, 0.007f, 0.0f);
+	SpotLightHandle = CreateSpotLightHandle(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, -1.0f, 0.0f), 0.375f, 0.75f, 2000.0f, 0.0f, 0.007f, 0.0f);
 
 	// スポットライトのアンビエントカラーを黄色にする
 	SetLightAmbColorHandle(SpotLightHandle, GetColorF(15.0f, 15.0f, 0.0f, 0.0f));
