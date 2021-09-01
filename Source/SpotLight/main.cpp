@@ -238,10 +238,10 @@ void MAIN::Game_Main() {
 		PlaySoundMem(bgm_main, DX_PLAYTYPE_LOOP);
 	}
 	//オブジェクトの表示
+	c_camera->Camera_Control(c_stage);
 	c_stage->Stage_Make(c_enemy, c_player);
 	c_player->Player_Controller();
 	if (!Collision_Player)c_enemy->Enemy_Creat();
-	c_camera->Camera_Control(c_stage);
 
 	//最初にBボタンを押してゲーム開始
 	if (c_ready == true) {
