@@ -284,26 +284,26 @@ void MAIN::Game_Main() {
 			Win_NameOld = NO_NAME;
 		}
 
-		if (LightFlg == false && time >= 598) {
-			if (DrawFlg == false) {
-				draw_count++;
-				DrawFlg = true;
-			}
-			draw_timer = (draw_timer + 1) % 121;
-			time = 599;
-			if (draw_count >= 2 && draw_timer < 119) {
-				if (CheckSoundMem(draw_sound) == 0) {
-					PlaySoundMem(draw_sound, DX_PLAYTYPE_BACK);
-				}
-				Key_Look = true;
-				SetFontSize(100);
-				DrawString(520, 140, "Draw", GetColor(0xff, 0xff, 0x00));
-			}
-			else if (draw_timer >= 120) {
-				time = 600;
-				draw_timer = 0;
-			}
-		}
+
+		//if (LightFlg == false && time >= 597) {
+		//	if (DrawFlg == false) {
+		//		draw_count++;
+		//		DrawFlg = true;
+		//	}
+		//	draw_timer = (draw_timer + 1) % 121;
+		//	if (draw_count >= 2 && draw_timer < 119) {
+		//		if (CheckSoundMem(draw_sound) == 0) {
+		//			PlaySoundMem(draw_sound, DX_PLAYTYPE_BACK);
+		//		}
+		//		Key_Look = true;
+		//		SetFontSize(100);
+		//		DrawString(520, 140, "Draw", GetColor(0xff, 0xff, 0x00));
+		//	}
+		//	else if (draw_timer >= 120) {
+		//		time = 600;
+		//		draw_timer = 0;
+		//	}
+		//}
 
 		
 		Number_count = 0;//スポットライトに入っている人数
@@ -321,73 +321,45 @@ void MAIN::Game_Main() {
 			player_win = true;
 		}
 
-		//スポットライトが止まっているなら勝敗判定を行う
-		if (LightFlg == false) {
-			if (Number_count == 1) {//1人だけになったときにカウント60フレームくらい
-				//1人なっているのがだれかを判定
-				if (player_win) {
-					Win_NameNow = PLAYER_NAME;
-				}
-				else {
-					Win_NameNow = ENEMY_WIN;
-				}
-
-				//入り続けているのが同じ人かどうかを調べる。
-				if (Win_NameOld == NO_NAME) {//最初のカウント時
-					Win_NameOld = Win_NameNow;
-					Time_IN_count++;
-				}
-				else if (Win_NameOld == Win_NameNow) {//同じ人が入っています。
-					Time_IN_count++;
-				}
-				else {//違う人だけが入っています。
-					Win_NameOld = Win_NameNow;
-					Time_IN_count = 1;
-				}
-			}
-			else {//それ以外だと0にする
-				Time_IN_count = 0;
-				Win_NameOld = NO_NAME;
-			}
-
-
-			if (Number_count == 1 && Time_IN_count > 60) {
-				if (CheckSoundMem(win_sound) == 0) {
-					PlaySoundMem(win_sound, DX_PLAYTYPE_LOOP);
-				}
-				if (player_win) {
-					if (judge_win == false)
-					{
-						PLAYER_WIN_COUNT++;
-						judge_win = true;
+		if (time <= 597){
+			//スポットライトが止まっているなら勝敗判定を行う
+			if (LightFlg == false) {
+				if (Number_count == 1) {//1人だけになったときにカウント60フレームくらい
+					//1人なっているのがだれかを判定
+					if (player_win) {
+						Win_NameNow = PLAYER_NAME;
+					}
+					else {
+						Win_NameNow = ENEMY_WIN;
 					}
 
-					win_timer = (win_timer + 1) % 121;
-					if (win_timer < 119) {
-						Key_Look = true;
-						SetFontSize(100);
-						DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
+					//入り続けているのが同じ人かどうかを調べる。
+					if (Win_NameOld == NO_NAME) {//最初のカウント時
+						Win_NameOld = Win_NameNow;
+						Time_IN_count++;
 					}
-					else if (win_timer >= 120) {
-						StopSoundMem(win_sound);
-						time = 600;
-						win_timer = 0;
-						enemy_judge = true;
-						player_judge = true;
+					else if (Win_NameOld == Win_NameNow) {//同じ人が入っています。
+						Time_IN_count++;
+					}
+					else {//違う人だけが入っています。
+						Win_NameOld = Win_NameNow;
+						Time_IN_count = 1;
 					}
 				}
-			}
-			if (Number_count == 1 && Time_IN_count > 60) {
-				if (enemy_win) {
+				else {//それ以外だと0にする
+					Time_IN_count = 0;
+					Win_NameOld = NO_NAME;
+				}
+
+
+				if (Number_count == 1 && Time_IN_count > 60) {
 					if (CheckSoundMem(win_sound) == 0) {
 						PlaySoundMem(win_sound, DX_PLAYTYPE_LOOP);
 					}
-
-					if (ENEMY_WIN == 1) {
-						Key_Look = true;
+					if (player_win) {
 						if (judge_win == false)
 						{
-							ENEMY_WIN_COUNT1++;
+							PLAYER_WIN_COUNT++;
 							judge_win = true;
 						}
 
@@ -395,45 +367,75 @@ void MAIN::Game_Main() {
 						if (win_timer < 119) {
 							Key_Look = true;
 							SetFontSize(100);
-							DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
+							DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
+						}
+						else if (win_timer >= 120) {
+							StopSoundMem(win_sound);
+							time = 600;
+							win_timer = 0;
+							enemy_judge = true;
+							player_judge = true;
 						}
 					}
-					if (ENEMY_WIN == 2) {
-						Key_Look = true;
-						if (judge_win == false)
-						{
-							ENEMY_WIN_COUNT2++;
-							judge_win = true;
+				}
+				if (Number_count == 1 && Time_IN_count > 60) {
+					if (enemy_win) {
+						if (CheckSoundMem(win_sound) == 0) {
+							PlaySoundMem(win_sound, DX_PLAYTYPE_LOOP);
 						}
 
-						win_timer = (win_timer + 1) % 121;
-						if (win_timer < 119) {
+						if (ENEMY_WIN == 1) {
 							Key_Look = true;
-							SetFontSize(100);
-							DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
-						}
-					}
-					if (ENEMY_WIN == 3) {
-						Key_Look = true;
-						if (judge_win == false)
-						{
-							ENEMY_WIN_COUNT3++;
-							judge_win = true;
-						}
+							if (judge_win == false)
+							{
+								ENEMY_WIN_COUNT1++;
+								judge_win = true;
+							}
 
-						win_timer = (win_timer + 1) % 121;
-						if (win_timer < 119) {
-							Key_Look = true;
-							SetFontSize(100);
-							DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
+							win_timer = (win_timer + 1) % 121;
+							if (win_timer < 119) {
+								Key_Look = true;
+								SetFontSize(100);
+								DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
+							}
 						}
-					}
-					if (win_timer >= 120) {
-						StopSoundMem(win_sound);
-						time = 600;
-						win_timer = 0;
-						enemy_judge = true;
-						player_judge = true;
+						if (ENEMY_WIN == 2) {
+							Key_Look = true;
+							if (judge_win == false)
+							{
+								ENEMY_WIN_COUNT2++;
+								judge_win = true;
+							}
+
+							win_timer = (win_timer + 1) % 121;
+							if (win_timer < 119) {
+								Key_Look = true;
+								SetFontSize(100);
+								DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
+							}
+						}
+						if (ENEMY_WIN == 3) {
+							Key_Look = true;
+							if (judge_win == false)
+							{
+								ENEMY_WIN_COUNT3++;
+								judge_win = true;
+							}
+
+							win_timer = (win_timer + 1) % 121;
+							if (win_timer < 119) {
+								Key_Look = true;
+								SetFontSize(100);
+								DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
+							}
+						}
+						if (win_timer >= 120) {
+							StopSoundMem(win_sound);
+							time = 600;
+							win_timer = 0;
+							enemy_judge = true;
+							player_judge = true;
+						}
 					}
 				}
 			}
