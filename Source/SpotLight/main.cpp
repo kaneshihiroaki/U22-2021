@@ -275,7 +275,7 @@ void MAIN::Game_Main() {
 		DrawFormatString(100, 220 + 20, 0xFFFFFF, "%d\n", Time_IN_count);
 		if (LightFlg == true) {
 			Number_count = 0;//スポットライトに入っている人数
-
+			draw_timer = 0;
 			judge_win = false;
 			player_judge = false;
 			enemy_judge = false;
@@ -284,27 +284,30 @@ void MAIN::Game_Main() {
 			Win_NameOld = NO_NAME;
 		}
 
-
-		//if (LightFlg == false && time >= 597) {
-		//	if (DrawFlg == false) {
-		//		draw_count++;
-		//		DrawFlg = true;
-		//	}
-		//	draw_timer = (draw_timer + 1) % 121;
-		//	if (draw_count >= 2 && draw_timer < 119) {
-		//		if (CheckSoundMem(draw_sound) == 0) {
-		//			PlaySoundMem(draw_sound, DX_PLAYTYPE_BACK);
-		//		}
-		//		Key_Look = true;
-		//		SetFontSize(100);
-		//		DrawString(520, 140, "Draw", GetColor(0xff, 0xff, 0x00));
-		//	}
-		//	else if (draw_timer >= 120) {
-		//		time = 600;
-		//		draw_timer = 0;
-		//	}
-		//}
-
+		
+			if (LightFlg == false && time >= 598) {
+				if (DrawFlg == false) {
+					draw_count++;
+					DrawFlg = true;
+				}
+				if (draw_count >=2) {
+					draw_timer = (draw_timer + 1) % 121;
+					time = 599;
+					if (draw_timer < 119) {
+						if (CheckSoundMem(draw_sound) == 0) {
+							PlaySoundMem(draw_sound, DX_PLAYTYPE_BACK);
+						}
+						Key_Look = true;
+						SetFontSize(100);
+						DrawString(520, 140, "Draw", GetColor(0xff, 0xff, 0x00));
+					}
+					else if (draw_timer >= 120) {
+						time = 600;
+						draw_timer = 0;
+					}
+				}
+			}
+		
 		
 		Number_count = 0;//スポットライトに入っている人数
 		player_win = false;//プレイヤーがスポットライトに入っているかどうか
