@@ -71,6 +71,7 @@ public:
 	void init();		//初期化
 
 	void Enemy_Attack(PLAYER* player, int num);//エネミーの攻撃用
+	int c_AttackStm = 60;//攻撃による消費スタミナ
 	bool CheckPara(int num);//調べたいエネミーがしびれているかどうかの判定
 
 	//痺れ（ダメージ関連）
@@ -102,7 +103,7 @@ public:
 private:
 	bool c_MoveFlag;//エネミーが移動しているのか判定
 	int c_StmCount[ENEMY_MAX];	//敵の体力
-	const int c_StmMax = 600;	//体力の最大値
+	const int c_StmMax = 300;	//体力の最大値
 
 	VECTOR c_MoveVector;	//移動変数
 	VECTOR c_TempMoveVector[ENEMY_MAX];	//移動先計算用変数

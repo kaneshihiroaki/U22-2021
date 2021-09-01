@@ -741,18 +741,14 @@ int ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 
 void ENEMY::Ga_Attack(int num, PLAYER* player) {
 	if (Att[num].s_AttackStartKey == true) {
-		if (Enemy_Sound_flg == false) {
-			if (CheckSoundMem(enemy1_attack_sound) == 0) {
-				PlaySoundMem(enemy1_attack_sound, DX_PLAYTYPE_BACK);
-			}
-		}
+		
 		return; //攻撃中だと帰る
 	}
 	if (Ga_Interval[num] > 0) {//攻撃のインターバル
 		Ga_Interval[num]--;
 		return;
 	}
-	if (c_StmCount[num] < 16)return;//スタミナが15以下だと帰る
+	if (c_StmCount[num] < c_AttackStm + 1)return;//スタミナが15以下だと帰る
 
 	VECTOR Check_Future_Pos = c_ObjPos[num];//前方に座標をうつすため。長さ９６
 	Check_Future_Pos.x += 96.0f * sinf(c_Rotation[num].y)/* - c_MoveVector.z * sin(rad)*/;
@@ -773,6 +769,11 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 		if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], c_Rotation[i], 30, 96, 105, 55) == true) {
 
 			Ga_Interval[num] = Ga_Debug_Interval;//攻撃のインターバル60フレーム
+			if (Enemy_Sound_flg == false) {
+				if (CheckSoundMem(enemy1_attack_sound) == 0) {
+					PlaySoundMem(enemy1_attack_sound, DX_PLAYTYPE_BACK);
+				}
+			}
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -798,6 +799,11 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 			}
 
 			Ga_Interval[num] = Ga_Debug_Interval;//攻撃のインターバル60フレーム
+			if (Enemy_Sound_flg == false) {
+				if (CheckSoundMem(enemy1_attack_sound) == 0) {
+					PlaySoundMem(enemy1_attack_sound, DX_PLAYTYPE_BACK);
+				}
+			}
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -808,6 +814,11 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 	//自分の前方をみる
 	if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], player->c_Position, 30, 150, 105, 55) == true) {
 		Ga_Interval[num] = Ga_Debug_Interval;//攻撃のインターバル60フレー
+		if (Enemy_Sound_flg == false) {
+			if (CheckSoundMem(enemy1_attack_sound) == 0) {
+				PlaySoundMem(enemy1_attack_sound, DX_PLAYTYPE_BACK);
+			}
+		}
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
@@ -832,6 +843,11 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 		}
 
 		Ga_Interval[num] = Ga_Debug_Interval;//攻撃のインターバル60フレー
+		if (Enemy_Sound_flg == false) {
+			if (CheckSoundMem(enemy1_attack_sound) == 0) {
+				PlaySoundMem(enemy1_attack_sound, DX_PLAYTYPE_BACK);
+			}
+		}
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
@@ -840,7 +856,7 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 
 void ENEMY::Ga_Move(int num, PLAYER* player) {
 	if (WaitTime == 0 || time >= 480) {//スポットライトの動きが止まっているまたは、8秒以上になっている
-		if (c_StmCount[num] >= 300) {//スタミナが300以上なら勝ちを取りに行こうと動く
+		if (c_StmCount[num] >= (int)(c_StmMax * 0.5)) {//スタミナが50%以上なら勝ちを取りに行こうと動く
 			c_EnemyState[num] = ENEMY_MOVE;
 		}
 		else if (c_StmCount[num] < 10) {//スタミナが10以下なら回復に専念
@@ -848,10 +864,10 @@ void ENEMY::Ga_Move(int num, PLAYER* player) {
 		}
 	}
 	else {//スタートして0~8秒までの間は普通に動く
-		if (c_StmCount[num] >= 580) {//スタミナが580以上ならほぼ全回復と判断して移動に移る
+		if (c_StmCount[num] >= c_StmMax-10) {//スタミナが最大－10以上ならほぼ全回復と判断して移動に移る
 			c_EnemyState[num] = ENEMY_MOVE;
 		}
-		else if (c_StmCount[num] < 180) {//スタミナが180以下なら回復に専念
+		else if (c_StmCount[num] < (int)(c_StmMax * 0.3)) {//スタミナが30%以下なら回復に専念
 			c_EnemyState[num] = ENEMY_IDLE;
 		}
 	}
@@ -859,7 +875,7 @@ void ENEMY::Ga_Move(int num, PLAYER* player) {
 }
 void ENEMY::A_Move(int num) {
 	if (WaitTime == 0 || time >= 480) {//スポットライトの動きが止まっているまたは、8秒以上になっている
-		if (c_StmCount[num] >= 240) {//スタミナが240以上なら勝ちを取りに行こうと動く
+		if (c_StmCount[num] >= (int)(c_StmMax * 0.4)) {//スタミナが40%以上なら勝ちを取りに行こうと動く
 			//if (check_1 == 0 && check_2 == 0) {//敵と味方両方とも範囲にいない場合行動に移る
 				c_EnemyState[num] = ENEMY_MOVE;
 			//}
@@ -869,13 +885,13 @@ void ENEMY::A_Move(int num) {
 		}
 	}
 	else {//スタートして0~8秒までの間は普通に動く
-		if (c_StmCount[num] >= 480) {//スタミナが480以上ならほぼ全回復と判断して移動に移る
+		if (c_StmCount[num] >= (int)(c_StmMax * 0.8)) {//スタミナが80%以上ならほぼ全回復と判断して移動に移る
 			//if (check_1 == 0 && check_2 == 0) {//敵と味方両方とも範囲にいない場合行動に移る
 			//	
 			//}
 			c_EnemyState[num] = ENEMY_MOVE;
 		}
-		else if (c_StmCount[num] < 180) {//スタミナが180以下なら回復に専念
+		else if (c_StmCount[num] < (int)(c_StmMax * 0.3)) {//スタミナが30%以下なら回復に専念
 			c_EnemyState[num] = ENEMY_IDLE;
 		}
 	}
@@ -883,18 +899,14 @@ void ENEMY::A_Move(int num) {
 }
 void ENEMY::A_Attack(int num, PLAYER* player) {
 	if (Att[num].s_AttackStartKey == true) {
-		if (Enemy_Sound_flg == false) {
-			if (CheckSoundMem(enemy3_attack_sound) == 0) {
-				PlaySoundMem(enemy3_attack_sound, DX_PLAYTYPE_BACK);
-			}
-		}
+		
 		return; //攻撃中だと帰る
 	}
 	if (Ga_Interval[num] > 0) {//攻撃のインターバル
 		Ga_Interval[num]--;
 		return;
 	}
-	if (c_StmCount[num] < 16)return;//スタミナが15以下だと帰る
+	if (c_StmCount[num] < c_AttackStm + 1)return;//スタミナが15以下だと帰る
 
 	
 	if (((g_KeyFlg & PAD_INPUT_5) != 0)) {
@@ -928,6 +940,11 @@ void ENEMY::A_Attack(int num, PLAYER* player) {
 			}
 
 			Ga_Interval[num] = A_Debug_Interval;//攻撃のインターバル60フレーム
+			if (Enemy_Sound_flg == false) {
+				if (CheckSoundMem(enemy3_attack_sound) == 0) {
+					PlaySoundMem(enemy3_attack_sound, DX_PLAYTYPE_BACK);
+				}
+			}
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -955,6 +972,11 @@ void ENEMY::A_Attack(int num, PLAYER* player) {
 		}
 
 		Ga_Interval[num] = A_Debug_Interval;//攻撃のインターバル60フレー
+		if (Enemy_Sound_flg == false) {
+			if (CheckSoundMem(enemy3_attack_sound) == 0) {
+				PlaySoundMem(enemy3_attack_sound, DX_PLAYTYPE_BACK);
+			}
+		}
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
@@ -963,11 +985,7 @@ void ENEMY::A_Attack(int num, PLAYER* player) {
 
 void ENEMY::San_Attack(int num, PLAYER* player) {
 	if (Att[num].s_AttackStartKey == true) {
-		if (Enemy_Sound_flg == false) {
-			if (CheckSoundMem(enemy2_attack_sound) == 0) {
-				PlaySoundMem(enemy2_attack_sound, DX_PLAYTYPE_BACK);
-			}
-		}
+		
 
 		return; //攻撃中だと帰る
 	}
@@ -975,7 +993,7 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 		Ga_Interval[num]--;
 		return;
 	}
-	if (c_StmCount[num] < 16)return;//スタミナが15以下だと帰る
+	if (c_StmCount[num] < c_AttackStm+1)return;//スタミナが15以下だと帰る
 
 	VECTOR Check_Future_Pos = c_ObjPos[num];//前方に座標をうつすため。長さ123
 	Check_Future_Pos.x += 123.0f * sinf(c_Rotation[num].y)/* - c_MoveVector.z * sin(rad)*/;
@@ -996,6 +1014,11 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 		if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], c_Rotation[i], 30, 96, 105, 55) == true) {
 
 			Ga_Interval[num] = San_Debug_Interval;//攻撃のインターバル10フレーム
+			if (Enemy_Sound_flg == false) {
+				if (CheckSoundMem(enemy2_attack_sound) == 0) {
+					PlaySoundMem(enemy2_attack_sound, DX_PLAYTYPE_BACK);
+				}
+			}
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -1021,6 +1044,11 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 			}
 
 			Ga_Interval[num] = San_Debug_Interval;//攻撃のインターバル10フレーム
+			if (Enemy_Sound_flg == false) {
+				if (CheckSoundMem(enemy2_attack_sound) == 0) {
+					PlaySoundMem(enemy2_attack_sound, DX_PLAYTYPE_BACK);
+				}
+			}
 			Att[num].s_AttackStartKey = true;//
 			c_StmCount[num] = AttackStaminaCount(num);
 			return;
@@ -1031,6 +1059,11 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 	//自分の前方をみる
 	if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], player->c_Position, 30, 150, 105, 55) == true) {
 		Ga_Interval[num] = San_Debug_Interval;//攻撃のインターバル10フレー
+		if (Enemy_Sound_flg == false) {
+			if (CheckSoundMem(enemy2_attack_sound) == 0) {
+				PlaySoundMem(enemy2_attack_sound, DX_PLAYTYPE_BACK);
+			}
+		}
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
@@ -1055,6 +1088,11 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 		}
 
 		Ga_Interval[num] = San_Debug_Interval;//攻撃のインターバル10フレー
+		if (Enemy_Sound_flg == false) {
+			if (CheckSoundMem(enemy2_attack_sound) == 0) {
+				PlaySoundMem(enemy2_attack_sound, DX_PLAYTYPE_BACK);
+			}
+		}
 		Att[num].s_AttackStartKey = true;//
 		c_StmCount[num] = AttackStaminaCount(num);
 		return;
@@ -1062,8 +1100,9 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 }
 
 void ENEMY::San_Move(int num) {
+	
 	if (WaitTime == 0 || time >= 540) {//スポットライトの動きが止まっているまたは、9秒以上になっている
-		if (c_StmCount[num] >= 90) {//スタミナが90以上なら勝ちを取りに行こうと動く
+		if (c_StmCount[num] >= (int)(c_StmMax*0.15)) {//スタミナが15%以上なら勝ちを取りに行こうと動く
 			c_EnemyState[num] = ENEMY_MOVE;
 		}
 		else if (c_StmCount[num] < 10) {//スタミナが10以下なら回復に専念
@@ -1071,10 +1110,10 @@ void ENEMY::San_Move(int num) {
 		}
 	}
 	else {//スタートして0~8秒までの間は普通に動く
-		if (c_StmCount[num] >= 580) {//スタミナが580以上ならほぼ全回復と判断して移動に移る
+		if (c_StmCount[num] >= c_StmMax-10) {//スタミナが最大－10以上ならほぼ全回復と判断して移動に移る
 			c_EnemyState[num] = ENEMY_MOVE;
 		}
-		else if (c_StmCount[num] < 10) {//スタミナが110以下なら回復に専念
+		else if (c_StmCount[num] < 10) {//スタミナが10以下なら回復に専念
 			c_EnemyState[num] = ENEMY_IDLE;
 		}
 	}
@@ -1083,10 +1122,10 @@ void ENEMY::San_Move(int num) {
 
 void ENEMY::Bot_Normal(int num, PLAYER* player) {
 
-	if (c_StmCount[num] >= 580) {//スタミナがマックスになったら移動する。
+	if (c_StmCount[num] >= c_StmMax - 10) {//スタミナがマックスになったら移動する。
 		c_EnemyState[num] = ENEMY_MOVE;
 	}
-	if (c_StmCount[num] == 0) {//スタミナ０になったらアイドルになって回復する。
+	if (c_StmCount[num] == 10) {//スタミナ０になったらアイドルになって回復する。
 		c_EnemyState[num] = ENEMY_IDLE;
 	}
 }
