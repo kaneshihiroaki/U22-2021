@@ -70,7 +70,7 @@ private:
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
 	bool c_StageIn;		//ステージ内にいるかどうか判定
 	int c_StmCount;		//プレイヤーの体力
-	const int c_StmMax = 600;	//体力の最大値
+	int c_StmMax;	//体力の最大値
 	VECTOR c_MoveVector;	//移動変数
 	VECTOR c_TempMoveVector; //移動先を計算する変数
 
@@ -84,7 +84,7 @@ private:
 	{
 		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
 		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
-		const int s_MaxTimeParalyze = 30;		//プレイヤーが痺れている時間
+		const int s_MaxTimeParalyze = 60;		//プレイヤーが痺れている時間
 	}; Damage Damage;
 
 	struct Attack {

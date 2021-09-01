@@ -57,7 +57,8 @@ void PLAYER::init() {
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 	c_TempMoveVector = VGet(0.0f, 0.0f, 0.0f);
 
-	c_StmCount = 600;		//プレイヤーの体力
+	c_StmCount = 300;		//プレイヤーの体力
+	c_StmMax = 300;		//プレイヤーの体力最大値
 
 	c_Acc = 0.0f;
 
@@ -208,7 +209,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 		Att.s_Posx = c_Position.x;
 		Att.s_Posz = c_Position.z;
 		Att.s_GetOneRot = true;
-		c_StmCount -= 15;;		//プレイヤーの体力
+		c_StmCount -= 60;		//プレイヤーの体力
 	}
 
 	//プレイヤーの前方方向取得
