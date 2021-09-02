@@ -105,6 +105,7 @@ MAIN::MAIN()
 	c_player = new PLAYER();
 	c_stage = new STAGE();
 	c_enemy = new ENEMY();
+	c_chara = new CHARACTER();
 }
 
 MAIN::~MAIN()
@@ -117,6 +118,7 @@ void MAIN::Game_init() {
 	c_enemy->init();
 	c_stage->init();
 	c_camera->init();
+	c_chara->Character_Init();
 	Light_init();
 
 	//タイトルで使う変数初期化
@@ -138,6 +140,7 @@ void MAIN::Game_init() {
 	c_ready = false;
 	c_dispTime = c_readyMaxTime;
 	c_resultdispTime = 0;
+	c_PressBDispTime = 0;
 
 	//ライト・リザルト用変数初期化
 	LightFlg = false;
@@ -681,12 +684,19 @@ void MAIN::Game_Result() {
 			break;
 		}
 
+		//if (c_PressBDispTime++ >= c_PressBDispTimeMax)
+		//{
+		//	c_ResultBack = true;
+		//}
+		//if (c_ResultBack == true) {
+		//	if(c_PressBDispTime % 20 < 100)DrawFormatString(530, 550, 0x880000, "Press B");
+		//}
 		if (CheckSoundMem(player_win_sound) != 1 && CheckSoundMem(enemy_win_sound) != 1)
 		{
 			c_ResultBack = true;
 		}
 		if (c_ResultBack == true) {
-			DrawFormatString(530, 550, 0x880000, "Press B");
+			if(c_PressBDispTime % 20 < 100)DrawFormatString(530, 550, 0x880000, "Press B");
 		}
 
 		if ((g_KeyFlg & PAD_INPUT_2) != 0 && c_ResultBack == true) GameState = 0;

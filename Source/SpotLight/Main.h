@@ -55,6 +55,7 @@ private:
 	bool c_ready;		//ボタンを押してメインを開始する変数
 	int c_dispTime;		//READYとGOの表示時間カウント
 	int c_resultdispTime;	//リザルトで文字の表示に使用するカウント
+	int c_PressBDispTime;	//Press Bを表示・点滅させる変数
 	bool c_OnePass;			//スコア計算を一回だけ参照
 	bool c_ResultBack;		//リザルトでタイトルに戻るという表記を表示させる
 	int c_VictorNum = 0;	//勝者格納よう変数
@@ -62,6 +63,7 @@ private:
 	const int c_dispTimeMax = 60;	//GO表示時間
 	const int c_readyMaxTime = 240;		//READYの表示時間いっぱい
 	const int c_resultdispMaxTime = 180;	//リザルトの表示時間
+	const int c_PressBDispTimeMax = 190;			//Press Bを表示させる変数
 	//const int c_pointcal = 10;		//リザルトのポイント計算
 
 	int LoadSound();

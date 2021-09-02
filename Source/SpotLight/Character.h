@@ -4,12 +4,12 @@ class CHARACTER
 public:
 	CHARACTER();
 	~CHARACTER();
+	void Character_Init();
 
 protected:
 	int StaminaCount(bool MoveFlag,int num);	//エネミースタミナカウント
 	int PlayerStaminaCount(bool MoveFlag,int count,const int countMAX);//プレイヤースタミナカウント
 	int AttackStaminaCount( int num);	//エネミー攻撃によるスタミナカウント
-	void Character_Init();
 
 private:
 	//スタミナ関連
