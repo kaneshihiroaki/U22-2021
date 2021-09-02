@@ -196,7 +196,7 @@ void Light()
 		LightRotateAngle = 0.0f;
 		LightRotateAngle2 = 0.0f;
 		round_count++;
-		if (round_count > 1) finish = false;		//6ラウンドやったら終わる
+		if (round_count > 6) finish = false;		//6ラウンドやったら終わる
 	}
 
 	if (WaitTime == 1 && count < 6) {
