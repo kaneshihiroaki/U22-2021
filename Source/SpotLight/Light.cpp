@@ -155,7 +155,7 @@ void Light()
 {
 	//10カウント表示
 	SetFontSize(100);
-	if (g_DispTime == true)DrawFormatString(550, 10, 0xffff00, "%d", time / 60);
+	if (g_DispTime == true)DrawFormatString(550, 100, 0xffff00, "%d", time / 60);
 
 	Point_t
 		cp1 = { dis[rc].x,dis[rc].z, -180, distance / 2 },

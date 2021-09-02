@@ -91,9 +91,9 @@ void PLAYER::Player_Controller() {
 	}
 
 	//プレイヤーのスタミナのUI
-	SetFontSize(18);
+	SetFontSize(30);
 	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);
-	DrawFormatString(10, 650, 0xFFFFFF, "スタミナ");
+	DrawFormatString(10, 650, 0xFFFFFF, "Stamina Point");
 	DrawBox(10, 670, 10+110, 690, 0xFFFFFF,FALSE);
 	DrawBox(10, 670, 10+110 * c_StmCount / c_StmMax, 690, 0xFFFFFF,TRUE);
 	//Player_Move(Sin, Cos);
@@ -210,7 +210,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 		Att.s_Posx = c_Position.x;
 		Att.s_Posz = c_Position.z;
 		Att.s_GetOneRot = true;
-		c_StmCount -= Att.s_AttackCons;		//プレイヤーの体力消費
+		c_StmCount -= Att.s_AttackCons;		//プレイヤーの体力
 	}
 
 	//プレイヤーの前方方向取得
