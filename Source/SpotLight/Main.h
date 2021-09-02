@@ -38,6 +38,10 @@ extern bool enemy_judge;//敵がスポットライトに入ったら入ったときのflg
 extern int Win_NameOld;//誰がスポットライトに入っていたか#defineで数字管理
 extern int Win_NameNow;//誰がスポットライトに入っていたか#defineで数字管理
 
+/*サドンデス用変数*/
+extern bool Sadondes_flg;//サドンデスを行うかどうかtrueなら行っている。
+/*サドンデス用変数*/
+
 class MAIN 
 {
 public:
@@ -50,6 +54,11 @@ public:
 	void Game_Main();
 	void Game_Title();
 	void Game_Result();
+
+	//サドンデス用関数
+	void Sadondes();
+	void Sadondes_check();
+	void Sadondes_Init();
 
 private:
 	bool c_ready;		//ボタンを押してメインを開始する変数

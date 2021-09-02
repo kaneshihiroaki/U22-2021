@@ -73,6 +73,9 @@ int state = 0;
 
 bool g_loopFlg = false;
 
+//サドンデスを行うかどうかtrueなら行っている。
+bool Sadondes_flg = false;
+
 MAIN::MAIN()
 {
 	GameState = 0;
@@ -170,6 +173,67 @@ void MAIN::Game_init() {
 
 }
 
+void MAIN::Sadondes_Init() {
+	//initを新しくつくる
+	c_player->init();
+	c_enemy->init();
+	c_stage->init();
+	c_camera->init();
+	Light_init();
+
+	//タイトルで使う変数初期化
+	/*imgC = 17;
+	g_play = false;
+	g_exit = false;
+	state = 0;*/
+
+	//勝敗判定初期化
+	finish = true;
+	judgefinish = false;
+	win_timer = 0;
+	WaitTime = 0;
+	round_count = 0;
+
+
+
+	//ゲーム開始の演出関連変数初期化
+	c_ready = false;
+	c_dispTime = c_readyMaxTime;
+	c_resultdispTime = 0;
+	c_PressBDispTime = 0;
+
+	//ライト・リザルト用変数初期化
+	LightFlg = false;
+	Key_Look = false;
+	Win = false;
+	Lose = false;
+	GameJudge = false;
+	judge_win = false;
+
+	//引き分け用変数
+	DrawFlg = false;
+	draw_timer = 0;
+	draw_count = 0;
+	//得点初期化
+	PLAYER_WIN_COUNT = 0;
+	ENEMY_WIN = 0;
+	ENEMY_WIN_COUNT1 = 0;
+	ENEMY_WIN_COUNT2 = 0;
+	ENEMY_WIN_COUNT3 = 0;
+
+	//スコア計算用リザルトで使用かな？
+	c_OnePass = false;
+	c_ResultBack = false;
+	/*check_1 = 0;
+	check_2 = 0;*/
+
+	//BGM_flg = false;//BGMをとめるflg;
+	//Enemy_Sound_flg = false;//enemyの攻撃音をとめるflg;//true:止める false:止めない
+
+	//初期化したらゲームメインへ
+	//GameState = 2;
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	// 背景の色
@@ -257,6 +321,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	return 0;
 }
+
+
+
 
 void MAIN::Game_Main() {
 	SetFontSize(100);
@@ -464,7 +531,18 @@ void MAIN::Game_Main() {
 		}
 
 
-		if (finish == false) GameState = 3;	//決着ついたらタイトルへ戻る
+		//決着ついたらリザルトへ行くこれをサドンデスかどうか調べてから
+		if (finish == false) {
+			Sadondes_check();
+			if (Sadondes_flg == true) {//サドンデスにいってほしいなら
+				Sadondes_Init();
+				return;
+			}
+			else {
+				GameState = 3;	//決着ついたらリザルト画面へ
+			}
+			
+		}
 
 		//if (!Collision_Player) {
 		//	MV1DrawModel(c_player->c_PlayerModel);
@@ -771,3 +849,53 @@ int MAIN::LoadSound() {
 
 	return 0;
 }
+
+
+//サドンデス用メモ
+void MAIN::Sadondes() {
+	/*必要なこと
+	・敵キャラを存在する敵と存在しない敵にわける
+	・タイムが10秒経過後、その後10秒たってもドローしないようにする。
+	・Sadondesuフラグを作る
+	・ライトはinitでほぼオッケー
+	・メインは点数はそのままにするgameStateもそのまま
+	・敵のinitもほぼ同じ。存在フラグのみかな
+	・charactor.cppは普通にinit
+	*/
+}
+
+void MAIN::Sadondes_check() {
+	//プレイヤーと敵の点数を調べて、プレイヤーの点数が敵の点数以上ならはいる。
+	if (PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT1 && 
+		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT2 && 
+		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT3) {
+
+		//その後敵の点数とプレイヤーの点数が同じならサドンデス
+		if (PLAYER_WIN_COUNT == ENEMY_WIN_COUNT1) {
+			Sadondes_flg = true;
+			//ここにエネミーが存在するフラグ
+		}
+		else {
+			//存在しないフラグ
+		}
+		if(PLAYER_WIN_COUNT == ENEMY_WIN_COUNT2) {
+			Sadondes_flg = true;
+			//ここにエネミーが存在するフラグ
+		}
+		else {
+			//存在しないフラグ
+		}
+		if (PLAYER_WIN_COUNT == ENEMY_WIN_COUNT3) {
+			Sadondes_flg = true;
+			//ここにエネミーが存在するフラグ
+		}
+		else {
+				//存在しないフラグ
+		}
+	}
+	/*ここはデバッグ用です。*/
+	Sadondes_flg = false;
+	/*ここはデバッグ用です。*/
+}
+
+
