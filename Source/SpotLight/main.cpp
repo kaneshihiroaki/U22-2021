@@ -488,7 +488,7 @@ void MAIN::Game_Main() {
 		Light();
 
 		//ラウンド表示
-		DrawFormatString(450, 10, 0xffff00, "ROUND %d", round_count + 1);
+		DrawFormatString(450, 10, 0xffff00, "ROUND %d", round_count);
 
 		//開始時にGO!を表示
 		if (--c_dispTime >= 0)DrawFormatString(525, 250, 0x0000FF, "GO!");
@@ -522,8 +522,8 @@ void MAIN::Game_Title() {
 	ChangeFont("Rampart One");
 	SetFontSize(150);
 	DrawFormatString(255, 100, 0x000000, "SpotLight");
-	//SetFontSize(150);
-	//DrawFormatString(250, 100, 0xffff00, "SpotLight");
+	SetFontSize(150);
+	DrawFormatString(250, 100, 0xffff00, "SpotLight");
 	if (((g_KeyFlg & PAD_INPUT_DOWN) != 0)) {
 		if (CheckSoundMem(cursor_sound) == 0) {
 			PlaySoundMem(cursor_sound, DX_PLAYTYPE_BACK);

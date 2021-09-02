@@ -93,7 +93,7 @@ void PLAYER::Player_Controller() {
 	//プレイヤーのスタミナのUI
 	SetFontSize(30);
 	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);
-	DrawFormatString(10, 650, 0xFFFFFF, "Stamina Point");
+	DrawFormatString(10, 640, 0xFFFFFF, "Stamina Point");
 	DrawBox(10, 670, 10+110, 690, 0xFFFFFF,FALSE);
 	DrawBox(10, 670, 10+110 * c_StmCount / c_StmMax, 690, 0xFFFFFF,TRUE);
 	//Player_Move(Sin, Cos);

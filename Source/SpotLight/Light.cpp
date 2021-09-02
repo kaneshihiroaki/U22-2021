@@ -172,7 +172,6 @@ void Light()
 		time = 0;
 		LightFlg = false;
 		//finish = false;
-		round_count++;
 		g_DispTime = false;
 		StopSoundMem(drum);
 		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
@@ -196,7 +195,8 @@ void Light()
 		g_DispTime = true;
 		LightRotateAngle = 0.0f;
 		LightRotateAngle2 = 0.0f;
-		if (round_count >= 6) finish = false;		//6ラウンドやったら終わる
+		round_count++;
+		if (round_count > 6) finish = false;		//6ラウンドやったら終わる
 	}
 
 	if (WaitTime == 1 && count < 6) {
