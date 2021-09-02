@@ -275,6 +275,7 @@ void MAIN::Game_Main() {
 		DrawFormatString(100, 220 + 20, 0xFFFFFF, "%d\n", Time_IN_count);
 		if (LightFlg == true) {
 			Number_count = 0;//スポットライトに入っている人数
+			win_timer = 0;
 			draw_timer = 0;
 			judge_win = false;
 			player_judge = false;
@@ -282,6 +283,8 @@ void MAIN::Game_Main() {
 			DrawFlg = false;
 			Time_IN_count = 0;//1人がスポットライトに何秒入っているかどうか
 			Win_NameOld = NO_NAME;
+			player_win = false;//プレイヤーがスポットライトに入っているかどうか
+			enemy_win = false;//敵がスポットライトに入っているかどうか
 		}
 
 		
@@ -310,8 +313,7 @@ void MAIN::Game_Main() {
 		
 		
 		Number_count = 0;//スポットライトに入っている人数
-		player_win = false;//プレイヤーがスポットライトに入っているかどうか
-		enemy_win = false;//敵がスポットライトに入っているかどうか
+	
 		
 		//敵がスポットライトに入っているかどうか判定
 		Number_count += c_enemy->EnemyCheckHit(c_enemy->c_ObjPos, LightPos);
@@ -356,10 +358,10 @@ void MAIN::Game_Main() {
 
 
 				if (Number_count == 1 && Time_IN_count > 60) {
-					if (CheckSoundMem(win_sound) == 0) {
-						PlaySoundMem(win_sound, DX_PLAYTYPE_LOOP);
-					}
 					if (player_win) {
+						if (CheckSoundMem(win_sound) == 0) {
+							PlaySoundMem(win_sound, DX_PLAYTYPE_LOOP);
+						}
 						if (judge_win == false)
 						{
 							PLAYER_WIN_COUNT++;
@@ -368,6 +370,7 @@ void MAIN::Game_Main() {
 
 						win_timer = (win_timer + 1) % 121;
 						if (win_timer < 119) {
+							time = 496;
 							Key_Look = true;
 							SetFontSize(100);
 							DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
@@ -376,8 +379,7 @@ void MAIN::Game_Main() {
 							StopSoundMem(win_sound);
 							time = 600;
 							win_timer = 0;
-							enemy_judge = true;
-							player_judge = true;
+						
 						}
 					}
 				}
@@ -397,6 +399,7 @@ void MAIN::Game_Main() {
 
 							win_timer = (win_timer + 1) % 121;
 							if (win_timer < 119) {
+								time = 496;
 								Key_Look = true;
 								SetFontSize(100);
 								DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
@@ -412,6 +415,7 @@ void MAIN::Game_Main() {
 
 							win_timer = (win_timer + 1) % 121;
 							if (win_timer < 119) {
+								time = 496;
 								Key_Look = true;
 								SetFontSize(100);
 								DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
@@ -427,6 +431,7 @@ void MAIN::Game_Main() {
 
 							win_timer = (win_timer + 1) % 121;
 							if (win_timer < 119) {
+								time = 496;
 								Key_Look = true;
 								SetFontSize(100);
 								DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
@@ -436,8 +441,7 @@ void MAIN::Game_Main() {
 							StopSoundMem(win_sound);
 							time = 600;
 							win_timer = 0;
-							enemy_judge = true;
-							player_judge = true;
+							
 						}
 					}
 				}
@@ -457,7 +461,7 @@ void MAIN::Game_Main() {
 			SetFontSize(50);
 			DrawString(570, 5, "Judge", GetColor(0x00, 0x00, 0x00));
 			SetFontSize(20);
-			DrawFormatString(20, 40, 0xFFFFFF, "win_timer:%d", win_timer);
+			DrawFormatString(20, 40, 0xFFFFFF, "win_timer:%d", time);
 			DrawFormatString(20, 60, 0xFFFFFF, "judge_count2:%d", Time_IN_count);
 			DrawFormatString(20, 80, 0xFFFFFF, "judge_count3:%d", Time_IN_count);
 			DrawFormatString(20, 100, 0xFFFFFF, "ENEMYWIN:%d", ENEMY_WIN);
