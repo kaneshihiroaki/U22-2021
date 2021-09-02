@@ -81,14 +81,25 @@ MAIN::MAIN()
 	LoadDivGraph("Image/mes01_f01_d03_c10_05.png", 64, 4, 17, 240, 60, menu); // 画像の分割読み込み
 	LoadDivGraph("Image/mes01_f01_d03_c09_05.png", 64, 4, 17, 240, 60, menu2); // 画像の分割読み込み
 
-	LPCSTR font_path = "Fonts/Wolski.ttf"; // 読み込むフォントファイルのパス
+	LPCSTR font_path = "Fonts/rampart-one/RampartOne-Regular.ttf"; // 読み込むフォントファイルのパス
+	LPCSTR font_main = "Fonts/alumni-sans/AlumniSans-Black.ttf";	//メイン等で使うファイルパス
 
+	//タイトルフォント読込み
 	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0) {
 	}
 	else {
 		// フォント読込エラー処理
-		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
+		MessageBox(NULL, "タイトルフォント読込失敗", "", MB_OK);
 	}
+
+	//メインフォント読込み
+	if (AddFontResourceEx(font_main, FR_PRIVATE, NULL) > 0) {
+	}
+	else {
+		// フォント読込エラー処理
+		MessageBox(NULL, "メインフォント読込失敗", "", MB_OK);
+	}
+
 
 	c_camera = new CAMERA();
 	c_player = new PLAYER();
@@ -478,6 +489,9 @@ void MAIN::Game_Main() {
 
 		Light();
 
+		//ラウンド表示
+		DrawFormatString(450, 10, 0xffff00, "ROUND %d", round_count);
+
 		//開始時にGO!を表示
 		if (--c_dispTime >= 0)DrawFormatString(525, 250, 0x0000FF, "GO!");
 
@@ -507,10 +521,10 @@ void MAIN::Game_Title() {
 	DrawGraph(500, 500, menu[2], TRUE);
 
 	// 描画する文字列の文字セットを変更します
-	ChangeFont("Wolski");
+	ChangeFont("Rampart One");
 	SetFontSize(150);
-	DrawFormatString(255, 100, 0x000000, "SpotLight");
-	SetFontSize(150);
+	//DrawFormatString(255, 100, 0x000000, "SpotLight");
+	//SetFontSize(150);
 	DrawFormatString(250, 100, 0xffff00, "SpotLight");
 	if (((g_KeyFlg & PAD_INPUT_DOWN) != 0)) {
 		if (CheckSoundMem(cursor_sound) == 0) {
@@ -555,7 +569,7 @@ void MAIN::Game_Title() {
 		g_loopFlg = true;
 	}
 	if (imgC < 0) {
-		ChangeFont("MS Pゴシック");
+		ChangeFont("Alumni Sans Black");
 		g_play = false;
 		GameState = 1;
 	}
