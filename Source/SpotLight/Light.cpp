@@ -26,6 +26,8 @@ int count;       //移動するライトの予定位置
 int cntFlg = 4;  //現在のライトの位置
 int rc = 4;      //過去のライトの位置
 float distance = 600.0f;
+float distance2 = 900.0f;
+
 int WaitTime = 0;
 
 bool LightFlg;
@@ -118,15 +120,15 @@ void Light_init() {
 	LightFlg = true;
 
 	// ライトの位置の回転値を加算
-	LightPos = VGet(0.0f, 600.0f, -300.0f);
+	LightPos = VGet(0.0f, 600.0f, 0.0f);
 	LightPos2 = VGet(0.0f, 1000.0f, 0.0f);
 
-	dis[0] = VGet(-distance, 0.0f, distance);
+	dis[0] = VGet(-distance2, 0.0f, distance);
 	dis[1] = VGet(0.0f, 0.0f, distance);
-	dis[2] = VGet(distance, 0.0f, distance);
-	dis[3] = VGet(-distance, 0.0f, 0.0f);
+	dis[2] = VGet(distance2, 0.0f, distance);
+	dis[3] = VGet(-distance2, 0.0f, 0.0f);
 	dis[4] = VGet(0.0f, 0.0f, 0.0f);
-	dis[5] = VGet(distance, 0.0f, 0.0f);
+	dis[5] = VGet(distance2, 0.0f, 0.0f);
 
 	//角度を初期化
 	LightRotateAngle = 0;
@@ -158,8 +160,8 @@ void Light()
 	Point_t
 		cp1 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
 		cp2 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
-		cp3 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
-		cp4 = { dis[rc].x,dis[rc].z, -180, distance / 2 };
+		cp3 = { dis[rc].x,dis[rc].z, -180, distance2 / 2 },
+		cp4 = { dis[rc].x,dis[rc].z, -180, distance2 / 2 };
 
 	//10秒経過したら方向転換
 	if (time < 600) {
@@ -208,24 +210,24 @@ void Light()
 			LightRotateAngle += 0.9f;
 			LightRotateAngle2 += 1.5f;
 			DrawX = cp2.x + sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
-			DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range - cp1.Range;
+			DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range - cp2.Range;
 		}
 		if (count == rc + 1) {
 			LightRotateAngle += 1.5f;
-			LightRotateAngle2 += 0.9f;
-			DrawX = cp3.x + -cos(PI / cp1.T * LightRotateAngle) * cp3.Range + cp1.Range;
-			DrawZ = cp3.z + sin(PI / cp1.T * LightRotateAngle2) * cp3.Range;
+			LightRotateAngle2 += 0.3f;
+			DrawX = cp3.x + -cos(PI / cp3.T * LightRotateAngle) * cp3.Range + cp3.Range;
+			DrawZ = cp3.z + sin(PI / cp3.T * LightRotateAngle2) * cp3.Range;
 		}
 		else if (count == rc - 1) {
 			LightRotateAngle += 1.5f;
-			LightRotateAngle2 += 0.9f;
-			DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range - cp1.Range;
+			LightRotateAngle2 += 0.3f;
+			DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range - cp4.Range;
 			DrawZ = cp4.z + sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
 		}
 	}
 
 	//ライトの位置の回転値を加算
-	LightPos = VGet(DrawX, 600.0f, DrawZ - 300);
+	LightPos = VGet(DrawX, 600.0f, DrawZ);
 
 	// スポットライトの位置の更新
 	SetLightPositionHandle(SpotLightHandle, LightPos);
