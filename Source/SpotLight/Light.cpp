@@ -155,7 +155,7 @@ void Light()
 {
 	//10カウント表示
 	SetFontSize(100);
-	if (g_DispTime == true)DrawFormatString(550, 100, 0xffff00, "%d", time / 60);
+	if (g_DispTime == true)DrawFormatString(600, 100, 0xffff00, "%d", time / 60);
 
 	Point_t
 		cp1 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
@@ -196,7 +196,7 @@ void Light()
 		LightRotateAngle = 0.0f;
 		LightRotateAngle2 = 0.0f;
 		round_count++;
-		if (round_count > 6) finish = false;		//6ラウンドやったら終わる
+		if (round_count > 1) finish = false;		//6ラウンドやったら終わる
 	}
 
 	if (WaitTime == 1 && count < 6) {

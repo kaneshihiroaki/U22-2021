@@ -387,7 +387,7 @@ void MAIN::Game_Main() {
 							time = 496;
 							Key_Look = true;
 							SetFontSize(100);
-							DrawString(360, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
+							DrawString(380, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
 						}
 						else if (win_timer >= 120) {
 							StopSoundMem(win_sound);
@@ -416,7 +416,7 @@ void MAIN::Game_Main() {
 								time = 496;
 								Key_Look = true;
 								SetFontSize(100);
-								DrawString(360, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
+								DrawString(380, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
 							}
 						}
 						if (ENEMY_WIN == 2) {
@@ -432,7 +432,7 @@ void MAIN::Game_Main() {
 								time = 496;
 								Key_Look = true;
 								SetFontSize(100);
-								DrawString(360, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
+								DrawString(380, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
 							}
 						}
 						if (ENEMY_WIN == 3) {
@@ -448,7 +448,7 @@ void MAIN::Game_Main() {
 								time = 496;
 								Key_Look = true;
 								SetFontSize(100);
-								DrawString(360, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
+								DrawString(380, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
 							}
 						}
 						if (win_timer >= 120) {
@@ -490,18 +490,18 @@ void MAIN::Game_Main() {
 		Light();
 
 		//ラウンド表示
-		DrawFormatString(450, 10, 0xffff00, "ROUND %d", round_count);
+		DrawFormatString(500, 10, 0xffff00, "ROUND %d", round_count);
 
 		//開始時にGO!を表示
-		if (--c_dispTime >= 0)DrawFormatString(525, 250, 0x0000FF, "GO!");
+		if (--c_dispTime >= 0)DrawFormatString(550, 250, 0x0000FF, "GO!");
 
 	}
 	//3秒立ったら始める
 	else {
 		StopSoundMem(bgm_title);
 		SetFontSize(100);
-		DrawFormatString(470, 250, 0xFF0000, "READY?");
-		DrawFormatString(580, 350, 0xFF0000, "%d", c_dispTime / 60);
+		DrawFormatString(495, 220, 0xFF0000, "READY?");
+		DrawFormatString(595, 320, 0xFF0000, "%d", c_dispTime / 60);
 	}
 
 	//ボタン押したらゲーム開始
@@ -617,8 +617,8 @@ void MAIN::Game_Result() {
 	MV1SetScale(c_stage->c_StageModel, c_stage->c_StageScale);
 	MV1DrawModel(c_stage->c_StageModel);
 
-	SetFontSize(100);
-	DrawFormatString(350, 100, 0xFFFFFF, "WINNER IS");
+	SetFontSize(150);
+	DrawFormatString(380, 50, 0xFFFFFF, "WINNER IS");
 
 	//c_camera->Camera_Control(c_stage);
 
@@ -627,7 +627,7 @@ void MAIN::Game_Result() {
 	//	onecheck = true;
 	//}
 
-	SetFontSize(50);
+	SetFontSize(80);
 
 	//ポイントライトの初期値を設定
 	SetLightPositionHandle(PointLightHandle, VGet(80.0f, 1550.0f, -1200.0f));
@@ -646,7 +646,7 @@ void MAIN::Game_Result() {
 		switch (c_VictorNum)
 		{
 		case 0:
-			DrawFormatString(500, 220, 0xFFFFFF, "PLAYER!");
+			DrawFormatString(500, 220, 0xFF0000, "PLAYER!");
 			MV1SetPosition(c_player->c_PlayerModel, VGet(80.0f, 750.0f, -1200.0f));
 			MV1SetRotationXYZ(c_player->c_PlayerModel, VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
 			MV1SetScale(c_player->c_PlayerModel, c_player->c_AddPosPlay);
@@ -654,7 +654,7 @@ void MAIN::Game_Result() {
 			MV1DrawModel(c_player->c_PlayerModel);
 			break;
 		case 1:
-			DrawFormatString(500, 200, 0xFFFFFF, "ENEMY1!");
+			DrawFormatString(500, 200, 0x0000FF, "ENEMY1!");
 			MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
 			MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
 			MV1SetScale(c_enemy->c_EnemyModel[c_VictorNum - 1], c_player->c_AddPosPlay);
@@ -662,7 +662,7 @@ void MAIN::Game_Result() {
 			MV1DrawModel(c_enemy->c_EnemyModel[c_VictorNum - 1]);
 			break;
 		case 2:
-			DrawFormatString(500, 200, 0xFFFFFF, "ENEMY2!");
+			DrawFormatString(500, 200, 0x0000FF, "ENEMY2!");
 			MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
 			MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
 			MV1SetScale(c_enemy->c_EnemyModel[c_VictorNum - 1], c_player->c_AddPosPlay);
@@ -670,7 +670,7 @@ void MAIN::Game_Result() {
 			MV1DrawModel(c_enemy->c_EnemyModel[c_VictorNum - 1]);
 			break;
 		case 3:
-			DrawFormatString(500, 200, 0xFFFFFF, "ENEMY3!");
+			DrawFormatString(500, 200, 0x0000FF, "ENEMY3!");
 			MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
 			MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
 			MV1SetScale(c_enemy->c_EnemyModel[c_VictorNum - 1], c_player->c_AddPosPlay);
