@@ -26,14 +26,19 @@ ENEMY::ENEMY()
 
 	// ‚R‚cƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
 	for (int i = 0; i < ENEMY_MAX; i++) {
-		if (i == 0) {
+		if (i == 0) {//Ô
 			c_EnemyModel[i] = MV1LoadModel("Model/EnMe3.mv1");
 			c_WinEnemyModel[i] = MV1LoadModel("Model/EnMe4.mv1");
 		}
-		else {
-//			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
-			c_EnemyModel[i] = MV1LoadModel("Model/EnMe3.mv1");
-			c_WinEnemyModel[i] = MV1LoadModel("Model/EnMe4.mv1");
+		else if (i == 1) {//—Î
+			//			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
+			c_EnemyModel[i] = MV1LoadModel("Model/EnMe5.mv1");
+			c_WinEnemyModel[i] = MV1LoadModel("Model/EnMe6.mv1");
+		}
+		else {//ƒIƒŒƒ“ƒW
+			//			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
+			c_EnemyModel[i] = MV1LoadModel("Model/EnMe7.mv1");
+			c_WinEnemyModel[i] = MV1LoadModel("Model/EnMe8.mv1");
 		}
 		
 		//c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
