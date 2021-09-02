@@ -90,6 +90,7 @@ void ENEMY::init() {
 	Coefficient = 1.0f;
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
+	Character_Init();
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		c_TempMoveVector[i] = VGet(0.0f, 0.0f, 0.0f);
 	}

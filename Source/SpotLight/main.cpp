@@ -105,7 +105,6 @@ MAIN::MAIN()
 	c_player = new PLAYER();
 	c_stage = new STAGE();
 	c_enemy = new ENEMY();
-	c_chara = new CHARACTER();
 }
 
 MAIN::~MAIN()
@@ -118,7 +117,6 @@ void MAIN::Game_init() {
 	c_enemy->init();
 	c_stage->init();
 	c_camera->init();
-	c_chara->Character_Init();
 	Light_init();
 
 	//タイトルで使う変数初期化
