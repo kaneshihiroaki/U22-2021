@@ -71,6 +71,8 @@ int g_play = false;
 int g_exit = false;
 int state = 0;
 
+bool g_loopFlg = false;
+
 MAIN::MAIN()
 {
 	GameState = 0;
@@ -78,9 +80,9 @@ MAIN::MAIN()
 	LoadDivGraph("Image/pipo-curtain2.png", 18, 1, 18, 1280, 960, maku); // 画像の分割読み込み
 	LoadDivGraph("Image/mes01_f01_d03_c10_05.png", 64, 4, 17, 240, 60, menu); // 画像の分割読み込み
 	LoadDivGraph("Image/mes01_f01_d03_c09_05.png", 64, 4, 17, 240, 60, menu2); // 画像の分割読み込み
-	
+
 	LPCSTR font_path = "Fonts/Wolski.ttf"; // 読み込むフォントファイルのパス
-	
+
 	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0) {
 	}
 	else {
@@ -118,7 +120,7 @@ void MAIN::Game_init() {
 	win_timer = 0;
 	WaitTime = 0;
 	round_count = 0;
-	
+
 
 
 	//ゲーム開始の演出関連変数初期化
@@ -148,7 +150,7 @@ void MAIN::Game_init() {
 	/*check_1 = 0;
 	check_2 = 0;*/
 
-	BGM_flg=false;//BGMをとめるflg;
+	BGM_flg = false;//BGMをとめるflg;
 	Enemy_Sound_flg = false;//enemyの攻撃音をとめるflg;//true:止める false:止めない
 
 	//初期化したらゲームメインへ
@@ -187,7 +189,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	c_main->GameState = 0;
 
 	// メインループ(何かキーが押されたらループを抜ける)
-	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
+	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0 && g_loopFlg == false)
 	{
 		// 画面のクリア
 		ClearDrawScreen();
@@ -217,7 +219,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		case 2:
 			// 背景の色
-				c_main->Game_Main();
+			c_main->Game_Main();
 			break;
 
 		case 3:
@@ -262,16 +264,16 @@ void MAIN::Game_Main() {
 
 		if (!Collision_Player) {
 			for (int i = 0; i < ENEMY_MAX; i++) {
-				c_enemy->Enemy_State(i, c_player,c_enemy);
+				c_enemy->Enemy_State(i, c_player, c_enemy);
 			}
 		}
 
 		//プレイヤーの表示と動きの制御
 		c_player->Player_Move(c_player, c_enemy);
 
-		
+
 		WIN_Text();
-		
+
 		DrawFormatString(100, 220 + 20, 0xFFFFFF, "%d\n", Time_IN_count);
 		if (LightFlg == true) {
 			Number_count = 0;//スポットライトに入っている人数
@@ -287,34 +289,34 @@ void MAIN::Game_Main() {
 			enemy_win = false;//敵がスポットライトに入っているかどうか
 		}
 
-		
-			if (LightFlg == false && time >= 598) {
-				if (DrawFlg == false) {
-					draw_count++;
-					DrawFlg = true;
+
+		if (LightFlg == false && time >= 598) {
+			if (DrawFlg == false) {
+				draw_count++;
+				DrawFlg = true;
+			}
+			if (draw_count >= 2) {
+				draw_timer = (draw_timer + 1) % 121;
+				time = 599;
+				if (draw_timer < 119) {
+					if (CheckSoundMem(draw_sound) == 0) {
+						PlaySoundMem(draw_sound, DX_PLAYTYPE_BACK);
+					}
+					Key_Look = true;
+					SetFontSize(100);
+					DrawString(520, 140, "Draw", GetColor(0xff, 0xff, 0x00));
 				}
-				if (draw_count >=2) {
-					draw_timer = (draw_timer + 1) % 121;
-					time = 599;
-					if (draw_timer < 119) {
-						if (CheckSoundMem(draw_sound) == 0) {
-							PlaySoundMem(draw_sound, DX_PLAYTYPE_BACK);
-						}
-						Key_Look = true;
-						SetFontSize(100);
-						DrawString(520, 140, "Draw", GetColor(0xff, 0xff, 0x00));
-					}
-					else if (draw_timer >= 120) {
-						time = 600;
-						draw_timer = 0;
-					}
+				else if (draw_timer >= 120) {
+					time = 600;
+					draw_timer = 0;
 				}
 			}
-		
-		
+		}
+
+
 		Number_count = 0;//スポットライトに入っている人数
-	
-		
+
+
 		//敵がスポットライトに入っているかどうか判定
 		Number_count += c_enemy->EnemyCheckHit(c_enemy->c_ObjPos, LightPos);
 		if (Number_count > 0) {//1人以上入っているならば
@@ -326,7 +328,7 @@ void MAIN::Game_Main() {
 			player_win = true;
 		}
 
-		if (time <= 597){
+		if (time <= 597) {
 			//スポットライトが止まっているなら勝敗判定を行う
 			if (LightFlg == false) {
 				if (Number_count == 1) {//1人だけになったときにカウント60フレームくらい
@@ -379,7 +381,7 @@ void MAIN::Game_Main() {
 							StopSoundMem(win_sound);
 							time = 600;
 							win_timer = 0;
-						
+
 						}
 					}
 				}
@@ -441,13 +443,13 @@ void MAIN::Game_Main() {
 							StopSoundMem(win_sound);
 							time = 600;
 							win_timer = 0;
-							
+
 						}
 					}
 				}
 			}
 		}
-		
+
 
 		if (finish == false) GameState = 3;	//決着ついたらタイトルへ戻る
 
@@ -481,7 +483,7 @@ void MAIN::Game_Main() {
 	}
 	//3秒立ったら始める
 	else {
-	    StopSoundMem(bgm_title);
+		StopSoundMem(bgm_title);
 		SetFontSize(100);
 		DrawFormatString(470, 250, 0xFF0000, "READY?");
 		DrawFormatString(580, 350, 0xFF0000, "%d", c_dispTime / 60);
@@ -495,14 +497,14 @@ void MAIN::Game_Main() {
 }
 
 void MAIN::Game_Title() {
-	
+
 	if (CheckSoundMem(bgm_title) == 0) {
 		PlaySoundMem(bgm_title, DX_PLAYTYPE_LOOP);
 	}
 	DrawGraph(0, 0, maku[imgC], TRUE);      // 画像を表示
 	DrawGraph(500, 400, menu[1], TRUE);
 	DrawGraph(500, 500, menu[2], TRUE);
-	
+
 	// 描画する文字列の文字セットを変更します
 	ChangeFont("Wolski");
 	SetFontSize(150);
@@ -526,7 +528,7 @@ void MAIN::Game_Title() {
 		if (state < 0) {
 			state = 1;
 		}
-	}	
+	}
 	if (state == 0) {
 		DrawGraph(500, 405, menu2[1], TRUE);
 	}
@@ -549,7 +551,7 @@ void MAIN::Game_Title() {
 		}
 	}
 	else if (g_exit == true) {
-		DxLib_End();
+		g_loopFlg = true;
 	}
 	if (imgC < 0) {
 		ChangeFont("MS Pゴシック");
