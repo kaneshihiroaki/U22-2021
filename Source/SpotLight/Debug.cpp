@@ -17,7 +17,7 @@ bool CameraLR_bool = false;//カメラ移動上下を反転
 //Keyを制御する変数
 bool Key_Look = false;
 
-bool Build_bool = true;//ビルドの日付をけす用にする。
+bool Build_bool = false;//ビルドの日付をけす用にする。
 
 const char data[] = __DATE__;//ビルド時の日付や時間
 const char time[] = __TIME__;
