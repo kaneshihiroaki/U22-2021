@@ -315,7 +315,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ScreenFlip();
 	}
 	// キー入力待ちをする
-	WaitKey();
+	//WaitKey();
 
 	// ＤＸライブラリの後始末
 	DxLib_End();

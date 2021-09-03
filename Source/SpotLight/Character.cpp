@@ -38,15 +38,22 @@ int CHARACTER::StaminaCount(bool MoveFlag,int num) {
 	return Stamina.s_Count[num];
 }
 
-int CHARACTER::PlayerStaminaCount(bool MoveFlag, int count, const int countMAX) {
-	if (MoveFlag == false) {
-		if (count < countMAX) {
-			count++;
+int CHARACTER::PlayerStaminaCount(bool MoveFlag,bool StmOver, int count, const int countMAX) {
+	if (StmOver == true) {
+		if (MoveFlag == false) {
+			if (count < countMAX) {
+				count++;
+			}
+		}
+		else {
+			if (count > 0) {
+				count--;
+			}
 		}
 	}
 	else {
-		if (count > 0) {
-			count--;
+		if (count < countMAX) {
+			count++;
 		}
 	}
 

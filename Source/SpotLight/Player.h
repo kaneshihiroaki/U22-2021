@@ -70,13 +70,18 @@ private:
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
 	bool c_StageIn;		//ステージ内にいるかどうか判定
 	int c_StmCount;		//プレイヤーの体力
-	int c_StmMax;	//体力の最大値
+	int c_StmMax;	//スタミナの最大値
+	
+	int c_GearStm;	//スタミナが切れた後の処理を選択
+	bool c_StmStop;	//スタミナが切れたことを知らせる変数
+
+
 	VECTOR c_MoveVector;	//移動変数
 	VECTOR c_TempMoveVector; //移動先を計算する変数
 
 	bool c_Player_win = false;//プレイヤーがスポットライトに入っているときモデルを変更するようの変数
 
-	const float c_movespeed = 7.0f;	//プレイヤー移動スピード
+	float c_movespeed = 7.0f;	//プレイヤー移動スピード
 	float c_Acc;	//加速を制御
 
 		//痺れ（ダメージ関連）

@@ -64,8 +64,15 @@ void PLAYER::init() {
 	c_Acc = 0.0f;
 
 	c_Player_win = false;
+
+	c_movespeed = 7.0f;	//プレイヤーの速さ設定
+
+	//モデルの大きさを設定
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 	MV1SetScale(c_WinPlayerModel, c_AddPosPlay);
+
+	c_GearStm = 0;//スタミナが切れた時どうするか　0:案１ 1:案２ 2:案３　見たい場合切り替えてください。
+	c_StmStop == true;  //スタミナが切れたことを知らせる変数 true:切れてない false:切れた
 }
 
 void PLAYER::Player_Controller() {
@@ -252,10 +259,10 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		if (((g_NowKey & PAD_INPUT_LEFT) != 0) && ((g_NowKey & PAD_INPUT_UP) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) {
+			/*if (c_StmCount > 0 && c_GearStm != 0) {*/
 				c_MoveVector.x = c_movespeed;
 				c_MoveVector.z = c_movespeed;
-			}
+			/*}*/
 
 			//角度代入
 			c_PlayerAng = 315.0f;
@@ -264,10 +271,10 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if (((g_NowKey & PAD_INPUT_LEFT) != 0) && ((g_NowKey & PAD_INPUT_DOWN) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) {
+			/*if (c_StmCount > 0 && c_GearStm != 0) {*/
 				c_MoveVector.x = c_movespeed;
 				c_MoveVector.z = c_movespeed;
-			}
+			//}
 			//角度代入
 			c_PlayerAng = 225.0f;
 		}
@@ -275,10 +282,10 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if (((g_NowKey & PAD_INPUT_RIGHT) != 0) && ((g_NowKey & PAD_INPUT_DOWN) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) {
+			/*if (c_StmCount > 0 && c_GearStm != 0) {*/
 				c_MoveVector.x = c_movespeed;
 				c_MoveVector.z = c_movespeed;
-			}
+			/*}*/
 			//角度代入
 			c_PlayerAng = 135.0f;
 		}
@@ -286,10 +293,10 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if (((g_NowKey & PAD_INPUT_RIGHT) != 0) && ((g_NowKey & PAD_INPUT_UP) != 0))
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) {
+			/*if (c_StmCount > 0 && c_GearStm != 0) {*/
 				c_MoveVector.x = c_movespeed;
 				c_MoveVector.z = c_movespeed;
-			}
+			/*}*/
 			//角度代入
 			c_PlayerAng = 45.0f;
 		}
@@ -297,7 +304,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if ((g_NowKey & PAD_INPUT_RIGHT) != 0)
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0)c_MoveVector.x = c_movespeed;
+			/*if (c_StmCount > 0 && c_GearStm != 0)*/c_MoveVector.x = c_movespeed;
 
 			//角度代入
 			c_PlayerAng = 90.0f;
@@ -306,7 +313,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if ((g_NowKey & PAD_INPUT_LEFT) != 0)
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0)c_MoveVector.x = c_movespeed;
+			/*if (c_StmCount > 0 && c_GearStm != 0)*/c_MoveVector.x = c_movespeed;
 
 			//角度代入
 			c_PlayerAng = 270.0f;
@@ -315,7 +322,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if ((g_NowKey & PAD_INPUT_DOWN) != 0)
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0)c_MoveVector.z = c_movespeed;
+			/*if (c_StmCount > 0 && c_GearStm != 0)*/c_MoveVector.z = c_movespeed;
 
 			//角度代入
 			c_PlayerAng = 180.0f;
@@ -324,7 +331,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if ((g_NowKey & PAD_INPUT_UP) != 0)
 		{
 			c_MoveFlag = true;
-			if (c_StmCount > 0) c_MoveVector.z = c_movespeed;
+			/*if (c_StmCount > 0 && c_GearStm != 0)*/ c_MoveVector.z = c_movespeed;
 
 
 			//角度代入
@@ -332,8 +339,8 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		}
 	}
 
-	//Gキーを押したらプレイヤーが一定時間止まる
-	if (CheckHitKey(KEY_INPUT_G)) SetParalyzeKey();/*Damage.s_paralyzeKey = true;*/
+	//プレイヤーが一定時間止まる
+	//if (CheckHitKey(KEY_INPUT_G)) SetParalyzeKey();/*Damage.s_paralyzeKey = true;*/
 	if (Damage.s_paralyzeKey == true) {
 		if (CheckSoundMem(damage_sound) == 0) {
 			PlaySoundMem(damage_sound, DX_PLAYTYPE_BACK);
@@ -341,10 +348,27 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		Player_Paralyze();
 	}
 
-	if(Key_Look == false)c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmCount,c_StmMax);        //スタミナ管理
+	if(Key_Look == false)c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmStop, c_StmCount,c_StmMax);        //スタミナ管理
+	//スタミナの減少後の処理
+	//案①
+	if (c_GearStm == 0 && c_StmCount <= 0) { c_movespeed = 1.0f; }
+	else{ c_movespeed = 7.0f;}
+	//案②
+	if(c_GearStm == 1 && c_StmCount <= 0){ c_StmStop = false; }
+	else if (c_GearStm == 1 && c_StmCount <= (c_StmMax * 0.3f)) { c_movespeed = c_movespeed * 0.3f; }
+	else if(c_GearStm == 1 && c_StmCount > (c_StmMax * 0.3f)) {
+		c_StmStop = true;
+		c_movespeed = 7.0f;
+	}
+	//案③
+	if (c_GearStm == 2 && c_StmCount <= 0) { c_StmStop = false; }
+	else if (c_GearStm == 2 && c_StmCount > (c_StmMax * 0.2f)) {
+		c_StmStop = true;
+		c_movespeed = 7.0f;
+	}
 
 	//移動フラグがたってたら移動
-	if (c_MoveFlag == true)
+	if (c_MoveFlag == true && c_StmStop == true)
 	{
 		if (c_Acc == 0.0f) {//初速
 			c_Acc = 0.9f;
@@ -411,15 +435,37 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 	DrawFormatString(50, 40, 0xFFFFFF, "Stamina Point");
 	DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE);
 	//スタミナが100以上なら緑ゲージ・以下なら赤ゲージ
-	if (c_StmCount >= 100) { 
-		StopSoundMem(breath_sound);
-		DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
+	if (c_GearStm == 0) {
+		if (c_StmCount >= 100) {
+			StopSoundMem(breath_sound);
+			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
+		}
+		else {
+			if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
+			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+		}
 	}
-	else{ 
-		if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
-		DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+	else if (c_GearStm == 1) {
+		if (c_StmCount >= (c_StmMax * 0.3f)) {
+			StopSoundMem(breath_sound);
+			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
+		}
+		else {
+			if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
+			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+		}
 	}
-	//Player_Move(Sin, Cos);
+	else if (c_GearStm == 2) {
+		if (c_StmCount >= (c_StmMax * 0.2f)) {
+			StopSoundMem(breath_sound);
+			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
+		}
+		else {
+			if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
+			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+		}
+	}
+
 
 	if (Collision_Player) {
 		Collision_Draw(ene->c_ObjPos);//デバック用
