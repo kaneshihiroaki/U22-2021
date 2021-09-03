@@ -53,6 +53,7 @@ int enemy3_attack_sound;//enemy3が攻撃するときのSE
 int damage_sound;//被弾した時のSE
 int cursor_sound;//カーソルのSE
 int draw_sound;//引き分けのSE
+int breath_sound;  //息切れのSE
 
 int BGM_flg;//BGMをとめるflg;
 int Enemy_Sound_flg;//enemyの攻撃音をとめるflg;//true:止める false:止めない
@@ -829,6 +830,7 @@ int MAIN::LoadSound() {
 	if ((damage_sound = LoadSoundMem("GameSound/damage.mp3")) == -1)return-1;
 	if ((cursor_sound = LoadSoundMem("GameSound/cursor.mp3")) == -1)return-1;
 	if ((draw_sound = LoadSoundMem("GameSound/draw.mp3")) == -1)return-1;
+	if ((breath_sound = LoadSoundMem("GameSound/ikigire.m4a")) == -1)return-1;
 	//音量調整
 	// BGM
 	ChangeVolumeSoundMem(100, bgm_title);
@@ -846,6 +848,7 @@ int MAIN::LoadSound() {
 	ChangeVolumeSoundMem(80, damage_sound);
 	ChangeVolumeSoundMem(80, cursor_sound);
 	ChangeVolumeSoundMem(80, draw_sound);
+	ChangeVolumeSoundMem(80, breath_sound);
 
 	return 0;
 }

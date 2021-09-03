@@ -89,14 +89,6 @@ void PLAYER::Player_Controller() {
 			
 		}
 	}
-
-	//プレイヤーのスタミナのUI
-	SetFontSize(30);
-	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);
-	DrawFormatString(10, 640, 0xFFFFFF, "Stamina Point");
-	DrawBox(10, 670, 10+110, 690, 0xFFFFFF,FALSE);
-	DrawBox(10, 670, 10+110 * c_StmCount / c_StmMax, 690, 0xFFFFFF,TRUE);
-	//Player_Move(Sin, Cos);
 }
 
 // プレイヤーとオブジェクトのあたり判定
@@ -173,22 +165,6 @@ bool PLAYER::Player_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD,
 	//当たり判定の計算
 	float posz = cos(ang) * distz + sin(ang) * distx;
 	float posx = -sin(ang) * distz + cos(ang) * distx;
-
-	//if (num == 0) {
-	//	DrawSphere3D(VGet(posx, 150.0f, posz), 50.0f, 32, GetColor(255, 0, 0), GetColor(100 * num, 100 * num, 50 * num), TRUE);
-	//}
-	//else if (num == 1) {
-	//	DrawSphere3D(VGet(posx, 150.0f, posz), 50.0f, 32, GetColor(0, 255, 0), GetColor(100 * num, 100 * num, 50 * num), TRUE);
-	//}
-	//else {
-	//	DrawSphere3D(VGet(posx, 150.0f, posz), 50.0f, 32, GetColor(0, 0, 255), GetColor(100 * num, 100 * num, 50 * num), TRUE);
-	//}
-
-	//DrawLine3D(VGet(-Att.s_width, 150.0f, Att.s_heigt), VGet(Att.s_width, 150.0f, Att.s_heigt), GetColor(255, 255, 255));
-	//DrawLine3D(VGet(-Att.s_width, 150.0f, Att.s_heigt), VGet(-Att.s_width, 150.0f, -Att.s_heigt), GetColor(255, 255, 255));
-	//DrawLine3D(VGet(Att.s_width, 150.0f, Att.s_heigt), VGet(Att.s_width, 150.0f, -Att.s_heigt), GetColor(255, 255, 255));
-	//DrawLine3D(VGet(-Att.s_width, 150.0f, -Att.s_heigt), VGet(Att.s_width, 150.0f, -Att.s_heigt), GetColor(255, 255, 255));
-	
 
 	//矩形と点の当たり判定を行う
 	if (-Att.s_heigt /*/ 2.0f*/ <= posz && Att.s_heigt/* / 2.0f*/ >= posz) {	
@@ -382,18 +358,6 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 			c_Acc += 0.01f;
 		}
 
-		//float Sin = sin(camera->GetCameraAngle() / 180.0f * DX_PI_F);
-		//float Cos = cos(camera->GetCameraAngle() / 180.0f * DX_PI_F);
-
-		//TempMoveVector.x = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
-		//TempMoveVector.y = 0.0f;
-		//TempMoveVector.z = c_MoveVector.x * Sin + c_MoveVector.z * Cos;
-
-		//TempRotVector.x = 0.0f;
-		//TempRotVector.y = c_MoveVector.x * Cos - c_MoveVector.z * Sin;
-		//TempRotVector.z = 0.0f;
-		//TempRotVector.z = 0.0f;
-
 		//移動場所の確認
 		//VECTOR TempMoveVector;
 		float Sin1 = sin(c_PlayerAng * (M_PI / 180));
@@ -440,6 +404,22 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		Att.s_AttackStartKey = true;
 	}
 	if (Att.s_AttackStartKey == true) Player_Attack(ene, c_Rotation);
+
+	//プレイヤーのスタミナのUI
+	SetFontSize(30);
+	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);
+	DrawFormatString(50, 40, 0xFFFFFF, "Stamina Point");
+	DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE);
+	//スタミナが100以上なら緑ゲージ・以下なら赤ゲージ
+	if (c_StmCount >= 100) { 
+		StopSoundMem(breath_sound);
+		DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
+	}
+	else{ 
+		if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
+		DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+	}
+	//Player_Move(Sin, Cos);
 
 	if (Collision_Player) {
 		Collision_Draw(ene->c_ObjPos);//デバック用
