@@ -760,19 +760,12 @@ void MAIN::Game_Result() {
 			break;
 		}
 
-		//if (c_PressBDispTime++ >= c_PressBDispTimeMax)
-		//{
-		//	c_ResultBack = true;
-		//}
-		//if (c_ResultBack == true) {
-		//	if(c_PressBDispTime % 20 < 100)DrawFormatString(530, 550, 0x880000, "Press B");
-		//}
-		if (CheckSoundMem(player_win_sound) != 1 && CheckSoundMem(enemy_win_sound) != 1)
+		if (c_PressBDispTime++ >= c_resultdispMaxTime)
 		{
 			c_ResultBack = true;
 		}
 		if (c_ResultBack == true) {
-			if(c_PressBDispTime % 20 < 100)DrawFormatString(530, 550, 0x880000, "Press B");
+			if (c_PressBDispTime % 100 < 50)DrawFormatString(530, 550, 0x880000, "Press B");
 		}
 
 		if ((g_KeyFlg & PAD_INPUT_2) != 0 && c_ResultBack == true) GameState = 0;
