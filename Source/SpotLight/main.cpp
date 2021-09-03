@@ -336,6 +336,13 @@ void MAIN::Game_Main() {
 	c_player->Player_Controller();
 	if (!Collision_Player)c_enemy->Enemy_Creat();
 
+	if (Debug_Camera == true) {
+		SetFontSize(50);
+		DrawFormatString(300, 110, 0xFFFFFF, "CameraPos：%f", c_camera->cko);
+		DrawFormatString(300, 150, 0xFFFFFF, "CameraAngV%f", c_camera->c_CameraVAngle);
+		DrawFormatString(300, 190, 0xFFFFFF, "CameraAngD%f", c_camera->c_CameraHAngle);
+	}
+
 	//最初にBボタンを押してゲーム開始
 	if (c_ready == true) {
 

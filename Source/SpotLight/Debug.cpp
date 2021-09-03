@@ -23,6 +23,7 @@ const char data[] = __DATE__;//ビルド時の日付や時間
 const char time[] = __TIME__;
 
 bool Debug_Enemy = false;//デバック用フラグtrueで確認可能にする
+bool Debug_Camera = false;	//カメラ用デバック用フラグtrueで確認可能にする
 
 
 //ローカル変数（private変数）
@@ -95,6 +96,9 @@ int DebugCom() {
 		case 6:
 			Enemy_State();
 			break;
+		case 7:
+			FreeCamera();
+			break;
 		case 10:
 			CameraReverse();
 			break;
@@ -163,6 +167,7 @@ void DebugDrawing() {
 	DrawString(50, 81, "Build_Time", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 101, "Game_Judge", GetColor(0x00, 0xff, 0xff));
 	DrawString(50, 121, "Enemy_State", GetColor(0x00, 0xff, 0xff));
+	DrawString(50, 141, "FreeCamera", GetColor(0x00, 0xff, 0xff));
 }
 
 
@@ -319,5 +324,10 @@ void Game_Judge() {
 //エネミーのステータスを見るよう
 void Enemy_State() {
 	Debug_Enemy = !Debug_Enemy;
+	DebugMode = false;
+}
+
+void FreeCamera() {
+	Debug_Camera = !Debug_Camera;
 	DebugMode = false;
 }

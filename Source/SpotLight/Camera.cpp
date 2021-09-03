@@ -32,107 +32,107 @@ void CAMERA::init() {
 
 void CAMERA::Camera_Control(STAGE* stage) {
 
-	//DINPUT_JOYSTATE inputGet;
+	if (Debug_Camera == true) {
+		DINPUT_JOYSTATE inputGet;
 
-	//// 入力状態を取得
-	//GetJoypadDirectInputState(DX_INPUT_PAD1, &inputGet);
-	//if (CameraLR_bool == false) {
-	//	// カメラ左右移動
-	//	if (inputGet.Rx > 0)
-	//	{
-	//		c_CameraHAngle += c_CameraSpeed;
-	//		if (c_CameraHAngle >= 180.0f)
-	//		{
-	//			c_CameraHAngle -= 360.0f;
-	//		}
-	//	}
-	//	if (inputGet.Rx < 0)
-	//	{
-	//		c_CameraHAngle -= c_CameraSpeed;
-	//		if (c_CameraHAngle <= -180.0f)
-	//		{
-	//			c_CameraHAngle += 360.0f;
-	//		}
-	//	}
-	//}else{
-	//	// カメラ左右移動
-	//	if (inputGet.Rx < 0)
-	//	{
-	//		c_CameraHAngle += c_CameraSpeed;
-	//		if (c_CameraHAngle >= 180.0f)
-	//		{
-	//			c_CameraHAngle -= 360.0f;
-	//		}
-	//	}
-	//	if (inputGet.Rx > 0)
-	//	{
-	//		c_CameraHAngle -= c_CameraSpeed;
-	//		if (c_CameraHAngle <= -180.0f)
-	//		{
-	//			c_CameraHAngle += 360.0f;
-	//		}
-	//	}
-	//}
+		// 入力状態を取得
+		GetJoypadDirectInputState(DX_INPUT_PAD1, &inputGet);
+		if (CameraLR_bool == false) {
+			// カメラ左右移動
+			if (inputGet.Rx > 0)
+			{
+				c_CameraHAngle += c_CameraSpeed;
+				if (c_CameraHAngle >= 180.0f)
+				{
+					c_CameraHAngle -= 360.0f;
+				}
+			}
+			if (inputGet.Rx < 0)
+			{
+				c_CameraHAngle -= c_CameraSpeed;
+				if (c_CameraHAngle <= -180.0f)
+				{
+					c_CameraHAngle += 360.0f;
+				}
+			}
+		}
+		else {
+			// カメラ左右移動
+			if (inputGet.Rx < 0)
+			{
+				c_CameraHAngle += c_CameraSpeed;
+				if (c_CameraHAngle >= 180.0f)
+				{
+					c_CameraHAngle -= 360.0f;
+				}
+			}
+			if (inputGet.Rx > 0)
+			{
+				c_CameraHAngle -= c_CameraSpeed;
+				if (c_CameraHAngle <= -180.0f)
+				{
+					c_CameraHAngle += 360.0f;
+				}
+			}
+		}
 
-	//if (CameraUp_bool == false) {
-	//	//カメラの上下移動
-	//	if (inputGet.Ry > 0)
-	//	{
-	//		c_CameraVAngle += c_CameraSpeed;
-	//		if (c_CameraVAngle >= 80.0f)
-	//		{
-	//			c_CameraVAngle = 80.0f;
-	//		}
-	//	}
-	//	if (inputGet.Ry < 0)
-	//	{
-	//		c_CameraVAngle -= c_CameraSpeed;
-	//		if (c_CameraVAngle <= 0.0f)
-	//		{
-	//			c_CameraVAngle = 0.0f;
-	//		}
-	//	}
-	//}
-	//else {
-	//	//カメラの上下移動
-	//	if (inputGet.Ry < 0)
-	//	{
-	//		c_CameraVAngle += c_CameraSpeed;
-	//		if (c_CameraVAngle >= 80.0f)
-	//		{
-	//			c_CameraVAngle = 80.0f;
-	//		}
-	//	}
-	//	if (inputGet.Ry > 0)
-	//	{
-	//		c_CameraVAngle -= c_CameraSpeed;
-	//		if (c_CameraVAngle <= 0.0f)
-	//		{
-	//			c_CameraVAngle = 0.0f;
-	//		}
-	//	}
-	//}
+		if (CameraUp_bool == false) {
+			//カメラの上下移動
+			if (inputGet.Ry > 0)
+			{
+				c_CameraVAngle += c_CameraSpeed;
+				if (c_CameraVAngle >= 80.0f)
+				{
+					c_CameraVAngle = 80.0f;
+				}
+			}
+			if (inputGet.Ry < 0)
+			{
+				c_CameraVAngle -= c_CameraSpeed;
+				if (c_CameraVAngle <= 0.0f)
+				{
+					c_CameraVAngle = 0.0f;
+				}
+			}
+		}
+		else {
+			//カメラの上下移動
+			if (inputGet.Ry < 0)
+			{
+				c_CameraVAngle += c_CameraSpeed;
+				if (c_CameraVAngle >= 80.0f)
+				{
+					c_CameraVAngle = 80.0f;
+				}
+			}
+			if (inputGet.Ry > 0)
+			{
+				c_CameraVAngle -= c_CameraSpeed;
+				if (c_CameraVAngle <= 0.0f)
+				{
+					c_CameraVAngle = 0.0f;
+				}
+			}
+		}
 
-	//
 
-	////カメラとプレイヤーの距離
-	//if (CheckHitKey(KEY_INPUT_A) == 1)
-	//{
-	//	//if (cko >= 350.0f)
-	//	//{
-	//		cko -= 10.0f;
-	//	//}
-	//}
-	//if (CheckHitKey(KEY_INPUT_D) == 1)
-	//{
-	//	//if (cko <= 4000.0f)
-	//	//{
-	//		cko += 10.0f;
-	//	//}
-	//}
 
-	//DrawFormatString(300, 110, 0xFFFFFF, "%f", cko);
-	//DrawFormatString(300, 130, 0xFFFFFF, "%f", c_CameraVAngle);
+		//カメラとプレイヤーの距離
+		if (CheckHitKey(KEY_INPUT_A) == 1)
+		{
+			//if (cko >= 350.0f)
+			//{
+			cko -= 10.0f;
+			//}
+		}
+		if (CheckHitKey(KEY_INPUT_D) == 1)
+		{
+			//if (cko <= 4000.0f)
+			//{
+			cko += 10.0f;
+			//}
+		}
+	}
 
 	//カメラの計算のための変数宣言
 	VECTOR TempPosition1;

@@ -12,14 +12,15 @@ private:
 
 	float  c_SinParam;
 	float  c_CosParam;
-	float  c_CameraHAngle;		//Šp“x
-	float  c_CameraVAngle;		//Šp“x
-	float cko = -170;
 	
 
 public:
 	CAMERA();
 	~CAMERA();
+
+	float  c_CameraHAngle;		//Šp“x
+	float  c_CameraVAngle;		//Šp“x
+	float cko = -170;
 
 	float GetCameraAngle() { return c_CameraHAngle; }
 
