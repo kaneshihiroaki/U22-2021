@@ -118,14 +118,14 @@ void CAMERA::Camera_Control(STAGE* stage) {
 
 
 		//カメラとプレイヤーの距離
-		if (CheckHitKey(KEY_INPUT_A) == 1)
+		if ((g_NowKey & PAD_INPUT_3))
 		{
 			//if (cko >= 350.0f)
 			//{
 			cko -= 10.0f;
 			//}
 		}
-		if (CheckHitKey(KEY_INPUT_D) == 1)
+		if ((g_NowKey & PAD_INPUT_4))
 		{
 			//if (cko <= 4000.0f)
 			//{
