@@ -73,7 +73,7 @@ private:
 	int c_StmMax;	//スタミナの最大値
 	
 	int c_GearStm;	//スタミナが切れた後の処理を選択
-	bool c_StmStop;	//スタミナが切れたことを知らせる変数
+	bool c_StmStop;	//スタミナが切れたことを知らせる変数 true:切れてない false:切れた
 
 
 	VECTOR c_MoveVector;	//移動変数
