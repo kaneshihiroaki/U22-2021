@@ -24,7 +24,7 @@ STAGE::~STAGE()
 
 void STAGE::init() {
 	// À•W‰Šú‰»
-	c_StagePosition = VGet(100.0f, 0.0f, 0.0f);
+	c_StagePosition = VGet(0.0f, 0.0f, 0.0f);
 	//‘å‚«‚³‰Šú‰»
 	c_StageScale = { 1.0f,1.0f,1.0f };
 
