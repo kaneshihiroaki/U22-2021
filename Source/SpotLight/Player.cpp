@@ -52,6 +52,7 @@ void PLAYER::init() {
 	c_AddPosPlay = { 0.5f,0.5f,0.5f };
 
 	c_MoveFlag = false;	//プレイヤーが移動しているのか判定
+	c_StmStop = true;  //スタミナが切れたことを知らせる変数 true:切れてない false:切れた
 	c_StageIn = true;	//ステージ内にいるかどうか判定
 
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
@@ -72,7 +73,6 @@ void PLAYER::init() {
 	MV1SetScale(c_WinPlayerModel, c_AddPosPlay);
 
 	c_GearStm = 0;//スタミナが切れた時どうするか　0:案１ 1:案２ 2:案３　見たい場合切り替えてください。
-	c_StmStop == true;  //スタミナが切れたことを知らせる変数 true:切れてない false:切れた
 }
 
 void PLAYER::Player_Controller() {
