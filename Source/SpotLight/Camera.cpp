@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Debug.h"
 #include "Stage.h"
+#include "Main.h"
 
 CAMERA::CAMERA()
 {
@@ -160,4 +161,31 @@ void CAMERA::Camera_Control(STAGE* stage) {
 	CameraPosition = VAdd(TempPosition2, CameraLookAtPosition);
 
 	SetCameraPositionAndTarget_UpVecY(VGet(CameraPosition.x,CameraPosition.y+50,CameraPosition.z+ cko), CameraLookAtPosition);
+}
+
+void CAMERA::Camera_Result(MAIN* main) {
+	if (CheckHitKey(KEY_INPUT_Z))x = x + 1;
+	if (CheckHitKey(KEY_INPUT_A))x = x - 1;
+	if (CheckHitKey(KEY_INPUT_X))y = y + 1;
+	if (CheckHitKey(KEY_INPUT_S))y = y - 1;
+	if (CheckHitKey(KEY_INPUT_C))z = z + 1;
+	if (CheckHitKey(KEY_INPUT_D))z = z - 1;
+	if (CheckHitKey(KEY_INPUT_V))x1 = x1 + 0.01;
+	if (CheckHitKey(KEY_INPUT_F))x1 = x1 - 0.01;
+	if (CheckHitKey(KEY_INPUT_B))y2 = y2 + 0.01;
+	if (CheckHitKey(KEY_INPUT_G))y2 = y2 - 0.01;
+	if (CheckHitKey(KEY_INPUT_N))z1 = z1 + 0.01;
+	if (CheckHitKey(KEY_INPUT_H))z1 = z1 - 0.01;
+
+	SetFontSize(20);
+	DrawFormatString(10, 10, 0xFFFFFF, "%f", x);
+	DrawFormatString(10, 30, 0xFFFFFF, "%f", y);
+	DrawFormatString(10, 50, 0xFFFFFF, "%f", z);
+	DrawFormatString(10, 70, 0xFFFFFF, "%f", x1);
+	DrawFormatString(10, 90, 0xFFFFFF, "%f", y2);
+	DrawFormatString(10, 110, 0xFFFFFF, "%f", z1);
+
+
+	//SetCameraPositionAndTarget_UpVecY(VGet(x, y, z), /*main->c_ResultPos[0]*/VGet(x1, y2, z1));
+	SetCameraPositionAndAngle(VGet(x, y, z), x1,y2,z1);
 }

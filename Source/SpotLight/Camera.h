@@ -2,6 +2,7 @@
 
 class PLAYER;
 class STAGE;
+class MAIN;
 
 class CAMERA
 {
@@ -22,9 +23,17 @@ public:
 	float  c_CameraVAngle;		//äpìx
 	float cko = -170;
 
+	float x = 0;
+	float y = 569;
+	float z = -530;
+	float x1 = -0.41;
+	float y2 = 3.15;
+	float z1 = 0;
+
 	float GetCameraAngle() { return c_CameraHAngle; }
 
 	void init();	//èâä˙âª
 	void Camera_Control(STAGE* stage);
+	void Camera_Result(MAIN* main);
 
 };

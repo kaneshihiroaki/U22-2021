@@ -49,11 +49,12 @@ public:
 	~MAIN();
 
 	int GameState;		//ゲームの状態
+	VECTOR c_ResultPos[4];
 
 	void Game_init();	//ゲームの初期化
 	void Game_Main();
 	void Game_Title();
-	void Game_Result();
+	void Game_Result(MAIN* main);
 
 	//サドンデス用関数
 	void Sadondes();

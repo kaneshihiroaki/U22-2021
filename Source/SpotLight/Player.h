@@ -71,6 +71,7 @@ private:
 	bool c_StageIn;		//ステージ内にいるかどうか判定
 	int c_StmCount;		//プレイヤーの体力
 	int c_StmMax;	//スタミナの最大値
+	bool c_Slide;	//プレイヤーを滑らせる判定変数
 	
 	int c_GearStm;	//スタミナが切れた後の処理を選択
 	bool c_StmStop;	//スタミナが切れたことを知らせる変数 true:切れてない false:切れた

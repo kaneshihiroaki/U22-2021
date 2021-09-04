@@ -32,7 +32,7 @@ PLAYER::PLAYER()
 	// ３Ｄモデルの読み込み
 	c_PlayerModel = MV1LoadModel("Model/Player3.mv1");
 	c_WinPlayerModel = MV1LoadModel("Model/Player4.mv1");
-	
+
 	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
 
 	//c_enemyCol = new ENEMY();
@@ -44,7 +44,7 @@ PLAYER::~PLAYER()
 
 void PLAYER::init() {
 	// プレイヤー座標初期化
-	c_Position = VGet(100.0f, 100.0f, 0.0f);
+	c_Position = VGet(0.0f, 100.0f, -100.0f);
 	c_PlayerAng = 0;	//プレイヤーの角度
 	//プレイヤー回転（ラジアン変換）
 	c_Rotation = VGet(0.0f, (c_PlayerAng * (M_PI / 180)), 0.0f);
@@ -52,6 +52,7 @@ void PLAYER::init() {
 	c_AddPosPlay = { 0.5f,0.5f,0.5f };
 
 	c_MoveFlag = false;	//プレイヤーが移動しているのか判定
+	c_Slide = false;
 	c_StmStop = true;  //スタミナが切れたことを知らせる変数 true:切れてない false:切れた
 	c_StageIn = true;	//ステージ内にいるかどうか判定
 
@@ -78,9 +79,6 @@ void PLAYER::init() {
 void PLAYER::Player_Controller() {
 	//プレイヤー
 	// 画面に映る位置に３Ｄモデルを移動
-	
-	
-
 	if (!Collision_Player) {
 		if (Damage.s_ParaTime % 20 < 10 || Key_Look) {//0~9までは描画10~19までは描画しない
 			if (c_Player_win) {
@@ -93,9 +91,13 @@ void PLAYER::Player_Controller() {
 				MV1SetRotationXYZ(c_PlayerModel, c_Rotation);
 				MV1DrawModel(c_PlayerModel);			 //プレイヤーのモデル描画
 			}
-			
+
 		}
 	}
+	//SetFontSize(30);
+	//DrawFormatString(100,100, 0xFF0000, "%f",c_Position.x);
+	//DrawFormatString(100,130, 0xFF0000, "%f",700-c_Position.x);
+	//DrawFormatString(550 + (((int)c_Position.x+c_movespeed)-(int)c_Position.x),280 - (int)c_Position.z, 0xFF0000, "YOU");
 }
 
 // プレイヤーとオブジェクトのあたり判定
@@ -174,7 +176,7 @@ bool PLAYER::Player_AttackCol(VECTOR AttPosRU, VECTOR AttPosLU, VECTOR AttPosRD,
 	float posx = -sin(ang) * distz + cos(ang) * distx;
 
 	//矩形と点の当たり判定を行う
-	if (-Att.s_heigt /*/ 2.0f*/ <= posz && Att.s_heigt/* / 2.0f*/ >= posz) {	
+	if (-Att.s_heigt /*/ 2.0f*/ <= posz && Att.s_heigt/* / 2.0f*/ >= posz) {
 		if (-Att.s_width/* / 2.0f*/ <= posx && Att.s_width /*/ 2.0f*/ >= posx) {
 			return true;
 		}
@@ -244,19 +246,20 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 	}
 }
 
-void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
+void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 {
 	//移動場所の確認
 	VECTOR TempRotVector;
 
 	//移動してるかどうか
-	c_MoveFlag = FALSE;
-	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
+	//c_MoveFlag = FALSE;
+	c_Slide = false;
+	//c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
 	//プレイヤーのスタミナ案を変更
-	if(CheckHitKey(KEY_INPUT_J))c_GearStm = 0;
-	if(CheckHitKey(KEY_INPUT_K))c_GearStm = 1;
-	if(CheckHitKey(KEY_INPUT_L))c_GearStm = 2;
+	if (CheckHitKey(KEY_INPUT_J))c_GearStm = 0;
+	if (CheckHitKey(KEY_INPUT_K))c_GearStm = 1;
+	if (CheckHitKey(KEY_INPUT_L))c_GearStm = 2;
 
 	if (Key_Look == false) {
 		// プレイヤー移動
@@ -264,10 +267,9 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		if (((g_NowKey & PAD_INPUT_LEFT) != 0) && ((g_NowKey & PAD_INPUT_UP) != 0))
 		{
 			c_MoveFlag = true;
-			/*if (c_StmCount > 0 && c_GearStm != 0) {*/
-				c_MoveVector.x = c_movespeed;
-				c_MoveVector.z = c_movespeed;
-			/*}*/
+			c_Slide = true;
+			c_MoveVector.x = c_movespeed;
+			c_MoveVector.z = c_movespeed;
 
 			//角度代入
 			c_PlayerAng = 315.0f;
@@ -276,10 +278,9 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if (((g_NowKey & PAD_INPUT_LEFT) != 0) && ((g_NowKey & PAD_INPUT_DOWN) != 0))
 		{
 			c_MoveFlag = true;
-			/*if (c_StmCount > 0 && c_GearStm != 0) {*/
-				c_MoveVector.x = c_movespeed;
-				c_MoveVector.z = c_movespeed;
-			//}
+			c_Slide = true;
+			c_MoveVector.x = c_movespeed;
+			c_MoveVector.z = c_movespeed;
 			//角度代入
 			c_PlayerAng = 225.0f;
 		}
@@ -287,10 +288,10 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if (((g_NowKey & PAD_INPUT_RIGHT) != 0) && ((g_NowKey & PAD_INPUT_DOWN) != 0))
 		{
 			c_MoveFlag = true;
-			/*if (c_StmCount > 0 && c_GearStm != 0) {*/
-				c_MoveVector.x = c_movespeed;
-				c_MoveVector.z = c_movespeed;
-			/*}*/
+			c_Slide = true;
+
+			c_MoveVector.x = c_movespeed;
+			c_MoveVector.z = c_movespeed;
 			//角度代入
 			c_PlayerAng = 135.0f;
 		}
@@ -298,10 +299,10 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if (((g_NowKey & PAD_INPUT_RIGHT) != 0) && ((g_NowKey & PAD_INPUT_UP) != 0))
 		{
 			c_MoveFlag = true;
-			/*if (c_StmCount > 0 && c_GearStm != 0) {*/
-				c_MoveVector.x = c_movespeed;
-				c_MoveVector.z = c_movespeed;
-			/*}*/
+			c_Slide = true;
+
+			c_MoveVector.x = c_movespeed;
+			c_MoveVector.z = c_movespeed;
 			//角度代入
 			c_PlayerAng = 45.0f;
 		}
@@ -309,7 +310,9 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if ((g_NowKey & PAD_INPUT_RIGHT) != 0)
 		{
 			c_MoveFlag = true;
-			/*if (c_StmCount > 0 && c_GearStm != 0)*/c_MoveVector.x = c_movespeed;
+			c_Slide = true;
+
+			c_MoveVector.x = c_movespeed;
 
 			//角度代入
 			c_PlayerAng = 90.0f;
@@ -318,7 +321,9 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if ((g_NowKey & PAD_INPUT_LEFT) != 0)
 		{
 			c_MoveFlag = true;
-			/*if (c_StmCount > 0 && c_GearStm != 0)*/c_MoveVector.x = c_movespeed;
+			c_Slide = true;
+
+			c_MoveVector.x = c_movespeed;
 
 			//角度代入
 			c_PlayerAng = 270.0f;
@@ -327,7 +332,9 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if ((g_NowKey & PAD_INPUT_DOWN) != 0)
 		{
 			c_MoveFlag = true;
-			/*if (c_StmCount > 0 && c_GearStm != 0)*/c_MoveVector.z = c_movespeed;
+			c_Slide = true;
+
+			c_MoveVector.z = c_movespeed;
 
 			//角度代入
 			c_PlayerAng = 180.0f;
@@ -336,7 +343,9 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		else if ((g_NowKey & PAD_INPUT_UP) != 0)
 		{
 			c_MoveFlag = true;
-			/*if (c_StmCount > 0 && c_GearStm != 0)*/ c_MoveVector.z = c_movespeed;
+			c_Slide = true;
+
+			c_MoveVector.z = c_movespeed;
 
 
 			//角度代入
@@ -353,15 +362,15 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 		Player_Paralyze();
 	}
 
-	if(Key_Look == false)c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmStop, c_StmCount,c_StmMax);        //スタミナ管理
+	if (Key_Look == false)c_StmCount = PlayerStaminaCount(c_Slide, c_StmStop, c_StmCount, c_StmMax);        //スタミナ管理
 	//スタミナの減少後の処理
 	//案①
 	if (c_GearStm != 1 && c_GearStm != 2 && c_StmCount <= 0) { c_movespeed = 1.0f; }
-	else{ c_movespeed = 7.0f;}
+	else { c_movespeed = 7.0f; }
 	//案②
-	if(c_GearStm == 1 && c_StmCount <= 0){ c_StmStop = false; }
+	if (c_GearStm == 1 && c_StmCount <= 0) { c_StmStop = false; }
 	else if (c_GearStm == 1 && c_StmCount <= (c_StmMax * 0.3f)) { c_movespeed = c_movespeed * 0.3f; }
-	else if(c_GearStm == 1 && c_StmCount > (c_StmMax * 0.3f)) {
+	else if (c_GearStm == 1 && c_StmCount > (c_StmMax * 0.3f)) {
 		c_StmStop = true;
 		c_movespeed = 7.0f;
 	}
@@ -375,17 +384,28 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true && c_StmStop == true)
 	{
-		if (c_Acc == 0.0f) {//初速
-			c_Acc = 0.9f;
+		if (c_Slide == true) {
+			if (c_Acc == 0.0f) {//初速
+				c_Acc = 0.9f;
+			}
+			else if (c_Acc == 1.0f) {
+			}
+			else if (c_Acc > 1.0f) {
+				c_Acc = 1.0f;
+			}
+			else {//加速度
+				c_Acc += 0.01f;
+			}
 		}
-		else if (c_Acc == 1.0f) {
+		else {
+			c_Acc -= 0.1f;
+
+			if (c_Acc <= 0) { 
+				c_MoveFlag = false;
+				c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
+			}
 		}
-		else if (c_Acc > 1.0f) {
-			c_Acc = 1.0f;
-		}
-		else {//加速度
-			c_Acc += 0.01f;
-		}
+
 
 		//移動場所の確認
 		//VECTOR TempMoveVector;
@@ -402,7 +422,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 				if (ene->CheckPara(i) == false) {
 					c_MoveFlag = false;
 				}
-				else if ((ene->Enemy_Push(i, player,ene, c_TempMoveVector,0)) == false) {//falseなら動かせなかった。
+				else if ((ene->Enemy_Push(i, player, ene, c_TempMoveVector, 0)) == false) {//falseなら動かせなかった。
 					c_MoveFlag = false;
 				}
 			}
@@ -423,7 +443,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 	c_Rotation.x = 0.0f;
 	c_Rotation.y = c_PlayerAng * (M_PI / 180);
 	c_Rotation.z = 0.0f;
-	
+
 	//攻撃
 	if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false &&
 		Att.s_AttackStartKey == false && c_StmCount >= Att.s_AttackCons)) {
@@ -477,10 +497,10 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 	}
 }
 
-bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy,   VECTOR PushVec,int count)
+bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy, VECTOR PushVec, int count)
 {
 	//しびれているかどうか。しびれていないならfalseで帰る
-	if (Damage.s_paralyzeKey == false||count>2) {
+	if (Damage.s_paralyzeKey == false || count > 2) {
 		return false;
 	}
 
@@ -501,7 +521,7 @@ bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy,   VECTOR PushVec,int coun
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), enemy->c_ObjPos[i], 55) == true) {
 				c_MoveFlag = false;
-				if (enemy->Enemy_Push(i, player, enemy, c_TempMoveVector,count+1) == false) {//falseなら動かせなかった
+				if (enemy->Enemy_Push(i, player, enemy, c_TempMoveVector, count + 1) == false) {//falseなら動かせなかった
 					c_MoveFlag = false;
 				}
 			}
@@ -510,8 +530,8 @@ bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy,   VECTOR PushVec,int coun
 		if (c_StageIn == false) {
 			c_MoveFlag = false;
 		}
-	
-		if (c_MoveFlag ) {//移動できるときにのみとおる
+
+		if (c_MoveFlag) {//移動できるときにのみとおる
 			c_Position = VAdd(c_Position, c_TempMoveVector);		//移動
 			//c_Rotation = VAdd(c_Rotation, TempRotVector);
 		}
