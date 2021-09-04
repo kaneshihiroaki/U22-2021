@@ -253,6 +253,11 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 	c_MoveFlag = FALSE;
 	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
+	//プレイヤーのスタミナ案を変更
+	if(CheckHitKey(KEY_INPUT_J))c_GearStm = 0;
+	if(CheckHitKey(KEY_INPUT_K))c_GearStm = 1;
+	if(CheckHitKey(KEY_INPUT_L))c_GearStm = 2;
+
 	if (Key_Look == false) {
 		// プレイヤー移動
 		//左上移動
@@ -351,7 +356,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 	if(Key_Look == false)c_StmCount = PlayerStaminaCount(c_MoveFlag, c_StmStop, c_StmCount,c_StmMax);        //スタミナ管理
 	//スタミナの減少後の処理
 	//案①
-	if (c_GearStm == 0 && c_StmCount <= 0) { c_movespeed = 1.0f; }
+	if (c_GearStm != 1 && c_GearStm != 2 && c_StmCount <= 0) { c_movespeed = 1.0f; }
 	else{ c_movespeed = 7.0f;}
 	//案②
 	if(c_GearStm == 1 && c_StmCount <= 0){ c_StmStop = false; }
@@ -435,7 +440,7 @@ void PLAYER::Player_Move(PLAYER* player,ENEMY* ene)
 	DrawFormatString(50, 40, 0xFFFFFF, "Stamina Point");
 	DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE);
 	//スタミナが100以上なら緑ゲージ・以下なら赤ゲージ
-	if (c_GearStm == 0) {
+	if (c_GearStm != 1 && c_GearStm != 2) {
 		if (c_StmCount >= 100) {
 			StopSoundMem(breath_sound);
 			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
