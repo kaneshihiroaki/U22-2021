@@ -44,7 +44,7 @@ PLAYER::~PLAYER()
 
 void PLAYER::init() {
 	// プレイヤー座標初期化
-	c_Position = VGet(0.0f, 100.0f, -100.0f);
+	c_Position = VGet(-10.0f, 100.0f, -500.0f);
 	c_PlayerAng = 0;	//プレイヤーの角度
 	//プレイヤー回転（ラジアン変換）
 	c_Rotation = VGet(0.0f, (c_PlayerAng * (M_PI / 180)), 0.0f);
@@ -94,10 +94,9 @@ void PLAYER::Player_Controller() {
 
 		}
 	}
-	//SetFontSize(30);
-	//DrawFormatString(100,100, 0xFF0000, "%f",c_Position.x);
-	//DrawFormatString(100,130, 0xFF0000, "%f",700-c_Position.x);
-	//DrawFormatString(550 + (((int)c_Position.x+c_movespeed)-(int)c_Position.x),280 - (int)c_Position.z, 0xFF0000, "YOU");
+	SetFontSize(30);
+	VECTOR stringpos = ConvWorldPosToScreenPos(c_Position);
+	DrawFormatString(stringpos.x - 20,stringpos.y - 55, 0xFF0000, "YOU");
 }
 
 // プレイヤーとオブジェクトのあたり判定

@@ -323,9 +323,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	return 0;
 }
 
-
-
-
 void MAIN::Game_Main() {
 	SetFontSize(100);
 	if (CheckSoundMem(bgm_main) == 0) {
@@ -334,8 +331,8 @@ void MAIN::Game_Main() {
 	//オブジェクトの表示
 	c_camera->Camera_Control(c_stage);
 	c_stage->Stage_Make(c_enemy, c_player);
-	c_player->Player_Controller();
 	if (!Collision_Player)c_enemy->Enemy_Creat();
+	c_player->Player_Controller();
 
 	if (Debug_Camera == true) {
 		SetFontSize(50);
@@ -580,15 +577,15 @@ void MAIN::Game_Main() {
 		DrawFormatString(500, 10, 0xffff00, "ROUND %d", round_count);
 
 		//開始時にGO!を表示
-		if (--c_dispTime >= 0)DrawFormatString(550, 250, 0x0000FF, "GO!");
+		if (--c_dispTime >= 0)DrawFormatString(580, 230, 0x0000FF, "GO!");
 
 	}
 	//3秒立ったら始める
 	else {
 		StopSoundMem(bgm_title);
 		SetFontSize(100);
-		DrawFormatString(495, 220, 0xFF0000, "READY?");
-		DrawFormatString(595, 320, 0xFF0000, "%d", c_dispTime / 60);
+		DrawFormatString(520, 140, 0xFF0000, "READY?");
+		DrawFormatString(620, 240, 0xFF0000, "%d", c_dispTime / 60);
 	}
 
 	//ボタン押したらゲーム開始

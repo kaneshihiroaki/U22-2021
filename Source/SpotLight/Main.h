@@ -73,7 +73,7 @@ private:
 	bool c_ResultBack;		//リザルトでタイトルに戻るという表記を表示させる
 	int c_VictorNum = 0;	//勝者格納よう変数
 
-	const int c_dispTimeMax = 60;	//GO表示時間
+	const int c_dispTimeMax = 90;	//GO表示時間
 	const int c_readyMaxTime = 240;		//READYの表示時間いっぱい
 	const int c_resultdispMaxTime = 180;	//リザルトの表示時間
 	//const int c_pointcal = 10;		//リザルトのポイント計算
