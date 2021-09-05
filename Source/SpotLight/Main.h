@@ -49,7 +49,10 @@ public:
 	~MAIN();
 
 	int GameState;		//ゲームの状態
-	VECTOR c_ResultPos[4];
+	VECTOR c_ResultPos[4];	//リザルトでのキャラクターの位置
+
+	bool GetResult() { return c_OnePass; }
+	int GetWinner() { return c_VictorNum; }
 
 	void Game_init();	//ゲームの初期化
 	void Game_Main();

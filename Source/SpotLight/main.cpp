@@ -698,10 +698,10 @@ void MAIN::Game_Result(MAIN* main) {
 	score[2] = ENEMY_WIN_COUNT2;
 	score[3] = ENEMY_WIN_COUNT3;
 
-	c_ResultPos[0] = VGet(-600.0f, 750.0f, -1200.0f);
-	c_ResultPos[1] = VGet(-200.0f, 750.0f, -1200.0f);
-	c_ResultPos[2] = VGet(200.0f, 750.0f, -1200.0f);
-	c_ResultPos[3] = VGet(600.0f, 750.0f, -1200.0f);
+	c_ResultPos[0] = VGet(600.0f, 750.0f, -1200.0f);
+	c_ResultPos[1] = VGet(200.0f, 750.0f, -1200.0f);
+	c_ResultPos[2] = VGet(-200.0f, 750.0f, -1200.0f);
+	c_ResultPos[3] = VGet(-600.0f, 750.0f, -1200.0f);
 
 	//ステージの描画
 	MV1SetPosition(c_stage->c_StageModel, VGet(80.0f, 650.0f, -1200.0f));
@@ -732,7 +732,7 @@ void MAIN::Game_Result(MAIN* main) {
 	MV1DrawModel(c_enemy->c_EnemyModel[2]);
 
 	SetFontSize(150);
-	DrawFormatString(380, 50, 0xFF0000, "WINNER IS");
+	DrawFormatString(400, 50, 0xFF0000, "WINNER IS");
 
 	c_camera->Camera_Result(main);
 
@@ -762,8 +762,8 @@ void MAIN::Game_Result(MAIN* main) {
 		switch (c_VictorNum)
 		{
 		case 0:
-			DrawFormatString(500, 220, 0xFF0000, "PLAYER!");
-			SetLightPositionHandle(SpotLightHandle, VGet(-600.0f, 1450.0f, -1250.0f));
+			DrawFormatString(540, 220, 0xFF0000, "PLAYER!");
+			SetLightPositionHandle(SpotLightHandle, VGet(600.0f, 1450.0f, -1250.0f));
 			//MV1SetPosition(c_player->c_PlayerModel, VGet(80.0f, 750.0f, -1200.0f));
 			//MV1SetRotationXYZ(c_player->c_PlayerModel, VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
 			//MV1SetScale(c_player->c_PlayerModel, c_player->c_AddPosPlay);
@@ -771,16 +771,7 @@ void MAIN::Game_Result(MAIN* main) {
 			//MV1DrawModel(c_player->c_PlayerModel);
 			break;
 		case 1:
-			DrawFormatString(500, 200, 0x0000FF, "ENEMY1!");
-			SetLightPositionHandle(SpotLightHandle, VGet(-200.0f, 1450.0f, -1250.0f));
-			//MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
-			//MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
-			//MV1SetScale(c_enemy->c_EnemyModel[c_VictorNum - 1], c_player->c_AddPosPlay);
-
-			//MV1DrawModel(c_enemy->c_EnemyModel[c_VictorNum - 1]);
-			break;
-		case 2:
-			DrawFormatString(500, 200, 0x0000FF, "ENEMY2!");
+			DrawFormatString(540, 200, 0x0000FF, "ENEMY1!");
 			SetLightPositionHandle(SpotLightHandle, VGet(200.0f, 1450.0f, -1250.0f));
 			//MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
 			//MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
@@ -788,9 +779,18 @@ void MAIN::Game_Result(MAIN* main) {
 
 			//MV1DrawModel(c_enemy->c_EnemyModel[c_VictorNum - 1]);
 			break;
+		case 2:
+			DrawFormatString(540, 200, 0x0000FF, "ENEMY2!");
+			SetLightPositionHandle(SpotLightHandle, VGet(-200.0f, 1450.0f, -1250.0f));
+			//MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
+			//MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
+			//MV1SetScale(c_enemy->c_EnemyModel[c_VictorNum - 1], c_player->c_AddPosPlay);
+
+			//MV1DrawModel(c_enemy->c_EnemyModel[c_VictorNum - 1]);
+			break;
 		case 3:
-			DrawFormatString(500, 200, 0x0000FF, "ENEMY3!");
-			SetLightPositionHandle(SpotLightHandle, VGet(600.0f, 1450.0f, -1250.0f));
+			DrawFormatString(540, 200, 0x0000FF, "ENEMY3!");
+			SetLightPositionHandle(SpotLightHandle, VGet(-600.0f, 1450.0f, -1250.0f));
 			//MV1SetPosition(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet(80.0f, 750.0f, -1200.0f));
 			//MV1SetRotationXYZ(c_enemy->c_EnemyModel[c_VictorNum - 1], VGet((-30.0f * (DX_PI / 180)), (180.0f * (DX_PI / 180)), 0.0f));
 			//MV1SetScale(c_enemy->c_EnemyModel[c_VictorNum - 1], c_player->c_AddPosPlay);

@@ -23,12 +23,12 @@ public:
 	float  c_CameraVAngle;		//Šp“x
 	float cko = -170;
 
-	float x = 0;
-	float y = 569;
-	float z = -530;
-	float x1 = -0.41;
-	float y2 = 3.15;
-	float z1 = 0;
+	float c_RPosX;
+	float c_RPosY;
+	float c_RPosZ;
+	float c_RAngX;
+	float c_RAngY;
+	float c_RAngZ;
 
 	float GetCameraAngle() { return c_CameraHAngle; }
 
