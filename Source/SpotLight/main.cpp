@@ -610,7 +610,7 @@ void MAIN::Game_Title() {
 	//DrawFormatString(255, 100, 0x000000, "SpotLight");
 	//SetFontSize(150);
 	DrawFormatString(250, 100, 0xffff00, "SpotLight");
-	if (((g_KeyFlg & PAD_INPUT_DOWN) != 0)) {
+	if (((g_KeyFlg & PAD_INPUT_DOWN && g_play == false) != 0)) {
 		if (CheckSoundMem(cursor_sound) == 0) {
 			PlaySoundMem(cursor_sound, DX_PLAYTYPE_BACK);
 		}
@@ -619,7 +619,7 @@ void MAIN::Game_Title() {
 			state = 0;
 		}
 	}
-	else if (((g_KeyFlg & PAD_INPUT_UP) != 0)) {
+	else if (((g_KeyFlg & PAD_INPUT_UP && g_play == false) != 0)) {
 		if (CheckSoundMem(cursor_sound) == 0) {
 			PlaySoundMem(cursor_sound, DX_PLAYTYPE_BACK);
 		}
