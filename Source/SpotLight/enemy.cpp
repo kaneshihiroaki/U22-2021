@@ -84,6 +84,7 @@ void ENEMY::init() {
 
 		c_EnemyAddVect[i] = VGet(0.0f, 0.0f, 0.0f);//追い越す処理のときに加算するベクトルを保存
 		c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
+		Damage[i].s_paralyzeKey = false;//しびれた時の変数初期化
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
