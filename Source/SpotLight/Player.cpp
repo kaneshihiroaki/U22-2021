@@ -45,6 +45,7 @@ PLAYER::~PLAYER()
 void PLAYER::init() {
 	// プレイヤー座標初期化
 	c_Position = VGet(-10.0f, 100.0f, -500.0f);
+	c_StringPos = VGet(0.0f, 0.0f, 0.0f);
 	c_PlayerAng = 0;	//プレイヤーの角度
 	//プレイヤー回転（ラジアン変換）
 	c_Rotation = VGet(0.0f, (c_PlayerAng * (M_PI / 180)), 0.0f);
@@ -95,8 +96,9 @@ void PLAYER::Player_Controller() {
 		}
 	}
 	SetFontSize(30);
-	VECTOR stringpos = ConvWorldPosToScreenPos(c_Position);
-	DrawFormatString(stringpos.x - 20,stringpos.y - 55, 0xFF0000, "YOU");
+	c_StringPos = ConvWorldPosToScreenPos(c_Position);
+	DrawFormatString(c_StringPos.x - 20, c_StringPos.y - 85, 0xFF0000, "YOU");
+	//DrawFormatString(c_StringPos.x - 20, c_StringPos.y - 55, 0xFF0000, "YOU");
 }
 
 // プレイヤーとオブジェクトのあたり判定
@@ -399,7 +401,7 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 		else {
 			c_Acc -= 0.1f;
 
-			if (c_Acc <= 0) { 
+			if (c_Acc <= 0) {
 				c_MoveFlag = false;
 				c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 			}
@@ -456,17 +458,22 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 	//プレイヤーのスタミナのUI
 	SetFontSize(30);
 	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);
-	DrawFormatString(50, 40, 0xFFFFFF, "Stamina Point");
-	DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE);
+	//DrawFormatString(50, 40, 0xFFFFFF, "Stamina Point"); DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE);
+	if (c_GearStm != 1 && c_GearStm != 2) { 
+		DrawBox(c_StringPos.x - 30, c_StringPos.y - 55, c_StringPos.x + 40, c_StringPos.y - 40, 0xFFFFFF, FALSE); }
+	else { 
+		DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE); }
 	//スタミナが100以上なら緑ゲージ・以下なら赤ゲージ
 	if (c_GearStm != 1 && c_GearStm != 2) {
-		if (c_StmCount >= 100) {
+		if (c_StmCount >= (c_StmMax * 0.5f)) {
 			StopSoundMem(breath_sound);
-			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
+			DrawBox(c_StringPos.x - 29, c_StringPos.y - 54, c_StringPos.x + 39 * c_StmCount / c_StmMax, c_StringPos.y - 41, 0x008000, TRUE);
+			//DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
 		}
 		else {
 			if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
-			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+			DrawBox(c_StringPos.x - 29, c_StringPos.y - 54, c_StringPos.x + 9 * c_StmCount / c_StmMax, c_StringPos.y - 41, 0xff4500, TRUE);
+			//DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
 		}
 	}
 	else if (c_GearStm == 1) {

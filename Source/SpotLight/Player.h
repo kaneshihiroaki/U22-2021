@@ -79,6 +79,7 @@ private:
 
 	VECTOR c_MoveVector;	//移動変数
 	VECTOR c_TempMoveVector; //移動先を計算する変数
+	VECTOR c_StringPos;
 
 	bool c_Player_win = false;//プレイヤーがスポットライトに入っているときモデルを変更するようの変数
 
