@@ -710,23 +710,31 @@ void MAIN::Game_Result(MAIN* main) {
 	//プレイヤー
 	MV1SetPosition(c_player->c_PlayerModel, c_ResultPos[0]);
 	MV1SetRotationXYZ(c_player->c_PlayerModel, VGet((30.0f * (DX_PI / 180)), (0.0f * (DX_PI / 180)), 0.0f));
-	MV1SetScale(c_player->c_PlayerModel, c_player->c_AddPosPlay);
-	MV1DrawModel(c_player->c_PlayerModel);
+	MV1SetPosition(c_player->c_WinPlayerModel, c_ResultPos[0]);
+	MV1SetRotationXYZ(c_player->c_WinPlayerModel, VGet((30.0f * (DX_PI / 180)), (0.0f * (DX_PI / 180)), 0.0f));
+	//MV1SetScale(c_player->c_WinPlayerModel, c_player->c_AddPosPlay);
+
 	//敵１の描画
 	MV1SetPosition(c_enemy->c_EnemyModel[0], c_ResultPos[1]);
 	MV1SetRotationXYZ(c_enemy->c_EnemyModel[0], VGet((30.0f * (DX_PI / 180)), (0.0f * (DX_PI / 180)), 0.0f));
-	MV1SetScale(c_enemy->c_EnemyModel[0], c_player->c_AddPosPlay);
-	MV1DrawModel(c_enemy->c_EnemyModel[0]);
+	MV1SetPosition(c_enemy->c_WinEnemyModel[0], c_ResultPos[1]);
+	MV1SetRotationXYZ(c_enemy->c_WinEnemyModel[0], VGet((30.0f * (DX_PI / 180)), (0.0f * (DX_PI / 180)), 0.0f));
+	//MV1SetScale(c_enemy->c_WinEnemyModel[0], c_player->c_AddPosPlay);
+
 	//敵２の描画
 	MV1SetPosition(c_enemy->c_EnemyModel[1], c_ResultPos[2]);
 	MV1SetRotationXYZ(c_enemy->c_EnemyModel[1], VGet((30.0f * (DX_PI / 180)), (0.0f * (DX_PI / 180)), 0.0f));
-	MV1SetScale(c_enemy->c_EnemyModel[1], c_player->c_AddPosPlay);
-	MV1DrawModel(c_enemy->c_EnemyModel[1]);
+	MV1SetPosition(c_enemy->c_WinEnemyModel[1], c_ResultPos[2]);
+	MV1SetRotationXYZ(c_enemy->c_WinEnemyModel[1], VGet((30.0f * (DX_PI / 180)), (0.0f * (DX_PI / 180)), 0.0f));
+	//MV1SetScale(c_enemy->c_WinEnemyModel[1], c_player->c_AddPosPlay);
+
 	//敵３の描画
 	MV1SetPosition(c_enemy->c_EnemyModel[2], c_ResultPos[3]);
 	MV1SetRotationXYZ(c_enemy->c_EnemyModel[2], VGet((30.0f * (DX_PI / 180)), (0.0f * (DX_PI / 180)), 0.0f));
-	MV1SetScale(c_enemy->c_EnemyModel[2], c_player->c_AddPosPlay);
-	MV1DrawModel(c_enemy->c_EnemyModel[2]);
+	MV1SetPosition(c_enemy->c_WinEnemyModel[2], c_ResultPos[3]);
+	MV1SetRotationXYZ(c_enemy->c_WinEnemyModel[2], VGet((30.0f * (DX_PI / 180)), (0.0f * (DX_PI / 180)), 0.0f));
+	//MV1SetScale(c_enemy->c_WinEnemyModel[2], c_player->c_AddPosPlay);
+
 
 	SetFontSize(150);
 	DrawFormatString(400, 50, 0xFF0000, "WINNER IS");
@@ -750,6 +758,23 @@ void MAIN::Game_Result(MAIN* main) {
 			c_VictorNum = CountMaxPoint(score);	//勝者を判定
 			c_OnePass = true;
 		}
+
+		/*キャラの描画*/
+		if (c_VictorNum == 0) {
+			MV1DrawModel(c_player->c_WinPlayerModel);//ここは勝者のみ写す
+		}
+		else {
+			MV1DrawModel(c_player->c_PlayerModel);//ここは敗者
+		}
+		for (int i = 1; i < 4; i++) {
+			if (c_VictorNum == i) {
+				MV1DrawModel(c_enemy->c_WinEnemyModel[i - 1]);//ここは勝者のみ写す
+			}
+			else {
+				MV1DrawModel(c_enemy->c_EnemyModel[i - 1]);//ここは敗者
+			}
+		}
+		/**/
 
 		//// スポットライトの位置の更新
 		//SetLightPositionHandle(SpotLightHandle, VGet(80.0f, 1450.0f, -1200.0f));
@@ -807,6 +832,12 @@ void MAIN::Game_Result(MAIN* main) {
 		}
 
 		if ((g_KeyFlg & PAD_INPUT_2) != 0 && c_ResultBack == true) GameState = 0;
+	}
+	else {//ほぼ常にうつす
+		MV1DrawModel(c_player->c_PlayerModel);//
+		MV1DrawModel(c_enemy->c_EnemyModel[0]);//
+		MV1DrawModel(c_enemy->c_EnemyModel[1]);//
+		MV1DrawModel(c_enemy->c_EnemyModel[2]);
 	}
 
 	//DrawFormatString(100, 100, 0xFFFFFF, "PLAYER_WIN_NUM:%d", PLAYER_WIN_COUNT);
