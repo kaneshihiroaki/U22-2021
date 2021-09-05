@@ -331,3 +331,58 @@ void FreeCamera() {
 	Debug_Camera = !Debug_Camera;
 	DebugMode = false;
 }
+
+
+//バグ直し用
+void Player_Enemy(VECTOR player,VECTOR Ene[3]) {
+	// 各座標を取得する
+	int baku = 0;
+	/*********************************************************************************
+
+
+	// 矩形の中心を原点とした相対座標を作成する
+	VECTOR relative_position = VGet(posYou.x - pos.x,0.0f, posYou.z - pos.z);
+
+	// 相対座標に対して矩形の回転を打ち消す逆行列を掛ける
+	VECTOR transform_pos = VGet(
+		cosf(rot.y) * relative_position.x + sinf(rot.y) * relative_position.z,
+		0.0f,
+		-sinf(rot.y) * relative_position.x + cosf(rot.y) * relative_position.z
+	);
+
+	// 矩形と点の当たり判定を行う
+	if (-MyScale_X / 2.0f <= transform_pos.x && MyScale_X / 2.0f >= transform_pos.x &&
+		-MyScale_Z / 2.0f <= transform_pos.z && MyScale_Z / 2.0f >= transform_pos.z)
+	{
+		return true;
+	}
+	***********************************************************************/
+
+	//当たったらtrue
+	//プレイヤーとエネミー（０，１，２）
+	for (int i = 0; i < 3; i++) {
+		if ((player.x + 55 > Ene[i].x - 55 &&
+			player.z + 55 > Ene[i].z - 55) &&
+			(player.x - 55 < Ene[i].x + 55 &&
+				player.z - 55 < Ene[i].z + 55)) {
+			baku++;
+		}
+	}
+	//エネミー０とエネミー（１，２）
+	for (int i = 1; i < 3; i++) {
+		if ((Ene[0].x + 55 > Ene[i].x - 55 &&
+			Ene[0].z + 55 > Ene[i].z - 55) &&
+			(Ene[0].x - 55 < Ene[i].x + 55 &&
+				Ene[0].z - 55 < Ene[i].z + 55)) {
+			baku++;
+		}
+	}
+	//エネミー１とエネミー２
+	if ((Ene[1].x + 55 > Ene[2].x - 55 &&
+		Ene[1].z + 55 > Ene[2].z - 55) &&
+		(Ene[1].x - 55 < Ene[2].x + 55 &&
+			Ene[1].z - 55 < Ene[2].z + 55)) {
+		baku++;
+	}
+
+}

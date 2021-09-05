@@ -512,39 +512,39 @@ bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy, VECTOR PushVec, int count
 	}
 
 	//移動してるかどうか
-	c_MoveFlag = true;
-	c_MoveVector = PushVec;
+	bool r_MoveFlag = true;
+	VECTOR r_MoveVector = PushVec;
 
 	//移動フラグがたってたら移動
-	if (c_MoveFlag == true)
+	if (r_MoveFlag == true)
 	{
 
-		c_TempMoveVector.x = c_MoveVector.x;
+		c_TempMoveVector.x = r_MoveVector.x;
 		c_TempMoveVector.y = 0.0f;
-		c_TempMoveVector.z = c_MoveVector.z;
+		c_TempMoveVector.z = r_MoveVector.z;
 
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), enemy->c_ObjPos[i], 55) == true) {
-				c_MoveFlag = false;
+				r_MoveFlag = false;
 				if (enemy->Enemy_Push(i, player, enemy, c_TempMoveVector, count + 1) == false) {//falseなら動かせなかった
-					c_MoveFlag = false;
+					r_MoveFlag = false;
 				}
 			}
 		}
 
 		if (c_StageIn == false) {
-			c_MoveFlag = false;
+			r_MoveFlag = false;
 		}
 
-		if (c_MoveFlag) {//移動できるときにのみとおる
+		if (r_MoveFlag) {//移動できるときにのみとおる
 			c_Position = VAdd(c_Position, c_TempMoveVector);		//移動
 			//c_Rotation = VAdd(c_Rotation, TempRotVector);
 		}
 	}
 
-	return c_MoveFlag;
+	return r_MoveFlag;
 }
 
 void PLAYER::Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]) {

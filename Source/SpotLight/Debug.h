@@ -42,4 +42,4 @@ extern void FreeCamera();
 extern void Build_Time();//ビルドスタンプ関数
 extern void Game_Judge();//勝敗関数
 
-
+extern void Player_Enemy(VECTOR player, VECTOR Ene[3]);

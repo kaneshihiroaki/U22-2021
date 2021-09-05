@@ -464,54 +464,53 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 
 
 //numは押される側
-bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, VECTOR PushVec,int count)
+bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, VECTOR PushVec, int count)
 {
 	//しびれているかどうか。しびれていないならfalseで帰るまたはカウントが3回目以上ならfalseでかえるオーバーフロー対策
-	if (Damage[num].s_paralyzeKey == false||count>2) {
+	if (Damage[num].s_paralyzeKey == false || count > 2) {
 		return false;
 	}
-
+	//ここで新しくローカル変数を作成
 	//移動してるかどうか
-	c_MoveFlag = FALSE;
-	c_MoveVector = PushVec;
+	bool r_MoveFlag = true;
+	VECTOR r_MoveVector = PushVec;
 
-	Coefficient = 1.0f;
+	float r_Coefficient = 1.0f;
 
-	c_SpotPos = LightPos;
 
-	c_MoveFlag = true;
+
 
 
 
 
 	//移動フラグがたってたら移動
-	if (c_MoveFlag == true)
+	if (r_MoveFlag == true)
 	{
 		//移動場所の確認
-		c_TempMoveVector[num].x = c_MoveVector.x * Coefficient;
+		c_TempMoveVector[num].x = r_MoveVector.x * r_Coefficient;
 		c_TempMoveVector[num].y = 0.0f;
-		c_TempMoveVector[num].z = c_MoveVector.z * Coefficient;
+		c_TempMoveVector[num].z = r_MoveVector.z * r_Coefficient;
 
 
 		//当たりl判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
 			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-				if (Enemy_Push(i, player, enemy,  c_TempMoveVector[num],count+1) == false) {//falseなら動かせなかった
-					c_MoveFlag = false;
+				if (Enemy_Push(i, player, enemy, c_TempMoveVector[num], count + 1) == false) {//falseなら動かせなかった
+					r_MoveFlag = false;
 				}
 			}
 		}
 		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
-			if (player->Player_Push(player, enemy,  c_TempMoveVector[num], count + 1) == false) {//falseなら動かせなかった
-				c_MoveFlag = false;
+			if (player->Player_Push(player, enemy, c_TempMoveVector[num], count + 1) == false) {//falseなら動かせなかった
+				r_MoveFlag = false;
 			}
 		}
 		if (c_MoveKey[num] == false) {
-			c_MoveFlag = false;
+			r_MoveFlag = false;
 		}
 
-		if (c_MoveFlag == true)
+		if (r_MoveFlag == true)
 		{
 			c_ObjPos[num] = VAdd(c_ObjPos[num], c_TempMoveVector[num]);
 		}
@@ -519,7 +518,8 @@ bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, VECTOR PushVec,int
 	//if (Collision_Player) {
 	//	Collision_Draw();//デバック用
 	//}
-	return c_MoveFlag;
+
+	return r_MoveFlag;
 }
 
 
