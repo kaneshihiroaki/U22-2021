@@ -24,7 +24,7 @@ CAMERA::~CAMERA()
 void CAMERA::init() {
 	// ƒJƒƒ‰‚ÌŒü‚«‚ğ‰Šú‰»
 	c_CameraHAngle = 0.0f;
-	c_CameraVAngle = 35.0f;
+	c_CameraVAngle = 25.0f;
 
 	// Œü‚«‚ğ‰Šú‰»
 	c_SinParam = 0.0f;
