@@ -85,6 +85,41 @@ void ENEMY::init() {
 		c_EnemyAddVect[i] = VGet(0.0f, 0.0f, 0.0f);//追い越す処理のときに加算するベクトルを保存
 		c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
 		Damage[i].s_paralyzeKey = false;//しびれた時の変数初期化
+		c_AliveEnemy[i] = true;
+	}
+
+	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
+	Coefficient = 1.0f;
+	c_MoveFlag = FALSE;
+	c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
+	Character_Init();
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		c_TempMoveVector[i] = VGet(0.0f, 0.0f, 0.0f);
+	}
+}
+
+void ENEMY::Sadon_init() {
+	//オブジェクトの座標初期化
+	c_ObjPos[0] = VGet(500.0f, 80.0f, 500.0f);
+	c_ObjPos[1] = VGet(300.0f, 100.0f, 50.0f);
+	c_ObjPos[2] = VGet(50.0f, 100.0f, 170.0f);
+
+	// ３Ｄモデルの読み込み
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
+		c_MoveKey[i] = true;
+		c_StmCount[i] = c_StmMax;	//エネミーの体力の最大
+		c_Rotation[i] = VGet(0.0f, 0.0f /*(c_PlayerAng * (M_PI / 180))*/, 0.0f);//エネミーの回転
+		c_Enemy_MoveAng[i] = 0;//エネミーの角度
+		c_EnemySpeed[i] = 0.0f;//エネミーのスピード
+		c_EnemyState[i] = ENEMY_IDLE;//エネミーの初期状態
+		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
+		MV1SetScale(c_WinEnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
+
+		c_EnemyAddVect[i] = VGet(0.0f, 0.0f, 0.0f);//追い越す処理のときに加算するベクトルを保存
+		c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
+		Damage[i].s_paralyzeKey = false;//しびれた時の変数初期化
+		//c_AliveEnemy[i] = true;
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
@@ -99,6 +134,7 @@ void ENEMY::init() {
 
 void ENEMY::Enemy_Creat() {
 	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (c_AliveEnemy[i] == false)continue;//存在しないとき
 		if (Damage[i].s_ParaTime%20<10 || Key_Look) {//0~9までは描画10~19までは描画しない。決着後消えるのはおかしいので表示する
 			if (c_EnemyWin[i]) {//勝利判定しているとき
 				MV1SetPosition(c_WinEnemyModel[i], c_ObjPos[i]);//エネミーの移動後位置をいれてる
@@ -124,6 +160,7 @@ void ENEMY::debug() {
 
 void ENEMY::Enemy_State(int num, PLAYER* player, ENEMY* enemy) {
 	if (Key_Look)return;//勝敗が決したときなどに入らないようにするフラグ
+	if (c_AliveEnemy[num] == false)return;//エネミーが存在していないとき
 	if (num == 0) {//タイプがっきー
 		Ga_Move(num, player);
 		Ga_Attack(num, player);
@@ -709,7 +746,7 @@ int ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 		float ez = LightPos.z - c_ObjPos[i].z;
 
 		float er = (ex * ex) + (ez * ez);
-		float elr = (20.0f + 70.0f);
+		float elr = ( 70.0f);
 		float elr2 = (elr * elr);
 		//DrawSphere3D(c_ObjPos[i], 10.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 		// enemyとlightの当たり判定

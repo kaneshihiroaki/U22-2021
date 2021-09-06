@@ -2,8 +2,8 @@
 #include "Character.h"
 
 #define ENEMY_MAX 3
-#define ENEMY_WIDTH 35
-#define ENEMY_HEIGHT 35
+#define ENEMY_WIDTH 38
+#define ENEMY_HEIGHT 38
 #define ENEMY_IDLE 0//スタミナを回復している状態
 #define ENEMY_MOVE 1//移動している状態
 #define ENEMY_ATTACK 2//攻撃している状態
@@ -34,6 +34,7 @@ public:
 	int c_EnemyModel[ENEMY_MAX];	//エネミーのインポート用変数
 	int c_WinEnemyModel[ENEMY_MAX];	//勝利エネミーのインポート用変数
 
+	bool c_AliveEnemy[ENEMY_MAX] = { true,true,true };//エネミーが存在するかどうか。主にサドンデスで使用
 
 	VECTOR c_EnemyAddVect[ENEMY_MAX];//15フレの間横にベクトルを加えるようにする
 	int c_EnemyFrameCount[ENEMY_MAX];//15フレ数える
@@ -69,6 +70,7 @@ public:
 
 	void debug();		//デバッグ用、用がなくなったら消します
 	void init();		//初期化
+	void Sadon_init();//サドンデス化
 
 	void Enemy_Attack(PLAYER* player, int num);//エネミーの攻撃用
 	int c_AttackStm = 60;//攻撃による消費スタミナ

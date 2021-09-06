@@ -177,7 +177,7 @@ void MAIN::Game_init() {
 void MAIN::Sadondes_Init() {
 	//initを新しくつくる
 	c_player->init();
-	c_enemy->init();
+	c_enemy->Sadon_init();
 	c_stage->init();
 	c_camera->init();
 	Light_init();
@@ -937,24 +937,24 @@ void MAIN::Sadondes_check() {
 		//その後敵の点数とプレイヤーの点数が同じならサドンデス
 		if (PLAYER_WIN_COUNT == ENEMY_WIN_COUNT1) {
 			Sadondes_flg = true;
-			//ここにエネミーが存在するフラグ
 		}
 		else {
-			//存在しないフラグ
+			//エネミーが存在しないフラグ
+			c_enemy->c_AliveEnemy[0] = false;
 		}
 		if(PLAYER_WIN_COUNT == ENEMY_WIN_COUNT2) {
 			Sadondes_flg = true;
-			//ここにエネミーが存在するフラグ
 		}
 		else {
-			//存在しないフラグ
+			//エネミーが存在しないフラグ
+			c_enemy->c_AliveEnemy[1] = false;
 		}
 		if (PLAYER_WIN_COUNT == ENEMY_WIN_COUNT3) {
 			Sadondes_flg = true;
-			//ここにエネミーが存在するフラグ
 		}
 		else {
-				//存在しないフラグ
+				//エネミーが存在しないフラグ
+			c_enemy->c_AliveEnemy[2] = false;
 		}
 	}
 	/*ここはデバッグ用です。*/
