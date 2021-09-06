@@ -2,8 +2,8 @@
 #include "Character.h"
 
 #define ENEMY_MAX 3
-#define ENEMY_WIDTH 45
-#define ENEMY_HEIGHT 30
+#define ENEMY_WIDTH 35
+#define ENEMY_HEIGHT 35
 #define ENEMY_IDLE 0//スタミナを回復している状態
 #define ENEMY_MOVE 1//移動している状態
 #define ENEMY_ATTACK 2//攻撃している状態
