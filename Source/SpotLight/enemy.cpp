@@ -744,7 +744,7 @@ int ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 		c_EnemyWin[i] = false;
 		float ex = LightPos.x - c_ObjPos[i].x;
 		float ez = LightPos.z - c_ObjPos[i].z;
-
+		if (c_AliveEnemy[i] == false)continue;//ë∂ç›ÇµÇƒÇ¢Ç»Ç¢
 		float er = (ex * ex) + (ez * ez);
 		float elr = ( 70.0f);
 		float elr2 = (elr * elr);

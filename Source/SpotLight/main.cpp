@@ -929,6 +929,11 @@ void MAIN::Sadondes() {
 }
 
 void MAIN::Sadondes_check() {
+	/*ここはデバッグ用です。*/
+	Sadondes_flg = false;
+	return;
+	/*ここはデバッグ用です。*/
+	
 	//プレイヤーと敵の点数を調べて、プレイヤーの点数が敵の点数以上ならはいる。
 	if (PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT1 && 
 		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT2 && 
@@ -942,7 +947,7 @@ void MAIN::Sadondes_check() {
 			//エネミーが存在しないフラグ
 			c_enemy->c_AliveEnemy[0] = false;
 		}
-		if(PLAYER_WIN_COUNT == ENEMY_WIN_COUNT2) {
+		if (PLAYER_WIN_COUNT == ENEMY_WIN_COUNT2) {
 			Sadondes_flg = true;
 		}
 		else {
@@ -953,13 +958,12 @@ void MAIN::Sadondes_check() {
 			Sadondes_flg = true;
 		}
 		else {
-				//エネミーが存在しないフラグ
+			//エネミーが存在しないフラグ
 			c_enemy->c_AliveEnemy[2] = false;
 		}
 	}
-	/*ここはデバッグ用です。*/
-	Sadondes_flg = false;
-	/*ここはデバッグ用です。*/
+	
+	
 }
 
 
