@@ -380,7 +380,7 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 		//当たりl判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
-			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
+			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT ) == true) {
 				if (Enemy_Push(i, player,enemy, c_TempMoveVector[num], 0) == false) {//falseなら動かせなかった
 					VECTOR Reserve_Vect = c_TempMoveVector[num];//X座標を0にしてみる
 
@@ -388,11 +388,11 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 					Reserve_Vect.x = 0.0f;//
 					
 					if (Coefficient!=1.0f) {
-						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) && (Enemy_Push(i, player, enemy,  Reserve_Vect,0) == false)) {
+						if ((Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT) == true) && (Enemy_Push(i, player, enemy,  Reserve_Vect,0) == false)) {
 							Reserve_Vect.x = Reserve;//
 							Reserve = Reserve_Vect.z;//
 							Reserve_Vect.z = 0.0f;//
-							if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
+							if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT) == true) {
 								if (Enemy_Push(i, player,enemy, Reserve_Vect, 0) == false) {//falseなら動かせなかった
 									c_MoveFlag = false;
 								}
@@ -412,19 +412,19 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 				}
 			}
 		}
-		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
+		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT) == true) {
 			if (player->Player_Push(player,enemy,c_TempMoveVector[num], 0) == false) {//falseなら動かせなかった
 				VECTOR Reserve_Vect = c_TempMoveVector[num];//X座標を0にしてみる
 
 				float Reserve = Reserve_Vect.x;//X座標を0にしてみる
 				Reserve_Vect.x = 0.0f;//
 				if (Coefficient != 1.0) {
-					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true && player->Player_Push(player, enemy,  Reserve_Vect, 0) == false) {//falseなら動かせなかった
+					if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT) == true && player->Player_Push(player, enemy,  Reserve_Vect, 0) == false) {//falseなら動かせなかった
 
 						Reserve_Vect.x = Reserve;//
 						Reserve = Reserve_Vect.z;//
 						Reserve_Vect.z = 0.0f;//
-						if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
+						if (Collision_Cube(VAdd(c_ObjPos[num], Reserve_Vect), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT) == true) {
 							if (player->Player_Push(player, enemy, Reserve_Vect, 0) == false) {//falseなら動かせなかった
 								c_MoveFlag = false;
 							}
@@ -495,13 +495,13 @@ bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, VECTOR PushVec, in
 		//当たりl判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
-			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
+			if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], c_ObjPos[i], ENEMY_WIDTH, ENEMY_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT) == true) {
 				if (Enemy_Push(i, player, enemy, c_TempMoveVector[num], count + 1) == false) {//falseなら動かせなかった
 					r_MoveFlag = false;
 				}
 			}
 		}
-		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, 55, 55) == true) {
+		if (Collision_Cube(VAdd(c_ObjPos[num], c_TempMoveVector[num]), c_Rotation[num], player->c_Position, ENEMY_WIDTH, ENEMY_HEIGHT, ENEMY_WIDTH, ENEMY_HEIGHT) == true) {
 			if (player->Player_Push(player, enemy, c_TempMoveVector[num], count + 1) == false) {//falseなら動かせなかった
 				r_MoveFlag = false;
 			}

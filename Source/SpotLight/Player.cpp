@@ -103,16 +103,16 @@ void PLAYER::Player_Controller() {
 }
 
 // プレイヤーとオブジェクトのあたり判定
-bool Collision_Cube(VECTOR PlayerCol, VECTOR ObjCol, float EnemyScale) {
+bool Collision_Cube(VECTOR PlayerCol, VECTOR ObjCol, float EnemyScaleX, float EnemyScaleZ) {
 	// 各座標を取得する
 	VECTOR pos = PlayerCol;
 	VECTOR posObj = ObjCol;
 
 	//当たったらtrue
-	if ((pos.x + CHAR_SIZE_X > posObj.x - EnemyScale &&
-		pos.z + CHAR_SIZE_Z > posObj.z - EnemyScale) &&
-		(pos.x - CHAR_SIZE_X < posObj.x + EnemyScale &&
-			pos.z - CHAR_SIZE_Z < posObj.z + EnemyScale)) {
+	if ((pos.x + CHAR_SIZE_X > posObj.x - EnemyScaleX &&
+		pos.z + CHAR_SIZE_Z > posObj.z - EnemyScaleZ) &&
+		(pos.x - CHAR_SIZE_X < posObj.x + EnemyScaleX &&
+			pos.z - CHAR_SIZE_Z < posObj.z + EnemyScaleZ)) {
 		return true;
 	}
 
@@ -420,7 +420,7 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), ene->c_ObjPos[i], 55) == true) {
+			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), ene->c_ObjPos[i], CHAR_SIZE_X,CHAR_SIZE_Z) == true) {
 				if (ene->CheckPara(i) == false) {
 					c_MoveFlag = false;
 				}
@@ -526,7 +526,7 @@ bool PLAYER::Player_Push(PLAYER* player, ENEMY* enemy, VECTOR PushVec, int count
 
 		//当たり判定の確認
 		for (int i = 0; i < ENEMY_MAX; i++) {
-			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), enemy->c_ObjPos[i], 55) == true) {
+			if (Collision_Cube(VAdd(c_Position, c_TempMoveVector), enemy->c_ObjPos[i], CHAR_SIZE_X, CHAR_SIZE_Z) == true) {
 				r_MoveFlag = false;
 				if (enemy->Enemy_Push(i, player, enemy, c_TempMoveVector, count + 1) == false) {//falseなら動かせなかった
 					r_MoveFlag = false;
@@ -571,7 +571,7 @@ void PLAYER::Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]) {
 
 
 	//オブジェクトのコリジョン
-	for (int i = 1; i < 3; i++) {
+	for (int i = 0; i < 3; i++) {
 		Copy_Vect1 = EnemyPos[i]; Copy_Vect1.x += CHAR_SIZE_X; Copy_Vect1.z += CHAR_SIZE_Z;
 		Copy_Vect2 = EnemyPos[i]; Copy_Vect2.x += CHAR_SIZE_X; Copy_Vect2.z -= CHAR_SIZE_Z;
 		DrawLine3D(Copy_Vect1, Copy_Vect2, 0x00ffff);
@@ -595,7 +595,7 @@ void PLAYER::Collision_Draw(VECTOR EnemyPos[ENEMY_MAX]) {
 	}
 
 	//半径を５５に統一している
-	DrawSphere3D(EnemyPos[0], 55.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+	//DrawSphere3D(EnemyPos[0], 55.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 
 }
 

@@ -3,9 +3,9 @@
 #include "enemy.h"
 #include "Character.h"
 
-#define CHAR_SIZE_X		55.0f		// キャラのサイズ
+#define CHAR_SIZE_X		45.0f		// キャラのサイズ
 #define CHAR_SIZE_Y		55.0f		// キャラのサイズ
-#define CHAR_SIZE_Z		55.0f		// キャラのサイズ
+#define CHAR_SIZE_Z		30.0f		// キャラのサイズ
 
 class CAMERA;
 class ENEMY;
