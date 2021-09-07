@@ -99,13 +99,16 @@ void ENEMY::init() {
 }
 
 void ENEMY::Sadon_init() {
-	//オブジェクトの座標初期化
-	c_ObjPos[0] = VGet(500.0f, 80.0f, 500.0f);
-	c_ObjPos[1] = VGet(300.0f, 100.0f, 50.0f);
-	c_ObjPos[2] = VGet(50.0f, 100.0f, 170.0f);
+	
 
 	// ３Ｄモデルの読み込み
 	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (c_AliveEnemy[i] == true) {
+			c_ObjPos[i] = VGet(-100.0f + (300.0f * i), 100.0f, 0.0f);
+		}
+		else {//エネミーが存在しない。ので遠くに飛ばす
+			c_ObjPos[i] = VGet(-5000.0f, 100.0f, 0.0f);
+		}
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
 		c_MoveKey[i] = true;
 		c_StmCount[i] = c_StmMax;	//エネミーの体力の最大
@@ -296,7 +299,7 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 				//c_MoveVector.x += 5.0f;
 
 				SetFontSize(20);
-				DrawFormatString(1100, 600, 0xFFFFFF, "いるぜ\n");
+				//DrawFormatString(1100, 600, 0xFFFFFF, "いるぜ\n");
 
 			}
 			//1回だけ通る
@@ -315,7 +318,7 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 					//c_MoveVector.x += 5.0f;
 
 					SetFontSize(20);
-					DrawFormatString(1100, 600, 0xFFFFFF, "いるぜ\n");
+					//DrawFormatString(1100, 600, 0xFFFFFF, "いるぜ\n");
 
 				}
 			}

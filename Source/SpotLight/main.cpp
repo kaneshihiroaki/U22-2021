@@ -174,66 +174,7 @@ void MAIN::Game_init() {
 
 }
 
-void MAIN::Sadondes_Init() {
-	//initを新しくつくる
-	c_player->init();
-	c_enemy->Sadon_init();
-	c_stage->init();
-	c_camera->init();
-	Light_init();
 
-	//タイトルで使う変数初期化
-	/*imgC = 17;
-	g_play = false;
-	g_exit = false;
-	state = 0;*/
-
-	//勝敗判定初期化
-	finish = true;
-	judgefinish = false;
-	win_timer = 0;
-	WaitTime = 0;
-	round_count = 0;
-
-
-
-	//ゲーム開始の演出関連変数初期化
-	c_ready = false;
-	c_dispTime = c_readyMaxTime;
-	c_resultdispTime = 0;
-	c_PressBDispTime = 0;
-
-	//ライト・リザルト用変数初期化
-	LightFlg = false;
-	Key_Look = false;
-	Win = false;
-	Lose = false;
-	GameJudge = false;
-	judge_win = false;
-
-	//引き分け用変数
-	DrawFlg = false;
-	draw_timer = 0;
-	draw_count = 0;
-	//得点初期化
-	PLAYER_WIN_COUNT = 0;
-	ENEMY_WIN = 0;
-	ENEMY_WIN_COUNT1 = 0;
-	ENEMY_WIN_COUNT2 = 0;
-	ENEMY_WIN_COUNT3 = 0;
-
-	//スコア計算用リザルトで使用かな？
-	c_OnePass = false;
-	c_ResultBack = false;
-	/*check_1 = 0;
-	check_2 = 0;*/
-
-	//BGM_flg = false;//BGMをとめるflg;
-	//Enemy_Sound_flg = false;//enemyの攻撃音をとめるflg;//true:止める false:止めない
-
-	//初期化したらゲームメインへ
-	//GameState = 2;
-}
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -358,7 +299,7 @@ void MAIN::Game_Main() {
 
 		WIN_Text();
 
-		DrawFormatString(100, 220 + 20, 0xFFFFFF, "%d\n", Time_IN_count);
+		//DrawFormatString(100, 220 + 20, 0xFFFFFF, "%d\n", Time_IN_count);
 		if (LightFlg == true) {
 			Number_count = 0;//スポットライトに入っている人数
 			win_timer = 0;
@@ -375,6 +316,11 @@ void MAIN::Game_Main() {
 		player_win = false;//プレイヤーがスポットライトに入っているかどうか
 		enemy_win = false;//敵がスポットライトに入っているかどうか
 
+		//サドンデスなら入る。主にタイムを固定する予定
+		if (Sadondes_flg) {
+
+		}
+		//ここはドロー判定
 		if (LightFlg == false && time >= 598) {
 			if (DrawFlg == false) {
 				draw_count++;
@@ -584,8 +530,14 @@ void MAIN::Game_Main() {
 	else {
 		StopSoundMem(bgm_title);
 		SetFontSize(100);
-		DrawFormatString(520, 140, 0xFF0000, "READY?");
-		DrawFormatString(620, 240, 0xFF0000, "%d", c_dispTime / 60);
+		if (Sadondes_flg == false) {//サドンデス前なのでタイトルからとんだとき
+			DrawFormatString(520, 140, 0xFF0000, "READY?");
+			DrawFormatString(620, 240, 0xFF0000, "%d", c_dispTime / 60);
+		}
+		else {//サドンデス用の表示
+			DrawFormatString(390, 140, 0xFF0000, "SUDDEN　DEATH");
+			DrawFormatString(620, 240, 0xFF0000, "%d", c_dispTime / 60);
+		}
 	}
 
 	//ボタン押したらゲーム開始
@@ -660,9 +612,15 @@ void MAIN::Game_Title() {
 }
 
 void MAIN::Game_Result(MAIN* main) {
+	
 	StopSoundMem(drum);
 	StopSoundMem(bgm_main);
 	StopSoundMem(damage_sound);
+
+	//エネミーを描画するために存在させる
+	for (int i = 0; i < 3; i++) {
+		c_enemy->c_AliveEnemy[i] = true;
+	}
 
 	if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT1) {
 		if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT2) {
@@ -929,8 +887,9 @@ void MAIN::Sadondes() {
 }
 
 void MAIN::Sadondes_check() {
-	/*ここはデバッグ用です。*/
+	//サドンデス後も入ってもらうので一度falseにします。
 	Sadondes_flg = false;
+	/*ここはデバッグ用です。*/
 	return;
 	/*ここはデバッグ用です。*/
 	
@@ -967,3 +926,63 @@ void MAIN::Sadondes_check() {
 }
 
 
+void MAIN::Sadondes_Init() {
+	//initを新しくつくる
+	c_player->init();
+	c_enemy->Sadon_init();
+	c_stage->init();
+	c_camera->init();
+	Light_init();
+
+	//タイトルで使う変数初期化
+	/*imgC = 17;
+	g_play = false;
+	g_exit = false;
+	state = 0;*/
+
+	//勝敗判定初期化
+	finish = true;
+	judgefinish = false;
+	win_timer = 0;
+	WaitTime = 0;
+	round_count = 0;
+
+
+
+	//ゲーム開始の演出関連変数初期化
+	c_ready = false;
+	c_dispTime = c_readyMaxTime;
+	c_resultdispTime = 0;
+	c_PressBDispTime = 0;
+
+	//ライト・リザルト用変数初期化
+	LightFlg = false;
+	Key_Look = false;
+	Win = false;
+	Lose = false;
+	GameJudge = false;
+	judge_win = false;
+
+	//引き分け用変数
+	DrawFlg = false;
+	draw_timer = 0;
+	draw_count = 0;
+	//得点は初期化しない
+	//PLAYER_WIN_COUNT = 0;
+	ENEMY_WIN = 0;
+	//ENEMY_WIN_COUNT1 = 0;
+	//ENEMY_WIN_COUNT2 = 0;
+	//ENEMY_WIN_COUNT3 = 0;
+
+	//スコア計算用リザルトで使用かな？
+	c_OnePass = false;
+	c_ResultBack = false;
+	/*check_1 = 0;
+	check_2 = 0;*/
+
+	//BGM_flg = false;//BGMをとめるflg;
+	//Enemy_Sound_flg = false;//enemyの攻撃音をとめるflg;//true:止める false:止めない
+
+	//初期化したらゲームメインへ
+	//GameState = 2;
+}
