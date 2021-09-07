@@ -21,8 +21,9 @@ float DrawZ = 0.0f;
 float DrawX2 = 0.0f;
 float DrawZ2 = 0.0f;
 
-int time = 600;
-int time2 = 600;
+int time;
+int time2;
+
 int count;       //移動するライトの予定位置
 int cntFlg = 4;  //現在のライトの位置
 int rc = 4;      //過去のライトの位置
@@ -142,8 +143,8 @@ void Light_init() {
 	SetLightPositionHandle(SpotLightHandle, LightPos);
 
 	//時間初期化
-	time = 120;
-	time2 = 0;
+	time2 = 120;
+	time = 0;
 	WaitTime = 0;
 	cntFlg = 4;
 	rc = 4;
@@ -164,14 +165,29 @@ void Light()
 		cp3 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
 		cp4 = { dis[rc].x,dis[rc].z, -180, distance / 2 };
 
-	//2秒経過したら方向転換
-	if (time < 120) {
+	//10秒経過でラウンド次のラウンドへ
+	if (time < 600) {
 		time++;
 	}
-	else if (WaitTime == 1 && time >= 120) {
+	else if (time >= 600) {
+		time = 0;
+		LightFlg = false;
+		g_DispTime = false;
+		StopSoundMem(drum);
+		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
+
+		round_count++;
+		if (round_count > 6) finish = false;		//6ラウンドやったら終わる
+	}
+
+	//2秒経過したら方向転換
+	if (time2 < 120) {
+		time2++;
+	}
+	else if (WaitTime == 1 && time2 >= 120) {
 		WaitTime = 0;
 	}
-	else if (time >= 120 && WaitTime == 0) {
+	else if (time2 >= 120 && WaitTime == 0) {
 
 		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
 			cntFlg + 5 == count || cntFlg - 5 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
@@ -182,7 +198,7 @@ void Light()
 		PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
 
 		cntFlg = count;
-		time = 0;
+		time2 = 0;
 		WaitTime = 1;
 		Key_Look = false;
 		LightFlg = true;
@@ -192,22 +208,9 @@ void Light()
 		LightRotateAngle2 = 0.0f;
 	}
 
-	//10秒経過でラウンド次のラウンドへ
-	if (time2 < 600) {
-		time2++;
-	}
-	else if (time2 >= 600) {
-		time2 = 0;
-		LightFlg = false;
-		g_DispTime = false;
-		StopSoundMem(drum);
-		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
-
-		round_count++;
-		if (round_count > 6) finish = false;		//6ラウンドやったら終わる
-	}
-
 	if (WaitTime == 1 && count < 6) {
+
+		//上に移動
 		if (count == rc - 3) {
 			LightRotateAngle += 1.5f;
 			LightRotateAngle2 += 1.5f;
@@ -220,6 +223,8 @@ void Light()
 				DrawZ = cp1.z + -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range + cp1.Range;
 			}
 		}
+
+		//下に移動
 		else if (count == rc + 3) {
 			LightRotateAngle += 1.5f;
 			LightRotateAngle2 += 1.5f;
@@ -232,6 +237,8 @@ void Light()
 				DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range - cp2.Range;
 			}
 		}
+
+		//右に移動
 		if (count == rc + 1) {
 			LightRotateAngle += 1.5f;
 			LightRotateAngle2 += 1.5f;
@@ -244,6 +251,8 @@ void Light()
 				DrawZ = cp3.z + sin(PI / cp3.T * LightRotateAngle2) * cp3.Range;
 			}
 		}
+
+		//左に移動
 		else if (count == rc - 1) {
 			LightRotateAngle += 1.5f;
 			LightRotateAngle2 += 1.5f;
