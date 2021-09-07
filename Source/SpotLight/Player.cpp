@@ -44,11 +44,11 @@ PLAYER::~PLAYER()
 
 void PLAYER::init() {
 	// プレイヤー座標初期化
-	c_Position = VGet(-10.0f, 100.0f, -500.0f);
+	c_Position = VGet(-400.0f, 100.0f, 0.0f);
 	c_StringPos = VGet(0.0f, 0.0f, 0.0f);
-	c_PlayerAng = 0;	//プレイヤーの角度
+	c_PlayerAng = 180;	//プレイヤーの角度
 	//プレイヤー回転（ラジアン変換）
-	c_Rotation = VGet(0.0f, (c_PlayerAng * (M_PI / 180)), 0.0f);
+	c_Rotation = VGet(0.0f, (180.0f * (M_PI / 180)), 0.0f);
 	//プレイヤーの大きさ初期化
 	c_AddPosPlay = { 0.5f,0.5f,0.5f };
 

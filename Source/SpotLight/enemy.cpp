@@ -66,17 +66,17 @@ ENEMY::~ENEMY()
 
 void ENEMY::init() {
 	//オブジェクトの座標初期化
-	c_ObjPos[0] = VGet(500.0f, 80.0f, 500.0f);
-	c_ObjPos[1] = VGet(300.0f, 100.0f, 50.0f);
-	c_ObjPos[2] = VGet(50.0f, 100.0f, 170.0f);
+	c_ObjPos[0] = VGet(-100.0f, 100.0f, 0.0f);
+	c_ObjPos[1] = VGet(200.0f, 100.0f, 0.0f);
+	c_ObjPos[2] = VGet(500.0f, 100.0f, 0.0f);
 
 	// ３Ｄモデルの読み込み
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
 		c_MoveKey[i] = true;
 		c_StmCount[i] = c_StmMax;	//エネミーの体力の最大
-		c_Rotation[i] = VGet(0.0f, 0.0f /*(c_PlayerAng * (M_PI / 180))*/, 0.0f);//エネミーの回転
-		c_Enemy_MoveAng[i] = 0;//エネミーの角度
+		c_Rotation[i] = VGet(0.0f, (180.0f * (M_PI / 180)), 0.0f);//エネミーの回転
+		c_Enemy_MoveAng[i] = 180;//エネミーの角度
 		c_EnemySpeed[i] = 0.0f;//エネミーのスピード
 		c_EnemyState[i] = ENEMY_IDLE;//エネミーの初期状態
 		MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
