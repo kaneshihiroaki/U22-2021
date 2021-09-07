@@ -75,7 +75,7 @@ void PLAYER::init() {
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 	MV1SetScale(c_WinPlayerModel, c_AddPosPlay);
 
-	c_GearStm = 0;//スタミナが切れた時どうするか　0:案１ 1:案２ 2:案３　見たい場合切り替えてください。
+	c_GearStm = 1;//スタミナが切れた時どうするか　0:案１ 1:案２ 2:案３　見たい場合切り替えてください。
 }
 
 void PLAYER::Player_Controller() {
@@ -364,23 +364,25 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 		Player_Paralyze();
 	}
 
+	c_movespeed = 5.0f;
+
 	if (Key_Look == false)c_StmCount = PlayerStaminaCount(c_Slide, c_StmStop, c_StmCount, c_StmMax);        //スタミナ管理
 	//スタミナの減少後の処理
 	//案①
 	if (c_GearStm != 1 && c_GearStm != 2 && c_StmCount <= 0) { c_movespeed = 1.0f; }
-	else { c_movespeed = 7.0f; }
+	else { c_movespeed = 5.0f; }
 	//案②
 	if (c_GearStm == 1 && c_StmCount <= 0) { c_StmStop = false; }
-	else if (c_GearStm == 1 && c_StmCount <= (c_StmMax * 0.3f)) { c_movespeed = c_movespeed * 0.3f; }
+	else if (c_GearStm == 1 && c_StmCount <= (c_StmMax * 0.3f)) { c_movespeed = c_movespeed * 0.8f; }
 	else if (c_GearStm == 1 && c_StmCount > (c_StmMax * 0.3f)) {
 		c_StmStop = true;
-		c_movespeed = 7.0f;
+		c_movespeed = 5.0f;
 	}
 	//案③
 	if (c_GearStm == 2 && c_StmCount <= 0) { c_StmStop = false; }
 	else if (c_GearStm == 2 && c_StmCount > (c_StmMax * 0.2f)) {
 		c_StmStop = true;
-		c_movespeed = 7.0f;
+		c_movespeed = 5.0f;
 	}
 
 	//移動フラグがたってたら移動

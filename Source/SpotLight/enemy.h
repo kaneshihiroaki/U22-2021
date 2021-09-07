@@ -131,7 +131,7 @@ private:
 
 		//攻撃速度(終了地点)
 		const float s_AttackSpeed = 10.0f;
-		const float s_RangMax = 500.0f;
+		const float s_RangMax = 300.0f;
 
 		int s_Memo = 0;
 		bool s_ParaKey[ENEMY_MAX];
