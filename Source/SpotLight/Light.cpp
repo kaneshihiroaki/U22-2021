@@ -22,10 +22,12 @@ float DrawX2 = 0.0f;
 float DrawZ2 = 0.0f;
 
 int time = 600;
+int time2 = 600;
 int count;       //移動するライトの予定位置
 int cntFlg = 4;  //現在のライトの位置
 int rc = 4;      //過去のライトの位置
 float distance = 600.0f;
+float distance2 = 450.0f;
 
 int WaitTime = 0;
 
@@ -119,15 +121,15 @@ void Light_init() {
 	LightFlg = true;
 
 	// ライトの位置の回転値を加算
-	LightPos = VGet(0.0f, 600.0f, 0.0f);
+	LightPos = VGet(0.0f, 600.0f, -250.0f);
 	LightPos2 = VGet(0.0f, 1000.0f, 0.0f);
 
-	dis[0] = VGet(-distance, 0.0f, distance);
-	dis[1] = VGet(0.0f, 0.0f, distance);
-	dis[2] = VGet(distance, 0.0f, distance);
-	dis[3] = VGet(-distance, 0.0f, 0.0f);
-	dis[4] = VGet(0.0f, 0.0f, 0.0f);
-	dis[5] = VGet(distance, 0.0f, 0.0f);
+	dis[0] = VGet(-distance, 0.0f, distance2 - 200);
+	dis[1] = VGet(0.0f, 0.0f, distance2 - 200);
+	dis[2] = VGet(distance, 0.0f, distance2 - 200);
+	dis[3] = VGet(-distance, 0.0f, -250.0f);
+	dis[4] = VGet(0.0f, 0.0f, -250.0f);
+	dis[5] = VGet(distance, 0.0f, -250.0f);
 
 	//角度を初期化
 	LightRotateAngle = 0;
@@ -140,8 +142,8 @@ void Light_init() {
 	SetLightPositionHandle(SpotLightHandle, LightPos);
 
 	//時間初期化
-	time = 600;
-
+	time = 120;
+	time2 = 0;
 	WaitTime = 0;
 	cntFlg = 4;
 	rc = 4;
@@ -157,25 +159,19 @@ void Light()
 	if (g_DispTime == true)DrawFormatString(600, 100, 0xffff00, "%d", time / 60);
 
 	Point_t
-		cp1 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
-		cp2 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
+		cp1 = { dis[rc].x,dis[rc].z, -180, distance2 - 200 },
+		cp2 = { dis[rc].x,dis[rc].z, -180, distance2 - 200 },
 		cp3 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
 		cp4 = { dis[rc].x,dis[rc].z, -180, distance / 2 };
 
-	//10秒経過したら方向転換
-	if (time < 600) {
+	//2秒経過したら方向転換
+	if (time < 120) {
 		time++;
 	}
-	else if (WaitTime == 1 && time >= 600) {
+	else if (WaitTime == 1 && time >= 120) {
 		WaitTime = 0;
-		time = 0;
-		LightFlg = false;
-		//finish = false;
-		g_DispTime = false;
-		StopSoundMem(drum);
-		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
 	}
-	else if (time >= 600 && WaitTime == 0) {
+	else if (time >= 120 && WaitTime == 0) {
 
 		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
 			cntFlg + 5 == count || cntFlg - 5 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
@@ -194,43 +190,94 @@ void Light()
 		g_DispTime = true;
 		LightRotateAngle = 0.0f;
 		LightRotateAngle2 = 0.0f;
+	}
+
+	//10秒経過でラウンド次のラウンドへ
+	if (time2 < 600) {
+		time2++;
+	}
+	else if (time2 >= 600) {
+		time2 = 0;
+		LightFlg = false;
+		g_DispTime = false;
+		StopSoundMem(drum);
+		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
+
 		round_count++;
 		if (round_count > 6) finish = false;		//6ラウンドやったら終わる
 	}
 
 	if (WaitTime == 1 && count < 6) {
 		if (count == rc - 3) {
-			LightRotateAngle += 0.3f;
+			LightRotateAngle += 1.5f;
 			LightRotateAngle2 += 1.5f;
-			DrawX = cp1.x + sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
-			DrawZ = cp1.z + -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range + cp1.Range;
+			if (count == 0 ) {
+				DrawX = cp1.x + -sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
+				DrawZ = cp1.z + -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range + cp1.Range;
+			}
+			else {
+				DrawX = cp1.x + sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
+				DrawZ = cp1.z + -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range + cp1.Range;
+			}
 		}
 		else if (count == rc + 3) {
-			LightRotateAngle += 0.3f;
+			LightRotateAngle += 1.5f;
 			LightRotateAngle2 += 1.5f;
-			DrawX = cp2.x + sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
-			DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range - cp2.Range;
+			if (count == 3) {
+				DrawX = cp2.x + -sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
+				DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range - cp2.Range;
+			}
+			else {
+				DrawX = cp2.x + sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
+				DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range - cp2.Range;
+			}
 		}
 		if (count == rc + 1) {
 			LightRotateAngle += 1.5f;
-			LightRotateAngle2 += 0.3f;
-			DrawX = cp3.x + -cos(PI / cp3.T * LightRotateAngle) * cp3.Range + cp3.Range;
-			DrawZ = cp3.z + sin(PI / cp3.T * LightRotateAngle2) * cp3.Range;
+			LightRotateAngle2 += 1.5f;
+			if (count >= 3) {
+				DrawX = cp3.x + -cos(PI / cp3.T * LightRotateAngle) * cp3.Range + cp3.Range;
+				DrawZ = cp3.z + -sin(PI / cp3.T * LightRotateAngle2) * cp3.Range;
+			}
+			else{
+				DrawX = cp3.x + -cos(PI / cp3.T * LightRotateAngle) * cp3.Range + cp3.Range;
+				DrawZ = cp3.z + sin(PI / cp3.T * LightRotateAngle2) * cp3.Range;
+			}
 		}
 		else if (count == rc - 1) {
 			LightRotateAngle += 1.5f;
-			LightRotateAngle2 += 0.3f;
-			DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range - cp4.Range;
-			DrawZ = cp4.z + sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
+			LightRotateAngle2 += 1.5f;
+			if (count >= 3) {
+				DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range - cp4.Range;
+				DrawZ = cp4.z + -sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
+			}
+			else{
+				DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range - cp4.Range;
+				DrawZ = cp4.z + sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
+			}
 		}
 	}
 
 	//ライトの位置の回転値を加算
-	LightPos = VGet(DrawX, 600.0f, DrawZ-300);
+	LightPos = VGet(DrawX, 600.0f, DrawZ);
 
 	// スポットライトの位置の更新
 	SetLightPositionHandle(SpotLightHandle, LightPos);
 
 	//ポイントライトの初期値を設定
 	SetLightPositionHandle(PointLightHandle, LightPos2);
+
+	// ライトの止まる位置を球で描画する
+//DrawSphere3D(VGet(-distance, 40.0f, distance2 - 200), 40.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
+//DrawSphere3D(VGet(0.0f, 40.0f, distance2 - 200), 40.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
+//DrawSphere3D(VGet(distance, 40.0f, distance2 - 200), 40.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
+//DrawSphere3D(VGet(-distance, 40.0f, -250.0f), 40.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
+//DrawSphere3D(VGet(0.0f, 40.0f, -250.0f), 40.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
+//DrawSphere3D(VGet(distance, 40.0f, -250.0f), 40.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
+
 }
