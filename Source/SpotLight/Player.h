@@ -83,7 +83,7 @@ private:
 
 	bool c_Player_win = false;//プレイヤーがスポットライトに入っているときモデルを変更するようの変数
 
-	float c_movespeed = 7.0f;	//プレイヤー移動スピード
+	float c_movespeed = 5.0f;	//プレイヤー移動スピード
 	float c_Acc;	//加速を制御
 
 		//痺れ（ダメージ関連）

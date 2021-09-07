@@ -8,7 +8,7 @@ class CAMERA
 {
 private:
 	//const float c_CameraPosHeight = 100000.0f;			//カメラの初期高さ
-	float c_CameraPosDist = 1300.0f;					//プレイヤーとカメラの初期距離
+	float c_CameraPosDist = 1100.0f;					//プレイヤーとカメラの初期距離
 	const float c_CameraSpeed = 3.0f;				//カメラの移動速さ
 
 	float  c_SinParam;
@@ -21,7 +21,7 @@ public:
 
 	float  c_CameraHAngle;		//角度
 	float  c_CameraVAngle;		//角度
-	float cko = -170;
+	float cko = 100;
 
 	float c_RPosX;
 	float c_RPosY;

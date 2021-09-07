@@ -111,7 +111,7 @@ private:
 	VECTOR c_TempMoveVector[ENEMY_MAX];	//移動先計算用変数
 
 	float c_EnemySpeed[ENEMY_MAX];//現在のスピード
-	const float c_movespeed = 10.0f;	//エネミー最大移動スピード
+	const float c_movespeed = 5.0f;	//エネミー最大移動スピード
 	float Coefficient;//エネミーの移動係数（ななめ移動用）
 	bool Collision_Cube2(VECTOR MyCol, VECTOR MyRot, VECTOR YouCol, float MyScale_X, float MyScale_Z, float YouScale_X, float YouScale_Z);
 	

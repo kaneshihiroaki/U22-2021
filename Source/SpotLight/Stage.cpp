@@ -29,8 +29,8 @@ void STAGE::init() {
 	c_StageScale = { 1.0f,1.0f,1.0f };
 
 	//‰¡•‚Æ‰œs‚«
-	c_width = 1600;
-	c_depth = 1500;
+	c_width = 1500;
+	c_depth = 700;
 
 	//MV1SetPosition(c_StageModel, c_StagePosition);
 	//MV1SetScale(c_StageModel, c_StageScale);
