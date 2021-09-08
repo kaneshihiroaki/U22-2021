@@ -76,6 +76,8 @@ void PLAYER::init() {
 	MV1SetScale(c_WinPlayerModel, c_AddPosPlay);
 
 	c_GearStm = 1;//スタミナが切れた時どうするか　0:案１ 1:案２ 2:案３　見たい場合切り替えてください。
+	if (Sadondes_flg == false)c_DrowYouCount = 90;
+	
 }
 
 void PLAYER::Player_Controller() {
@@ -98,8 +100,10 @@ void PLAYER::Player_Controller() {
 	}
 	SetFontSize(30);
 	c_StringPos = ConvWorldPosToScreenPos(c_Position);
-	DrawFormatString(c_StringPos.x - 20, c_StringPos.y - 85, 0xFF0000, "YOU");
-	//DrawFormatString(c_StringPos.x - 20, c_StringPos.y - 55, 0xFF0000, "YOU");
+	if (c_DrowYouCount > 2) {
+		c_DrowYouCount--;
+		DrawFormatString(c_StringPos.x - 20, c_StringPos.y - 85, 0xFF0000, "YOU");
+	}//DrawFormatString(c_StringPos.x - 20, c_StringPos.y - 55, 0xFF0000, "YOU");
 }
 
 // プレイヤーとオブジェクトのあたり判定

@@ -21,7 +21,7 @@ public:
 
 	float  c_CameraHAngle;		//Šp“x
 	float  c_CameraVAngle;		//Šp“x
-	float cko = 100;
+	float cko = 10;
 
 	float c_RPosX;
 	float c_RPosY;

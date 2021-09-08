@@ -1,6 +1,8 @@
 #pragma once
 #include "DxLib.h"
 
+#define aaa 40
+
 class ENEMY;
 class PLAYER;
 
@@ -13,6 +15,12 @@ public:
 	int c_StageModel;	//ステージのインポート用変数
 	VECTOR c_StageScale;	//ステージの大きさ
 	VECTOR c_StagePosition;	//ステージの位置
+
+	
+	int c_SphereModel[aaa];	//光る球体インポート用変数
+	VECTOR c_SpherePosition[aaa];	//光る球体の位置
+	VECTOR c_SphereScale;	//光る球体の大きさ
+	
 
 	void Stage_Make(ENEMY* enemy, PLAYER* player);	//ステージ作成
 	void Stage_Col(ENEMY* enemy,PLAYER* player);		//当たり判定

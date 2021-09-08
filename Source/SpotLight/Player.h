@@ -66,6 +66,7 @@ public:
 private:
 	float c_PlayerAng;		//プレイヤーの角度
 
+	int c_DrowYouCount = 90;//Youを表示非表示
 	bool c_RotFlag;		//プレイヤーが回転している
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
 	bool c_StageIn;		//ステージ内にいるかどうか判定
