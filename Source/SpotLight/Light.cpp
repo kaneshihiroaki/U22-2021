@@ -165,7 +165,7 @@ void Light()
 	//10秒経過でラウンド次のラウンドへ
 	if (time < 600 && WaitTime == 1) {//最初の10秒
 		time++;
-
+	
 		//2秒経過したら方向転換
 		if (time2 < 120) {
 			time2++;
@@ -178,7 +178,7 @@ void Light()
 				count = GetRand(5);
 				rc = cntFlg;
 			}
-			PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
+			//PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
 
 			cntFlg = count;
 
@@ -202,6 +202,7 @@ void Light()
 	}
 	else if (time >= 600 && WaitTime == 0) {//次のラウンドに行く
 		time = 0;
+		PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
 		LightFlg = true;
 		g_DispTime = true;
 		WaitTime = 1;

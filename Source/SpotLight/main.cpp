@@ -538,6 +538,7 @@ void MAIN::Game_Main() {
 		}
 		else {//サドンデス用の表示
 			DrawFormatString(390, 140, 0xFF0000, "SUDDEN　DEATH");
+			StopSoundMem(drum);
 			DrawFormatString(620, 240, 0xFF0000, "%d", c_dispTime / 60);
 		}
 	}
@@ -626,13 +627,12 @@ void MAIN::Game_Result(MAIN* main) {
 
 	if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT1) {
 		if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT2) {
-			if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT3) {
+            if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT3) {
 				if (CheckSoundMem(player_win_sound) == 0) {
 					if (BGM_flg == false) {
 						PlaySoundMem(player_win_sound, DX_PLAYTYPE_BACK);
 						BGM_flg = true;
 					}
-
 				}
 			}
 		}
