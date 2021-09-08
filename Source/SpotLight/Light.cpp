@@ -208,7 +208,7 @@ void Light()
 		Key_Look = false;
 		round_count++;
 		if (round_count > 6 && Sadondes_flg == false) finish = false;		//6ラウンドやったら終わる
-		if (Sadondes_flg == true) finish = false;		//6ラウンドやったら終わる
+		if (round_count > 1 && Sadondes_flg == true) finish = false;		//6ラウンドやったら終わる
 	}
 
 	Point_t

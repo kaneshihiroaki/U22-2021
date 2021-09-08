@@ -86,6 +86,8 @@ void ENEMY::init() {
 		c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
 		Damage[i].s_paralyzeKey = false;//しびれた時の変数初期化
 		c_AliveEnemy[i] = true;
+		Damage[i].s_ParaTime = 0;
+		c_EnemyWin[i] = false;
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
@@ -123,6 +125,8 @@ void ENEMY::Sadon_init() {
 		c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
 		Damage[i].s_paralyzeKey = false;//しびれた時の変数初期化
 		//c_AliveEnemy[i] = true;
+		Damage[i].s_ParaTime = 0;
+		c_EnemyWin[i] = false;
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標

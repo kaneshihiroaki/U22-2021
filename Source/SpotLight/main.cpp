@@ -314,8 +314,8 @@ void MAIN::Game_Main() {
 		enemy_win = false;//敵がスポットライトに入っているかどうか
 
 		//サドンデスなら入る。主にタイムを固定する予定
-		if (Sadondes_flg) {
-
+		if (Sadondes_flg && LightFlg == false && round_count > 0) {
+			time = 100;
 		}
 		//ここはドロー判定
 		if (LightFlg == false && time >= 598) {
@@ -517,8 +517,13 @@ void MAIN::Game_Main() {
 		Light();
 
 		//ラウンド表示
-		DrawFormatString(500, 10, 0xffff00, "ROUND %d", round_count);
-
+		if (Sadondes_flg==false) {
+			DrawFormatString(500, 10, 0xffff00, "ROUND %d", round_count);
+		}
+		else {
+			DrawFormatString(410, 10, 0xffff00, "SADON DEATH");
+		}
+		
 		//開始時にGO!を表示
 		if (--c_dispTime >= 0)DrawFormatString(580, 230, 0x0000FF, "GO!");
 
@@ -887,7 +892,7 @@ void MAIN::Sadondes_check() {
 	//サドンデス後も入ってもらうので一度falseにします。
 	Sadondes_flg = false;
 	/*ここはデバッグ用です。*/
-	return;
+	//return;
 	/*ここはデバッグ用です。*/
 	
 	//プレイヤーと敵の点数を調べて、プレイヤーの点数が敵の点数以上ならはいる。
