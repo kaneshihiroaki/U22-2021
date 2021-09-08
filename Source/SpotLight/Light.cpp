@@ -144,8 +144,8 @@ void Light_init() {
 
 	//時間初期化
 	time2 = 120;
-	time = 0;
-	WaitTime = 0;
+	time = 600;
+	WaitTime = 1;
 	cntFlg = 4;
 	rc = 4;
 	while (count == 0 || count == 2 || count == 4)
@@ -165,47 +165,52 @@ void Light()
 		cp3 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
 		cp4 = { dis[rc].x,dis[rc].z, -180, distance / 2 };
 
+
+
 	//10秒経過でラウンド次のラウンドへ
-	if (time < 600) {
+	if (time < 600 && WaitTime == 1) {//最初の10秒
 		time++;
+		
+		//2秒経過したら方向転換
+		if (time2 < 120) {
+			time2++;
+		}
+		else if (time2 >= 120) {
+
+			while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
+				cntFlg + 5 == count || cntFlg - 5 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
+			{
+				count = GetRand(5);
+				rc = cntFlg;
+			}
+			PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
+
+			cntFlg = count;
+			time2 = 0;
+
+			LightRotateAngle = 0.0f;
+			LightRotateAngle2 = 0.0f;
+		}
 	}
-	else if (time >= 600) {
+	else if (time < 600 && WaitTime == 0) {//勝敗判定
+		time++;
+		Key_Look = false;
+		judge_win = false;
+
+	}
+	else if (time >= 600 && WaitTime == 1) {//ライトが止まる
 		time = 0;
+		WaitTime = 0;
 		LightFlg = false;
 		g_DispTime = false;
-		StopSoundMem(drum);
-		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
-
+	}
+	else if (time >= 600 && WaitTime == 0) {//次のラウンドに行く
+		time = 0;
+		LightFlg = true;
+		g_DispTime = true;
+		WaitTime = 1;
 		round_count++;
 		if (round_count > 6) finish = false;		//6ラウンドやったら終わる
-	}
-
-	//2秒経過したら方向転換
-	if (time2 < 120) {
-		time2++;
-	}
-	else if (WaitTime == 1 && time2 >= 120) {
-		WaitTime = 0;
-	}
-	else if (time2 >= 120 && WaitTime == 0) {
-
-		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
-			cntFlg + 5 == count || cntFlg - 5 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
-		{
-			count = GetRand(5);
-			rc = cntFlg;
-		}
-		PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
-
-		cntFlg = count;
-		time2 = 0;
-		WaitTime = 1;
-		Key_Look = false;
-		LightFlg = true;
-		judge_win = false;
-		g_DispTime = true;
-		LightRotateAngle = 0.0f;
-		LightRotateAngle2 = 0.0f;
 	}
 
 	if (WaitTime == 1 && count < 6) {
@@ -214,7 +219,7 @@ void Light()
 		if (count == rc - 3) {
 			LightRotateAngle += 1.5f;
 			LightRotateAngle2 += 1.5f;
-			if (count == 0 ) {
+			if (count == 0) {
 				DrawX = cp1.x + -sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
 				DrawZ = cp1.z + -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range + cp1.Range;
 			}
@@ -246,7 +251,7 @@ void Light()
 				DrawX = cp3.x + -cos(PI / cp3.T * LightRotateAngle) * cp3.Range + cp3.Range;
 				DrawZ = cp3.z + -sin(PI / cp3.T * LightRotateAngle2) * cp3.Range;
 			}
-			else{
+			else {
 				DrawX = cp3.x + -cos(PI / cp3.T * LightRotateAngle) * cp3.Range + cp3.Range;
 				DrawZ = cp3.z + sin(PI / cp3.T * LightRotateAngle2) * cp3.Range;
 			}
@@ -260,7 +265,7 @@ void Light()
 				DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range - cp4.Range;
 				DrawZ = cp4.z + -sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
 			}
-			else{
+			else {
 				DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range - cp4.Range;
 				DrawZ = cp4.z + sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
 			}
