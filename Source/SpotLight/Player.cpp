@@ -75,8 +75,8 @@ void PLAYER::init() {
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 	MV1SetScale(c_WinPlayerModel, c_AddPosPlay);
 
-	c_GearStm = 1;//スタミナが切れた時どうするか　0:案１ 1:案２ 2:案３　見たい場合切り替えてください。
-	if (Sadondes_flg == false)c_DrowYouCount = 90;
+	c_GearStm = 2;//スタミナが切れた時どうするか　0:案１ １:案２ ２:案３　見たい場合切り替えてください。
+	if (Sadondes_flg == false)c_DrowYouCount = 180;
 	
 }
 

@@ -168,29 +168,31 @@ void Light()
 		cp3 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
 		cp4 = { dis[rc].x,dis[rc].z, -180, distance / 2 };
 
-	//2•bŒo‰ß‚µ‚½‚ç•ûŒü“]Š·
-	if (time2 < 120) {
-	}
-	else if (time2 >= 120) {
 
-		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
-			cntFlg + 5 == count || cntFlg - 5 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
-		{
-			count = GetRand(5);
-			rc = cntFlg;
-		}
-		PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
-
-		cntFlg = count;
-		time2 = 0;
-
-		LightRotateAngle = 0.0f;
-		LightRotateAngle2 = 0.0f;
-	}
 	//10•bŒo‰ß‚Åƒ‰ƒEƒ“ƒhŽŸ‚Ìƒ‰ƒEƒ“ƒh‚Ö
 	if (time < 600 && WaitTime == 1) {//Å‰‚Ì10•b
-		time++;
-		time2 = time;
+		time++;	
+		
+		//2•bŒo‰ß‚µ‚½‚ç•ûŒü“]Š·
+		if (time2 < 120) {
+			time2++;
+		}
+		else if (time2 >= 120) {
+
+			while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
+				cntFlg + 5 == count || cntFlg - 5 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
+			{
+				count = GetRand(5);
+				rc = cntFlg;
+			}
+			PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
+
+			cntFlg = count;
+			time2 = 1;
+
+			LightRotateAngle = 0.0f;
+			LightRotateAngle2 = 0.0f;
+		}
 	}
 	else if (time < 600 && WaitTime == 0) {//Ÿ”s”»’è
 		time++;
