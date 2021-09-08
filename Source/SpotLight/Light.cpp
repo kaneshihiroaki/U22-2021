@@ -40,6 +40,9 @@ VECTOR dis[6];
 VECTOR LightPos;
 VECTOR LightPos2;
 
+//サドンデスを行うかどうかtrueなら行っている。
+bool Sadondes_flg = false;
+
 typedef struct {
 	float x, z;    //座標
 	float T;       //周期
@@ -165,53 +168,51 @@ void Light()
 		cp3 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
 		cp4 = { dis[rc].x,dis[rc].z, -180, distance / 2 };
 
+	//2秒経過したら方向転換
+	if (time2 < 120) {
+	}
+	else if (time2 >= 120) {
 
+		while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
+			cntFlg + 5 == count || cntFlg - 5 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
+		{
+			count = GetRand(5);
+			rc = cntFlg;
+		}
+		PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
 
+		cntFlg = count;
+		time2 = 0;
+
+		LightRotateAngle = 0.0f;
+		LightRotateAngle2 = 0.0f;
+	}
 	//10秒経過でラウンド次のラウンドへ
 	if (time < 600 && WaitTime == 1) {//最初の10秒
 		time++;
-		
-		//2秒経過したら方向転換
-		if (time2 < 120) {
-			time2++;
-		}
-		else if (time2 >= 120) {
-
-			while (cntFlg == count || cntFlg + 2 == count || cntFlg - 2 == count || cntFlg + 4 == count || cntFlg - 4 == count ||
-				cntFlg + 5 == count || cntFlg - 5 == count || (cntFlg == 2) && (count == 3) || (cntFlg == 3) && (count == 2))
-			{
-				count = GetRand(5);
-				rc = cntFlg;
-			}
-			PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
-
-			cntFlg = count;
-			time2 = 0;
-
-			LightRotateAngle = 0.0f;
-			LightRotateAngle2 = 0.0f;
-		}
+		time2 = time;
 	}
 	else if (time < 600 && WaitTime == 0) {//勝敗判定
 		time++;
-		Key_Look = false;
-		judge_win = false;
-
 	}
 	else if (time >= 600 && WaitTime == 1) {//ライトが止まる
 		time = 0;
 		WaitTime = 0;
 		LightFlg = false;
 		g_DispTime = false;
+		judge_win = false;
 	}
 	else if (time >= 600 && WaitTime == 0) {//次のラウンドに行く
 		time = 0;
 		LightFlg = true;
 		g_DispTime = true;
 		WaitTime = 1;
+		Key_Look = false;
 		round_count++;
-		if (round_count > 6) finish = false;		//6ラウンドやったら終わる
+		if (round_count > 6 && Sadondes_flg == false) finish = false;		//6ラウンドやったら終わる
+		if (Sadondes_flg == true) finish = false;		//6ラウンドやったら終わる
 	}
+
 
 	if (WaitTime == 1 && count < 6) {
 
