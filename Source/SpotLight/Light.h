@@ -22,6 +22,10 @@ extern bool LightFlg;//止まっているか調べる( TRUE:動く FALSE:止まっている )
 extern int time;//エネミーの方で今何秒なのか検知するよう
 extern int WaitTime;//上に同じ
 
+/*サドンデス用変数*/
+extern bool Sadondes_flg;//サドンデスを行うかどうかtrueなら行っている。
+/*サドンデス用変数*/
+
 void Light();
 void Light_init();
 void Light_SetUp();

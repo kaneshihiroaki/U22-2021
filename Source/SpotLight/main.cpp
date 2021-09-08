@@ -74,9 +74,6 @@ int state = 0;
 
 bool g_loopFlg = false;
 
-//サドンデスを行うかどうかtrueなら行っている。
-bool Sadondes_flg = false;
-
 MAIN::MAIN()
 {
 	GameState = 0;

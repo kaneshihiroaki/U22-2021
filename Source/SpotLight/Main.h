@@ -38,10 +38,6 @@ extern bool enemy_judge;//敵がスポットライトに入ったら入ったときのflg
 extern int Win_NameOld;//誰がスポットライトに入っていたか#defineで数字管理
 extern int Win_NameNow;//誰がスポットライトに入っていたか#defineで数字管理
 
-/*サドンデス用変数*/
-extern bool Sadondes_flg;//サドンデスを行うかどうかtrueなら行っている。
-/*サドンデス用変数*/
-
 class MAIN 
 {
 public:
