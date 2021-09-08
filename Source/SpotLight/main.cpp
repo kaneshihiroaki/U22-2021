@@ -827,12 +827,17 @@ int MAIN::CountMaxPoint(int* point)
 }
 
 void WIN_Text() {
-	SetFontSize(20);
-	DrawFormatString(20, 140, 0xFFFFFF, "PLAYER_WIN:%d", PLAYER_WIN_COUNT);
-	DrawFormatString(20, 160, 0xFFFFFF, "ENEMY_WIN_1:%d", ENEMY_WIN_COUNT1);
-	DrawFormatString(20, 180, 0xFFFFFF, "ENEMY_WIN_2:%d", ENEMY_WIN_COUNT2);
-	DrawFormatString(20, 200, 0xFFFFFF, "ENEMY_WIN_3:%d", ENEMY_WIN_COUNT3);
+	DrawBox(955, 30, 1265, 210, 0xFFFFFF, false);
 
+	DrawCircle(990, 61, 15, 0xffffff, true);//player
+	DrawCircle(990, 101, 15, 0xec1c24, true);//enemy1
+	DrawCircle(990, 141, 15, 0x0ed145, true);//enemy2
+	DrawCircle(990, 181, 15, 0xfff200, true);//enemy3
+	SetFontSize(40);
+	DrawFormatString(1020, 40, 0xFFFFFF, "PLAYER_WIN　   :%d", PLAYER_WIN_COUNT);
+	DrawFormatString(1020, 80, 0xFFFFFF, "ENEMY_WIN_1 :%d", ENEMY_WIN_COUNT1);
+	DrawFormatString(1020, 120, 0xFFFFFF, "ENEMY_WIN_2 :%d", ENEMY_WIN_COUNT2);
+	DrawFormatString(1020, 160, 0xFFFFFF, "ENEMY_WIN_3 :%d", ENEMY_WIN_COUNT3);
 }
 
 int MAIN::LoadSound() {
