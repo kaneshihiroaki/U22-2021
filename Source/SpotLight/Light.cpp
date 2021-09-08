@@ -162,17 +162,10 @@ void Light()
 	SetFontSize(100);
 	if (g_DispTime == true)DrawFormatString(600, 100, 0xffff00, "%d", time / 60);
 
-	Point_t
-		cp1 = { dis[rc].x,dis[rc].z, -180, distance2 - 200 },
-		cp2 = { dis[rc].x,dis[rc].z, -180, distance2 - 200 },
-		cp3 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
-		cp4 = { dis[rc].x,dis[rc].z, -180, distance / 2 };
-
-
 	//10秒経過でラウンド次のラウンドへ
 	if (time < 600 && WaitTime == 1) {//最初の10秒
-		time++;	
-		
+		time++;
+
 		//2秒経過したら方向転換
 		if (time2 < 120) {
 			time2++;
@@ -188,14 +181,16 @@ void Light()
 			PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
 
 			cntFlg = count;
+
 			time2 = 1;
 
-			LightRotateAngle = 0.0f;
-			LightRotateAngle2 = 0.0f;
+			LightRotateAngle = 1.5f;
+			LightRotateAngle2 = 1.5f;
 		}
 	}
 	else if (time < 600 && WaitTime == 0) {//勝敗判定
 		time++;
+		StopSoundMem(drum);
 	}
 	else if (time >= 600 && WaitTime == 1) {//ライトが止まる
 		time = 0;
@@ -203,6 +198,7 @@ void Light()
 		LightFlg = false;
 		g_DispTime = false;
 		judge_win = false;
+		PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
 	}
 	else if (time >= 600 && WaitTime == 0) {//次のラウンドに行く
 		time = 0;
@@ -215,6 +211,11 @@ void Light()
 		if (Sadondes_flg == true) finish = false;		//6ラウンドやったら終わる
 	}
 
+	Point_t
+		cp1 = { dis[rc].x,dis[rc].z, -180, distance2 - 200 },
+		cp2 = { dis[rc].x,dis[rc].z, -180, distance2 - 200 },
+		cp3 = { dis[rc].x,dis[rc].z, -180, distance / 2 },
+		cp4 = { dis[rc].x,dis[rc].z, -180, distance / 2 };
 
 	if (WaitTime == 1 && count < 6) {
 
@@ -283,6 +284,7 @@ void Light()
 
 	//ポイントライトの初期値を設定
 	SetLightPositionHandle(PointLightHandle, LightPos2);
+
 
 	// ライトの止まる位置を球で描画する
 //DrawSphere3D(VGet(-distance, 40.0f, distance2 - 200), 40.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
