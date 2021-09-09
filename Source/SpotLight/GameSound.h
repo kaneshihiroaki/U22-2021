@@ -10,6 +10,7 @@ extern	int player_win_sound;//player‚ª‚PˆÊ‚Ì‚ÌBGM
 extern	int enemy_win_sound;//enemy‚ª‚PˆÊ‚Ì‚ÌBGM
 
 extern  int player_attack_sound;//player‚ªUŒ‚‚·‚é‚Æ‚«‚ÌSE
+extern  int player_attack_false_sound;	//player‚ªUŒ‚‚Å‚«‚È‚©‚Á‚½‚Æ‚«iƒXƒ^ƒ~ƒi‚ª‘«‚è‚È‚©‚Á‚½‚Æ‚«j‚ÌSE
 extern  int enemy1_attack_sound;//enemy1‚ªUŒ‚‚·‚é‚Æ‚«‚ÌSE
 extern  int enemy2_attack_sound;//enemy2‚ªUŒ‚‚·‚é‚Æ‚«‚ÌSE
 extern  int enemy3_attack_sound;//enemy3‚ªUŒ‚‚·‚é‚Æ‚«‚ÌSE

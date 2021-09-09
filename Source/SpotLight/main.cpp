@@ -47,6 +47,7 @@ int win_sound;//勝利者SE
 int player_win_sound;//playerが１位の時のBGM
 int enemy_win_sound;//enemyが１位の時のBGM
 int player_attack_sound;//playerが攻撃するときのSE
+int player_attack_false_sound;//playerが攻撃できなかったとき（スタミナが足りなかったとき）のSE
 int enemy1_attack_sound;//enemy1が攻撃するときのSE
 int enemy2_attack_sound;//enemy2が攻撃するときのSE
 int enemy3_attack_sound;//enemy3が攻撃するときのSE
@@ -835,8 +836,8 @@ void WIN_Text() {
 	DrawCircle(990+teto, 141, 15, 0x0ed145, true);//enemy2
 	DrawCircle(990+teto, 181, 15, 0xfff200, true);//enemy3
 	SetFontSize(40);
-	DrawFormatString(1020+teto, 40, 0xFFFFFF,  "YOU　:%d", PLAYER_WIN_COUNT);
-	DrawFormatString(1020+teto, 80, 0xFFFFFF,  "CPU1 :%d", ENEMY_WIN_COUNT1);
+	DrawFormatString(1020+teto, 40, 0xFFFFFF,  "YOU　 :%d", PLAYER_WIN_COUNT);
+	DrawFormatString(1020+teto, 80, 0xFFFFFF,  "CPU1  :%d", ENEMY_WIN_COUNT1);
 	DrawFormatString(1020+teto, 120, 0xFFFFFF, "CPU2 :%d", ENEMY_WIN_COUNT2);
 	DrawFormatString(1020+teto, 160, 0xFFFFFF, "CPU3 :%d", ENEMY_WIN_COUNT3);
 	
@@ -853,6 +854,7 @@ int MAIN::LoadSound() {
 	if ((player_win_sound = LoadSoundMem("GameSound/player_win.mp3")) == -1)return-1;
 	if ((enemy_win_sound = LoadSoundMem("GameSound/enemy_win.mp3")) == -1)return-1;
 	if ((player_attack_sound = LoadSoundMem("GameSound/player_attack.mp3")) == -1)return -1;
+	if ((player_attack_false_sound = LoadSoundMem("GameSound/player_attack_false.mp3")) == -1)return -1;
 	if ((enemy1_attack_sound = LoadSoundMem("GameSound/enemy1.mp3")) == -1)return -1;
 	if ((enemy2_attack_sound = LoadSoundMem("GameSound/enemy2.mp3")) == -1)return -1;
 	if ((enemy3_attack_sound = LoadSoundMem("GameSound/enemy3.mp3")) == -1)return -1;
@@ -860,6 +862,7 @@ int MAIN::LoadSound() {
 	if ((cursor_sound = LoadSoundMem("GameSound/cursor.mp3")) == -1)return-1;
 	if ((draw_sound = LoadSoundMem("GameSound/draw.mp3")) == -1)return-1;
 	if ((breath_sound = LoadSoundMem("GameSound/ikigire.m4a")) == -1)return-1;
+	
 	//音量調整
 	// BGM
 	ChangeVolumeSoundMem(100, bgm_title);
@@ -878,6 +881,7 @@ int MAIN::LoadSound() {
 	ChangeVolumeSoundMem(80, cursor_sound);
 	ChangeVolumeSoundMem(80, draw_sound);
 	ChangeVolumeSoundMem(80, breath_sound);
+	ChangeVolumeSoundMem(80, player_attack_false_sound);
 
 	return 0;
 }

@@ -73,7 +73,7 @@ public:
 	void Sadon_init();//サドンデス化
 
 	void Enemy_Attack(PLAYER* player, int num);//エネミーの攻撃用
-	int c_AttackStm = 60;//攻撃による消費スタミナ
+	int c_AttackStm = 45;//攻撃による消費スタミナ
 	bool CheckPara(int num);//調べたいエネミーがしびれているかどうかの判定
 
 	//痺れ（ダメージ関連）

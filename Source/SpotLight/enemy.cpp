@@ -658,19 +658,19 @@ void ENEMY::Enemy_Attack(PLAYER* player, int num) {
 
 	//下横
 	DrawLine3D(VGet(x + (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width)),
-		VGet(x - (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width)), 0x888888);
+		VGet(x - (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width)), 0x880000);
 
 	//右縦
 	DrawLine3D(VGet(x + (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
-		VGet(x + (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width)), 0x888888);
+		VGet(x + (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width)), 0x880000);
 
 	//左縦
 	DrawLine3D(VGet(x - (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
-		VGet(x - (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width)), 0x888888);
+		VGet(x - (Att[num].s_RotCos * Att[num].s_width), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width)), 0x880000);
 
 	//上横
 	DrawLine3D(VGet(x - (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z + (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)),
-		VGet(x + (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)), 0x888888);
+		VGet(x + (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_ObjPos[num].y, z - (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)), 0x880000);
 
 	//右上は x + (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_Position.y, z - (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)
 	//左上は x - (Att[num].s_RotCos * Att[num].s_width) + (Att[num].s_RotSin * Att[num].s_heigt), c_Position.y, z + (Att[num].s_RotSin * Att[num].s_width) + (Att[num].s_RotCos * Att[num].s_heigt)
@@ -799,7 +799,10 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 		Ga_Interval[num]--;
 		return;
 	}
-	if (c_StmCount[num] < c_AttackStm + 1)return;//スタミナが15以下だと帰る
+	if (c_StmCount[num] < c_AttackStm + 1) {
+		
+		return;
+	}//スタミナが15以下だと帰る
 
 	VECTOR Check_Future_Pos = c_ObjPos[num];//前方に座標をうつすため。長さ９６
 	Check_Future_Pos.x += 96.0f * sinf(c_Rotation[num].y)/* - c_MoveVector.z * sin(rad)*/;
@@ -957,7 +960,10 @@ void ENEMY::A_Attack(int num, PLAYER* player) {
 		Ga_Interval[num]--;
 		return;
 	}
-	if (c_StmCount[num] < c_AttackStm + 1)return;//スタミナが15以下だと帰る
+	if (c_StmCount[num] < c_AttackStm + 1) {
+		
+		return; 
+	}//スタミナが15以下だと帰る
 
 	
 	if (((g_KeyFlg & PAD_INPUT_5) != 0)) {
@@ -1044,8 +1050,10 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 		Ga_Interval[num]--;
 		return;
 	}
-	if (c_StmCount[num] < c_AttackStm+1)return;//スタミナが15以下だと帰る
-
+	if (c_StmCount[num] < c_AttackStm + 1) {
+		
+		return;//スタミナが15以下だと帰る
+	}
 	VECTOR Check_Future_Pos = c_ObjPos[num];//前方に座標をうつすため。長さ123
 	Check_Future_Pos.x += 123.0f * sinf(c_Rotation[num].y)/* - c_MoveVector.z * sin(rad)*/;
 	Check_Future_Pos.z += 123.0f * cosf(c_Rotation[num].y) /*+ c_MoveVector.z * cos(rad)*/;
