@@ -75,7 +75,7 @@ void PLAYER::init() {
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 	MV1SetScale(c_WinPlayerModel, c_AddPosPlay);
 
-	c_GearStm = 2;//スタミナが切れた時どうするか　0:案１ １:案２ ２:案３　見たい場合切り替えてください。
+	c_GearStm = 0;//スタミナが切れた時どうするか　0:案１ １:案２ ２:案３　見たい場合切り替えてください。
 	if (Sadondes_flg == false)c_DrowYouCount = 180;
 	
 }
@@ -467,24 +467,28 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);
 	//DrawFormatString(50, 40, 0xFFFFFF, "Stamina Point"); DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE);
 	if (c_GearStm != 1 && c_GearStm != 2) { 
-		DrawBox(c_StringPos.x - 30, c_StringPos.y - 55, c_StringPos.x + 40, c_StringPos.y - 40, 0xFFFFFF, FALSE); }
+		//DrawBox(c_StringPos.x - 30, c_StringPos.y - 55, c_StringPos.x + 40, c_StringPos.y - 40, 0xFFFFFF, FALSE); 
+		DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE);
+	}
 	else { 
-		DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE); }
+		DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE); 
+	}
 	//スタミナが100以上なら緑ゲージ・以下なら赤ゲージ
 	if (c_GearStm != 1 && c_GearStm != 2) {
-		if (c_StmCount >= (c_StmMax * 0.5f)) {
+		DrawFormatString(50, 35, 0xFF0000, "ST");
+		if (c_StmCount >= (c_StmMax * 0.3f)) {
 			StopSoundMem(breath_sound);
-			DrawBox(c_StringPos.x - 29, c_StringPos.y - 54, c_StringPos.x + 39 * c_StmCount / c_StmMax, c_StringPos.y - 41, 0x008000, TRUE);
-			//DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
+			//DrawBox(c_StringPos.x - 29, c_StringPos.y - 54, c_StringPos.x + 39 * c_StmCount / c_StmMax, c_StringPos.y - 41, 0x008000, TRUE);
+			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
 		}
 		else {
 			if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
-			DrawBox(c_StringPos.x - 29, c_StringPos.y - 54, c_StringPos.x + 9 * c_StmCount / c_StmMax, c_StringPos.y - 41, 0xff4500, TRUE);
-			//DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+			//DrawBox(c_StringPos.x - 29, c_StringPos.y - 54, c_StringPos.x + 9 * c_StmCount / c_StmMax, c_StringPos.y - 41, 0xff4500, TRUE);
+			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
 		}
 	}
 	else if (c_GearStm == 1) {
-		DrawFormatString(50, 35, 0x0000FF, "ST");
+		DrawFormatString(50, 35, 0x00FF00, "ST");
 		if (c_StmCount >= (c_StmMax * 0.3f)) {
 			StopSoundMem(breath_sound);
 			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
