@@ -44,7 +44,7 @@ PLAYER::~PLAYER()
 
 void PLAYER::init() {
 	// プレイヤー座標初期化
-	c_Position = VGet(-400.0f, 100.0f, 0.0f);
+	c_Position = VGet(-450.0f, 100.0f, 0.0f);
 	c_StringPos = VGet(0.0f, 0.0f, 0.0f);
 	c_PlayerAng = 180;	//プレイヤーの角度
 	//プレイヤー回転（ラジアン変換）
@@ -62,7 +62,7 @@ void PLAYER::init() {
 
 	c_StmCount = 300;		//プレイヤーの体力
 	c_StmMax = 300;		//プレイヤーの体力最大値
-	Att.s_AttackCons = 60;	//プレイヤーの攻撃時消費体力
+	Att.s_AttackCons = 45;	//プレイヤーの攻撃時消費体力
 	Damage.s_paralyzeKey = false;	//プレイヤーが麻痺している変数初期化
 
 	c_Acc = 0.0f;
@@ -484,6 +484,7 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 		}
 	}
 	else if (c_GearStm == 1) {
+		DrawFormatString(50, 35, 0x0000FF, "ST");
 		if (c_StmCount >= (c_StmMax * 0.3f)) {
 			StopSoundMem(breath_sound);
 			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
@@ -494,6 +495,7 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 		}
 	}
 	else if (c_GearStm == 2) {
+		DrawFormatString(50, 35, 0x0000FF, "ST");
 		if (c_StmCount >= (c_StmMax * 0.2f)) {
 			StopSoundMem(breath_sound);
 			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);

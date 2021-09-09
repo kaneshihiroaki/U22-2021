@@ -403,7 +403,7 @@ void MAIN::Game_Main() {
 							time = 496;
 							Key_Look = true;
 							SetFontSize(100);
-							DrawString(380, 120, "PLAYER_WIN", GetColor(0xff, 0x00, 0x00));
+							DrawString(470, 120, "YOU_WIN", GetColor(0xff, 0x00, 0x00));
 						}
 						else if (win_timer >= 120) {
 							StopSoundMem(win_sound);
@@ -432,7 +432,7 @@ void MAIN::Game_Main() {
 								time = 496;
 								Key_Look = true;
 								SetFontSize(100);
-								DrawString(380, 120, "enemy1_WIN", GetColor(0x00, 0x00, 0xff));
+								DrawString(420, 120, "CPU1_WIN", GetColor(0x00, 0x00, 0xff));
 							}
 						}
 						if (ENEMY_WIN == 2) {
@@ -448,7 +448,7 @@ void MAIN::Game_Main() {
 								time = 496;
 								Key_Look = true;
 								SetFontSize(100);
-								DrawString(380, 120, "enemy2_WIN", GetColor(0x00, 0x00, 0xff));
+								DrawString(420, 120, "CPU2_WIN", GetColor(0x00, 0x00, 0xff));
 							}
 						}
 						if (ENEMY_WIN == 3) {
@@ -464,7 +464,7 @@ void MAIN::Game_Main() {
 								time = 496;
 								Key_Look = true;
 								SetFontSize(100);
-								DrawString(380, 120, "enemy3_WIN", GetColor(0x00, 0x00, 0xff));
+								DrawString(420, 120, "CPU3_WIN", GetColor(0x00, 0x00, 0xff));
 							}
 						}
 						if (win_timer >= 120) {
@@ -827,17 +827,20 @@ int MAIN::CountMaxPoint(int* point)
 }
 
 void WIN_Text() {
-	DrawBox(955, 30, 1265, 210, 0xFFFFFF, false);
+	int teto = 130;
+	DrawBox(955+teto, 30, 1265, 210, 0xFFFFFF, false);
 
-	DrawCircle(990, 61, 15, 0xffffff, true);//player
-	DrawCircle(990, 101, 15, 0xec1c24, true);//enemy1
-	DrawCircle(990, 141, 15, 0x0ed145, true);//enemy2
-	DrawCircle(990, 181, 15, 0xfff200, true);//enemy3
+	DrawCircle(990+teto, 61, 15, 0xffffff, true);//player
+	DrawCircle(990+teto, 101, 15, 0xec1c24, true);//enemy1
+	DrawCircle(990+teto, 141, 15, 0x0ed145, true);//enemy2
+	DrawCircle(990+teto, 181, 15, 0xfff200, true);//enemy3
 	SetFontSize(40);
-	DrawFormatString(1020, 40, 0xFFFFFF, "PLAYER_WIN　   :%d", PLAYER_WIN_COUNT);
-	DrawFormatString(1020, 80, 0xFFFFFF, "ENEMY_WIN_1 :%d", ENEMY_WIN_COUNT1);
-	DrawFormatString(1020, 120, 0xFFFFFF, "ENEMY_WIN_2 :%d", ENEMY_WIN_COUNT2);
-	DrawFormatString(1020, 160, 0xFFFFFF, "ENEMY_WIN_3 :%d", ENEMY_WIN_COUNT3);
+	DrawFormatString(1020+teto, 40, 0xFFFFFF,  "YOU　:%d", PLAYER_WIN_COUNT);
+	DrawFormatString(1020+teto, 80, 0xFFFFFF,  "CPU1 :%d", ENEMY_WIN_COUNT1);
+	DrawFormatString(1020+teto, 120, 0xFFFFFF, "CPU2 :%d", ENEMY_WIN_COUNT2);
+	DrawFormatString(1020+teto, 160, 0xFFFFFF, "CPU3 :%d", ENEMY_WIN_COUNT3);
+	
+	
 }
 
 int MAIN::LoadSound() {

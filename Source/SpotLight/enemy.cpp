@@ -66,9 +66,9 @@ ENEMY::~ENEMY()
 
 void ENEMY::init() {
 	//オブジェクトの座標初期化
-	c_ObjPos[0] = VGet(-100.0f, 100.0f, 0.0f);
-	c_ObjPos[1] = VGet(200.0f, 100.0f, 0.0f);
-	c_ObjPos[2] = VGet(500.0f, 100.0f, 0.0f);
+	c_ObjPos[0] = VGet(-150.0f, 100.0f, 0.0f);
+	c_ObjPos[1] = VGet(150.0f, 100.0f, 0.0f);
+	c_ObjPos[2] = VGet(450.0f, 100.0f, 0.0f);
 
 	// ３Ｄモデルの読み込み
 	for (int i = 0; i < ENEMY_MAX; i++) {
@@ -106,7 +106,7 @@ void ENEMY::Sadon_init() {
 	// ３Ｄモデルの読み込み
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (c_AliveEnemy[i] == true) {
-			c_ObjPos[i] = VGet(-100.0f + (300.0f * i), 100.0f, 0.0f);
+			c_ObjPos[i] = VGet(-150.0f + (300.0f * i), 100.0f, 0.0f);
 		}
 		else {//エネミーが存在しない。ので遠くに飛ばす
 			c_ObjPos[i] = VGet(-5000.0f, 100.0f, 0.0f);
