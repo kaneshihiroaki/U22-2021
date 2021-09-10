@@ -62,7 +62,13 @@ void PLAYER::init() {
 
 	c_StmCount = 300;		//プレイヤーの体力
 	c_StmMax = 300;		//プレイヤーの体力最大値
-	Att.s_AttackCons = 45;	//プレイヤーの攻撃時消費体力
+	if (pattern_blue == 0 || pattern_blue == 1) {
+		Att.s_AttackCons = 45;	//プレイヤーの攻撃時消費体力
+	}
+	else {
+		Att.s_AttackCons = 0;	//プレイヤーの攻撃時消費体力
+	}
+	
 	Damage.s_paralyzeKey = false;	//プレイヤーが麻痺している変数初期化
 
 	c_Acc = 0.0f;
