@@ -1,6 +1,8 @@
 #include "DxLib.h"
 #include "Character.h"
 
+int pattern_blue = 2;//０は通常。１は移動が減らない。２は攻撃が減らない。３はどっちも減らない
+
 CHARACTER::CHARACTER()
 {
 	for (int i = 0; i < 3; i++) {
@@ -30,7 +32,9 @@ int CHARACTER::StaminaCount(bool MoveFlag,int num) {
 	}
 	else {
 		if (Stamina.s_Count > 0) {
-			Stamina.s_Count[num]--;
+			if (pattern_blue == 0 || pattern_blue == 2) {
+				Stamina.s_Count[num]--;
+			}
 			Stamina.s_RecoveryCount[num] = 30;//移動などでスタミナを消費したら30フレーム回復しないようにする
 		}
 	}
@@ -47,7 +51,10 @@ int CHARACTER::PlayerStaminaCount(bool MoveFlag,bool StmOver, int count, const i
 		}
 		else {
 			if (count > 0) {
-				count--;
+				if (pattern_blue == 0 || pattern_blue == 2) {
+					count--;
+				}
+				
 			}
 		}
 	}
@@ -62,7 +69,10 @@ int CHARACTER::PlayerStaminaCount(bool MoveFlag,bool StmOver, int count, const i
 
 int CHARACTER::AttackStaminaCount(int num) {
 	
-	Stamina.s_Count[num] -= 45;
+	if (pattern_blue == 0 || pattern_blue == 1) {
+		Stamina.s_Count[num] -= 45;
+	}
+	
 	Stamina.s_RecoveryCount[num] = 30;//移動などでスタミナを消費したら30フレーム回復しないようにする
 
 	return Stamina.s_Count[num];

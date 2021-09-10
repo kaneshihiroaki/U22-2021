@@ -23,3 +23,5 @@ private:
 		//const int s_PlayStaminaMax = 600;		//プレイヤーのスタミナの最大値
 	}; Stamina Stamina;
 };
+
+extern int pattern_blue;
