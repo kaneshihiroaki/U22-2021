@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "Character.h"
 
-int pattern_blue = 2;//‚O‚Í’ÊíB‚P‚ÍˆÚ“®‚ªŒ¸‚ç‚È‚¢B‚Q‚ÍUŒ‚‚ªŒ¸‚ç‚È‚¢B‚R‚Í‚Ç‚Á‚¿‚àŒ¸‚ç‚È‚¢
+int pattern_blue = 0;//‚O‚Í’ÊíB‚P‚ÍˆÚ“®‚ªŒ¸‚ç‚È‚¢B‚Q‚ÍUŒ‚‚ªŒ¸‚ç‚È‚¢B‚R‚Í‚Ç‚Á‚¿‚àŒ¸‚ç‚È‚¢
 
 CHARACTER::CHARACTER()
 {

@@ -460,18 +460,28 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 
 	//攻撃
 	if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false &&
-		Att.s_AttackStartKey == false && c_StmCount >= Att.s_AttackCons)) {
+		Att.s_AttackStartKey == false && c_StmCount >= Att.s_AttackCons && Damage.s_paralyzeKey == false)) {
 		if (CheckSoundMem(player_attack_sound) == 0) {
 			PlaySoundMem(player_attack_sound, DX_PLAYTYPE_BACK);
 		}
 		Att.s_AttackStartKey = true;
+		
 	}
 	else if(((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false &&
-		Att.s_AttackStartKey == false && c_StmCount < Att.s_AttackCons)){
+		Att.s_AttackStartKey == false && c_StmCount < Att.s_AttackCons && Damage.s_paralyzeKey == false)){
+		if (CheckSoundMem(player_attack_false_sound) == 0) {
+			PlaySoundMem(player_attack_false_sound, DX_PLAYTYPE_BACK);
+		}
+		
+	}
+	else if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false &&
+		Att.s_AttackStartKey == false && Damage.s_paralyzeKey == true)) {
 		if (CheckSoundMem(player_attack_false_sound) == 0) {
 			PlaySoundMem(player_attack_false_sound, DX_PLAYTYPE_BACK);
 		}
 	}
+	
+	
 	if (Att.s_AttackStartKey == true) Player_Attack(ene, c_Rotation);
 
 	//プレイヤーのスタミナのUI

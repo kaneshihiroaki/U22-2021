@@ -88,6 +88,10 @@ void ENEMY::init() {
 		c_AliveEnemy[i] = true;
 		Damage[i].s_ParaTime = 0;
 		c_EnemyWin[i] = false;
+		//攻撃しているフラグを初期化
+		Att[i].s_AttackStartKey = false;
+		Att[i].s_GetOneRot = false;
+		Att[i].s_Rang = 0.0f;
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
@@ -127,6 +131,10 @@ void ENEMY::Sadon_init() {
 		//c_AliveEnemy[i] = true;
 		Damage[i].s_ParaTime = 0;
 		c_EnemyWin[i] = false;
+		//攻撃しているフラグを初期化
+		Att[i].s_AttackStartKey = false;
+		Att[i].s_GetOneRot = false;
+		Att[i].s_Rang = 0.0f;
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
@@ -799,10 +807,10 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 		Ga_Interval[num]--;
 		return;
 	}
-	if (c_StmCount[num] < c_AttackStm + 1) {
+	if (c_StmCount[num] < c_AttackStm + 1 || Damage[num].s_paralyzeKey == true) {
 		
 		return;
-	}//スタミナが15以下だと帰る
+	}//スタミナが15以下または、しびれていたら攻撃できないので帰る
 
 	VECTOR Check_Future_Pos = c_ObjPos[num];//前方に座標をうつすため。長さ９６
 	Check_Future_Pos.x += 96.0f * sinf(c_Rotation[num].y)/* - c_MoveVector.z * sin(rad)*/;
@@ -960,7 +968,7 @@ void ENEMY::A_Attack(int num, PLAYER* player) {
 		Ga_Interval[num]--;
 		return;
 	}
-	if (c_StmCount[num] < c_AttackStm + 1) {
+	if (c_StmCount[num] < c_AttackStm + 1 || Damage[num].s_paralyzeKey == true) {
 		
 		return; 
 	}//スタミナが15以下だと帰る
@@ -1050,7 +1058,7 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 		Ga_Interval[num]--;
 		return;
 	}
-	if (c_StmCount[num] < c_AttackStm + 1) {
+	if (c_StmCount[num] < c_AttackStm + 1 || Damage[num].s_paralyzeKey == true) {
 		
 		return;//スタミナが15以下だと帰る
 	}
