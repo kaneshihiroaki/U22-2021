@@ -522,7 +522,7 @@ void MAIN::Game_Main() {
 			DrawFormatString(500, 10, 0xffff00, "ROUND %d", round_count);
 		}
 		else {
-			DrawFormatString(410, 10, 0xffff00, "SADON DEATH");
+			DrawFormatString(410, 10, 0xffff00, "EXTRA ROUND");
 		}
 		
 		//開始時にGO!を表示
@@ -538,7 +538,7 @@ void MAIN::Game_Main() {
 			DrawFormatString(620, 240, 0xFF0000, "%d", c_dispTime / 60);
 		}
 		else {//サドンデス用の表示
-			DrawFormatString(390, 140, 0xFF0000, "SUDDEN　DEATH");
+			DrawFormatString(410, 140, 0xFF0000, "EXTRA ROUND");
 			StopSoundMem(drum);
 			DrawFormatString(620, 240, 0xFF0000, "%d", c_dispTime / 60);
 		}
