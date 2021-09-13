@@ -264,7 +264,7 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 	VECTOR TempRotVector;
 
 	//ˆÚ“®‚µ‚Ä‚é‚©‚Ç‚¤‚©
-	//c_MoveFlag = FALSE;
+	c_MoveFlag = false;
 	c_Slide = false;
 	//c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
