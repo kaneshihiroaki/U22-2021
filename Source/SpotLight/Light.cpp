@@ -44,7 +44,7 @@ VECTOR LightPos2;
 bool Sadondes_flg = false;
 
 //ライトの動き方案　1：既存の動き　2：前半と後半で動きが違う　3：2秒経過すると次のラウンド
-int Light_Gear = 1;
+int Light_Gear = 2;
 
 typedef struct {
 	float x, z;    //座標
@@ -406,8 +406,8 @@ void Light()
 
 			//上に移動
 			if (count == rc - 3) {
-				LightRotateAngle += 3.0f;
-				LightRotateAngle2 += 1.5f;
+				LightRotateAngle += 1.5f;
+				LightRotateAngle2 += 4.5f;
 				if (count == 0) {
 					DrawX = cp1.x + -sin(PI / cp1.T * LightRotateAngle) * cp1.Range;
 					DrawZ = cp1.z + -cos(PI / cp1.T * LightRotateAngle2) * cp1.Range + cp1.Range;
@@ -420,8 +420,8 @@ void Light()
 
 			//下に移動
 			else if (count == rc + 3) {
-				LightRotateAngle += 3.0f;
-				LightRotateAngle2 += 1.5f;
+				LightRotateAngle += 1.5f;
+				LightRotateAngle2 += 4.5f;
 				if (count == 3) {
 					DrawX = cp2.x + -sin(PI / cp2.T * LightRotateAngle) * cp2.Range;
 					DrawZ = cp2.z + cos(PI / cp2.T * LightRotateAngle2) * cp2.Range - cp2.Range;
@@ -434,8 +434,8 @@ void Light()
 
 			//右に移動
 			if (count == rc + 1) {
-				LightRotateAngle += 1.5f;
-				LightRotateAngle2 += 3.0f;
+				LightRotateAngle += 4.5f;
+				LightRotateAngle2 += 1.5f;
 				if (count >= 3) {
 					DrawX = cp3.x + -cos(PI / cp3.T * LightRotateAngle) * cp3.Range + cp3.Range;
 					DrawZ = cp3.z + -sin(PI / cp3.T * LightRotateAngle2) * cp3.Range;
@@ -448,8 +448,8 @@ void Light()
 
 			//左に移動
 			else if (count == rc - 1) {
-				LightRotateAngle += 1.5f;
-				LightRotateAngle2 += 3.0f;
+				LightRotateAngle += 4.5f;
+				LightRotateAngle2 += 1.5f;
 				if (count >= 3) {
 					DrawX = cp4.x + cos(PI / cp4.T * LightRotateAngle) * cp4.Range - cp4.Range;
 					DrawZ = cp4.z + -sin(PI / cp4.T * LightRotateAngle2) * cp4.Range;
