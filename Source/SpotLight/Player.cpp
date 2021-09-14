@@ -380,8 +380,6 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 	}
 
 	c_movespeed = 5.0f;
-	SetFontSize(50);
-	DrawFormatString(100, 100, 0xFFFFFF, "%d", c_MoveFlag);
 
 	if (Key_Look == false)c_StmCount = PlayerStaminaCount(c_Slide,c_EnemyTuchFlg/*, c_StmStop*/, c_StmCount, c_StmMax);        //スタミナ管理
 	//スタミナの減少後の処理
