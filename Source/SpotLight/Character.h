@@ -7,7 +7,7 @@ public:
 
 protected:
 	int StaminaCount(bool MoveFlag,int num);	//エネミースタミナカウント
-	int PlayerStaminaCount(bool MoveFlag,bool StmOver,int count,const int countMAX);//プレイヤースタミナカウント
+	int PlayerStaminaCount(bool SliderFlg, bool EnemyFlg/*,bool StmOver*/,int count,const int countMAX);//プレイヤースタミナカウント
 	int AttackStaminaCount( int num);	//エネミー攻撃によるスタミナカウント
 	void Character_Init();
 

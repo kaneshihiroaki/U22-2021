@@ -33,6 +33,8 @@ PLAYER::PLAYER()
 	c_PlayerModel = MV1LoadModel("Model/Player3.mv1");
 	c_WinPlayerModel = MV1LoadModel("Model/Player4.mv1");
 
+	c_Sibi = MV1LoadModel("image/痺れ.efk");
+
 	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
 
 	//c_enemyCol = new ENEMY();
@@ -76,6 +78,8 @@ void PLAYER::init() {
 	c_Player_win = false;
 
 	c_movespeed = 7.0f;	//プレイヤーの速さ設定
+
+	c_EnemyTuchFlg = false;	//敵に当たったかどうかを知らせるフラグ
 
 	//モデルの大きさを設定
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
@@ -167,6 +171,7 @@ bool PLAYER::CheckPara() {
 
 void PLAYER::Player_Paralyze() {
 	c_MoveFlag = false;
+	c_Slide = false;
 
 	if (Damage.s_ParaTime++ == Damage.s_MaxTimeParalyze) {
 		Damage.s_paralyzeKey = false;
@@ -207,7 +212,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 		Att.s_Posx = c_Position.x;
 		Att.s_Posz = c_Position.z;
 		Att.s_GetOneRot = true;
-		c_StmCount -= Att.s_AttackCons;		//プレイヤーの体力
+		//c_StmCount -= Att.s_AttackCons;		//プレイヤーの体力
 	}
 
 	//プレイヤーの前方方向取得
@@ -264,7 +269,7 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 	VECTOR TempRotVector;
 
 	//移動してるかどうか
-	c_MoveFlag = false;
+	//c_MoveFlag = false;
 	c_Slide = false;
 	//c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
 
@@ -375,25 +380,27 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 	}
 
 	c_movespeed = 5.0f;
+	SetFontSize(50);
+	DrawFormatString(100, 100, 0xFFFFFF, "%d", c_MoveFlag);
 
-	if (Key_Look == false)c_StmCount = PlayerStaminaCount(c_Slide, c_StmStop, c_StmCount, c_StmMax);        //スタミナ管理
+	if (Key_Look == false)c_StmCount = PlayerStaminaCount(c_Slide,c_EnemyTuchFlg/*, c_StmStop*/, c_StmCount, c_StmMax);        //スタミナ管理
 	//スタミナの減少後の処理
 	//案①
 	if (c_GearStm != 1 && c_GearStm != 2 && c_StmCount <= 0) { c_movespeed = 1.0f; }
 	else { c_movespeed = 5.0f; }
-	//案②
-	if (c_GearStm == 1 && c_StmCount <= 0) { c_StmStop = false; }
-	else if (c_GearStm == 1 && c_StmCount <= (c_StmMax * 0.3f)) { c_movespeed = c_movespeed * 0.8f; }
-	else if (c_GearStm == 1 && c_StmCount > (c_StmMax * 0.3f)) {
-		c_StmStop = true;
-		c_movespeed = 5.0f;
-	}
-	//案③
-	if (c_GearStm == 2 && c_StmCount <= 0) { c_StmStop = false; }
-	else if (c_GearStm == 2 && c_StmCount > (c_StmMax * 0.2f)) {
-		c_StmStop = true;
-		c_movespeed = 5.0f;
-	}
+	////案②
+	//if (c_GearStm == 1 && c_StmCount <= 0) { c_StmStop = false; }
+	//else if (c_GearStm == 1 && c_StmCount <= (c_StmMax * 0.3f)) { c_movespeed = c_movespeed * 0.8f; }
+	//else if (c_GearStm == 1 && c_StmCount > (c_StmMax * 0.3f)) {
+	//	c_StmStop = true;
+	//	c_movespeed = 5.0f;
+	//}
+	////案③
+	//if (c_GearStm == 2 && c_StmCount <= 0) { c_StmStop = false; }
+	//else if (c_GearStm == 2 && c_StmCount > (c_StmMax * 0.2f)) {
+	//	c_StmStop = true;
+	//	c_movespeed = 5.0f;
+	//}
 
 	//移動フラグがたってたら移動
 	if (c_MoveFlag == true && c_StmStop == true)
@@ -439,10 +446,12 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 				else if ((ene->Enemy_Push(i, player, ene, c_TempMoveVector, 0)) == false) {//falseなら動かせなかった。
 					c_MoveFlag = false;
 				}
+				c_EnemyTuchFlg = true;
 			}
 		}
 		if (c_MoveFlag && c_StageIn == true) {//移動できるときにのみとおる
 			c_Position = VAdd(c_Position, c_TempMoveVector);		//移動
+			c_EnemyTuchFlg = false;
 		}
 		////角度代入
 		//c_Rotation.x = 0.0f;
@@ -488,13 +497,13 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 	SetFontSize(30);
 	//DrawFormatString(10, 670, 0xFFFFFF, "スタミナ：%d / %d", c_StmCount, c_StmMax);
 	//DrawFormatString(50, 40, 0xFFFFFF, "Stamina Point"); DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE);
-	if (c_GearStm != 1 && c_GearStm != 2) { 
+	//if (c_GearStm != 1 && c_GearStm != 2) { 
 		//DrawBox(c_StringPos.x - 30, c_StringPos.y - 55, c_StringPos.x + 40, c_StringPos.y - 40, 0xFFFFFF, FALSE); 
 		DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE);
-	}
-	else { 
-		DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE); 
-	}
+	//}
+	//else { 
+	//	DrawBox(49, 69, 51 + 200, 91, 0xFFFFFF, FALSE); 
+	//}
 	//スタミナが100以上なら緑ゲージ・以下なら赤ゲージ
 	if (c_GearStm != 1 && c_GearStm != 2) {
 		DrawFormatString(50, 35, 0xFF0000, "ST");
@@ -509,28 +518,28 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
 		}
 	}
-	else if (c_GearStm == 1) {
-		DrawFormatString(50, 35, 0x00FF00, "ST");
-		if (c_StmCount >= (c_StmMax * 0.3f)) {
-			StopSoundMem(breath_sound);
-			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
-		}
-		else {
-			if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
-			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
-		}
-	}
-	else if (c_GearStm == 2) {
-		DrawFormatString(50, 35, 0x0000FF, "ST");
-		if (c_StmCount >= (c_StmMax * 0.2f)) {
-			StopSoundMem(breath_sound);
-			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
-		}
-		else {
-			if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
-			DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
-		}
-	}
+	//else if (c_GearStm == 1) {
+	//	DrawFormatString(50, 35, 0x00FF00, "ST");
+	//	if (c_StmCount >= (c_StmMax * 0.3f)) {
+	//		StopSoundMem(breath_sound);
+	//		DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
+	//	}
+	//	else {
+	//		if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
+	//		DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+	//	}
+	//}
+	//else if (c_GearStm == 2) {
+	//	DrawFormatString(50, 35, 0x0000FF, "ST");
+	//	if (c_StmCount >= (c_StmMax * 0.2f)) {
+	//		StopSoundMem(breath_sound);
+	//		DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0x008000, TRUE);
+	//	}
+	//	else {
+	//		if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
+	//		DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+	//	}
+	//}
 
 
 	if (Collision_Player) {

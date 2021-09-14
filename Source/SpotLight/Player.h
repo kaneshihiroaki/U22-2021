@@ -22,6 +22,7 @@ public:
 
 	int c_PlayerModel;	//プレイヤーのインポート用変数
 	int c_WinPlayerModel;	//プレイヤーのインポート用変数
+	int c_Sibi;
 	VECTOR c_AddPosPlay;	//プレイヤーの大きさ
 	VECTOR c_Rotation;		//プレイヤーの回転
 	VECTOR c_Position;	//プレイヤーの位置
@@ -54,6 +55,11 @@ public:
 		Damage.s_paralyzeKey = true;
 	}
 
+	//勝敗判定時にプレイヤーが動かないようにフラグをfalseにしておく
+	void SetStopMoveFlg() {
+		c_MoveFlag = false;
+	}
+
 	//プレイヤーがステージにいるかどうか
 	void SetPlayerOutStage() {
 		c_StageIn = false;
@@ -76,6 +82,7 @@ private:
 	
 	int c_GearStm;	//スタミナが切れた後の処理を選択
 	bool c_StmStop;	//スタミナが切れたことを知らせる変数 true:切れてない false:切れた
+	bool c_EnemyTuchFlg;	//敵に当たったかどうかを知らせるフラグ
 
 
 	VECTOR c_MoveVector;	//移動変数

@@ -1,7 +1,7 @@
 #include "DxLib.h"
 #include "Character.h"
 
-int pattern_blue = 0;//‚O‚Í’ÊíB‚P‚ÍˆÚ“®‚ªŒ¸‚ç‚È‚¢B‚Q‚ÍUŒ‚‚ªŒ¸‚ç‚È‚¢B‚R‚Í‚Ç‚Á‚¿‚àŒ¸‚ç‚È‚¢
+int pattern_blue = 2;//‚O‚Í’ÊíB‚P‚ÍˆÚ“®‚ªŒ¸‚ç‚È‚¢B‚Q‚ÍUŒ‚‚ªŒ¸‚ç‚È‚¢B‚R‚Í‚Ç‚Á‚¿‚àŒ¸‚ç‚È‚¢
 
 CHARACTER::CHARACTER()
 {
@@ -42,27 +42,37 @@ int CHARACTER::StaminaCount(bool MoveFlag,int num) {
 	return Stamina.s_Count[num];
 }
 
-int CHARACTER::PlayerStaminaCount(bool MoveFlag,bool StmOver, int count, const int countMAX) {
-	if (StmOver == true) {
-		if (MoveFlag == false) {
+int CHARACTER::PlayerStaminaCount(bool SliderFlg,bool EnemyFlg/*,bool StmOver*/, int count, const int countMAX) {
+	//ƒXƒ^ƒ~ƒi‚ªØ‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©”»’è
+	//if (StmOver == true) {
+		//“G‚ÉU‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©”»’è
+		if (EnemyFlg == false) {
+			//“®‚¢‚Ä‚¢‚é‚©‚Ç‚¤‚©”»’è
+			if (SliderFlg == false) {
+				if (count < countMAX) {
+					count++;
+				}
+			}
+			else {
+				if (count > 0) {
+					if (pattern_blue == 0 || pattern_blue == 2) {
+						count--;
+					}
+
+				}
+			}
+		}
+		else {
 			if (count < countMAX) {
 				count++;
 			}
 		}
-		else {
-			if (count > 0) {
-				if (pattern_blue == 0 || pattern_blue == 2) {
-					count--;
-				}
-				
-			}
-		}
-	}
-	else {
-		if (count < countMAX) {
-			count++;
-		}
-	}
+	//}
+	//else {
+	//	if (count < countMAX) {
+	//		count++;
+	//	}
+	//}
 
 	return count;
 }

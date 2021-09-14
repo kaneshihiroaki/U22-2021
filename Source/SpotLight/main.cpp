@@ -360,6 +360,9 @@ void MAIN::Game_Main() {
 		if (time <= 597) {
 			//スポットライトが止まっているなら勝敗判定を行う
 			if (LightFlg == false) {
+
+				c_player->SetStopMoveFlg();		//勝敗判定時にプレイヤーが動かないようにフラグをfalseにしておく
+
 				if (Number_count == 1) {//1人だけになったときにカウント60フレームくらい
 					//1人なっているのがだれかを判定
 					if (player_win) {
