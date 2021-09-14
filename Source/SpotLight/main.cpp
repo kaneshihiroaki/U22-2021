@@ -626,17 +626,18 @@ void MAIN::Game_Result(MAIN* main) {
 		c_enemy->c_AliveEnemy[i] = true;
 	}
 
-	if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT1) {
-		if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT2) {
-            if (PLAYER_WIN_COUNT > ENEMY_WIN_COUNT3) {
+	//プレイヤーと敵の点数を調べて、プレイヤーの点数が敵の点数以上ならはいる。
+	if (PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT1 &&
+		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT2 &&
+		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT3) {
 				if (CheckSoundMem(player_win_sound) == 0) {
 					if (BGM_flg == false) {
 						PlaySoundMem(player_win_sound, DX_PLAYTYPE_BACK);
 						BGM_flg = true;
 					}
 				}
-			}
-		}
+			
+		
 	}
 	else {
 		if (CheckSoundMem(enemy_win_sound) == 0) {
