@@ -30,7 +30,7 @@ PLAYER::PLAYER()
 
 	//c_Acc = 0.0f;
 
-	c_EffPara = LoadEffekseerEffect("Effect/Numb/para.efk", 50.0f);//MV1LoadModel("image/áƒ‚ê.efk");
+	c_EffPara = LoadEffekseerEffect("Effect/Numb/paralayze.efk", 50.0f);//MV1LoadModel("image/áƒ‚ê.efk");
 	Damage.c_onePlayEffect = false;
 	//int effectResourceHandle = LoadEffekseerEffect("image/“dŒ‚2.efkefc", 1.0f);
 
