@@ -1,7 +1,7 @@
 #pragma once
 #include "DxLib.h"
 
-#define aaa 40
+#define SphereAmount 40
 
 class ENEMY;
 class PLAYER;
@@ -17,8 +17,8 @@ public:
 	VECTOR c_StagePosition;	//ステージの位置
 
 	
-	int c_SphereModel[aaa];	//光る球体インポート用変数
-	VECTOR c_SpherePosition[aaa];	//光る球体の位置
+	int c_SphereModel[SphereAmount];	//光る球体インポート用変数
+	VECTOR c_SpherePosition[SphereAmount];	//光る球体の位置
 	VECTOR c_SphereScale;	//光る球体の大きさ
 	
 

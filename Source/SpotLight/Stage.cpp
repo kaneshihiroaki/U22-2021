@@ -17,7 +17,7 @@ STAGE::STAGE()
 	//MV1SetPosition(c_StageModel, c_StagePosition);
 	//MV1SetScale(c_StageModel, c_StageScale);
 
-	for (int i = 0; i < aaa; i++) {
+	for (int i = 0; i < SphereAmount; i++) {
 		switch (i%3)
 		{
 		case 0:
@@ -49,7 +49,7 @@ void STAGE::init() {
 	c_width = 1400;
 	c_depth = 740;
 
-	for (int i = 0; i < aaa; i++) {
+	for (int i = 0; i < SphereAmount; i++) {
 		// À•W‰Šú‰»
 		c_SpherePosition[i] = VGet(-700.0f + i * 50, 50.0f, -470.0f);
 		//‘å‚«‚³‰Šú‰»
@@ -77,7 +77,7 @@ void STAGE::Stage_Make(ENEMY* enemy, PLAYER* player) {
 	MV1DrawModel(c_StageModel);
 	//DrawCube3D(VGet(-1000.0f, 0.0f, 0.0f), VGet(1500.0f, 50.0f, 1200.0f), GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 
-	for (int i = 0; i < aaa; i++) {
+	for (int i = 0; i < SphereAmount; i++) {
 		MV1DrawModel(c_SphereModel[i]);
 	}
 }

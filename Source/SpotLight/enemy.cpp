@@ -300,8 +300,8 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 			if (Collision_Cube2(Check_Future_Pos, c_Rotation[num], c_ObjPos[i], 30, 150, 105, 55) == true) {
 
 				float rad = c_Rotation[num].y + (M_PI / 2);
-				c_EnemyAddVect[num].x = 5.0f * sinf(rad)/* - c_MoveVector.z * sin(rad)*/;
-				c_EnemyAddVect[num].z = 5.0f * cosf(rad) /*+ c_MoveVector.z * cos(rad)*/;
+				c_EnemyAddVect[num].x = 3.0f * sinf(rad)/* - c_MoveVector.z * sin(rad)*/;
+				c_EnemyAddVect[num].z = 3.0f * cosf(rad) /*+ c_MoveVector.z * cos(rad)*/;
 
 				c_MoveVector.x += c_EnemyAddVect[num].x;
 				c_MoveVector.z += c_EnemyAddVect[num].z;
@@ -319,8 +319,8 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 				if (Collision_Cube2(Check_Future_Pos, c_Rotation[num],player->c_Position, 30, 150, 105, 55) == true) {
 
 					float rad = c_Rotation[num].y + (M_PI / 2);
-					c_EnemyAddVect[num].x = 5.0f * sinf(rad)/* - c_MoveVector.z * sin(rad)*/;
-					c_EnemyAddVect[num].z = 5.0f * cosf(rad) /*+ c_MoveVector.z * cos(rad)*/;
+					c_EnemyAddVect[num].x = 3.0f * sinf(rad)/* - c_MoveVector.z * sin(rad)*/;
+					c_EnemyAddVect[num].z = 3.0f * cosf(rad) /*+ c_MoveVector.z * cos(rad)*/;
 
 					c_MoveVector.x += c_EnemyAddVect[num].x;
 					c_MoveVector.z += c_EnemyAddVect[num].z;
@@ -428,7 +428,19 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 		c_TempMoveVector[num].y = 0.0f;
 		c_TempMoveVector[num].z = c_MoveVector.z * Coefficient * c_EnemySpeed[num];
 
-
+		if (c_TempMoveVector[num].x > c_movespeed) {
+			c_TempMoveVector[num].x = c_movespeed;
+		}
+		else if (c_TempMoveVector[num].x < -c_movespeed) {
+			c_TempMoveVector[num].x = -c_movespeed;
+		}
+		if (c_TempMoveVector[num].z > c_movespeed) {
+			c_TempMoveVector[num].z = c_movespeed;
+		}
+		else if (c_TempMoveVector[num].z < -c_movespeed) {
+			c_TempMoveVector[num].z = -c_movespeed;
+		}
+		
 		//“–‚½‚èl”»’è‚ÌŠm”F
 		for (int i = 0; i < ENEMY_MAX; i++) {
 			if (i == num)continue;
