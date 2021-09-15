@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "debug.h"
 #include "GameSound.h"
+#include "EffekseerForDXLib.h"
 
 
 int ENEMY_WIN;//どの敵が勝ったか調べる変数
@@ -54,6 +55,8 @@ ENEMY::ENEMY()
 		//c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
 	}
 
+	c_EffDamageEnemy = LoadEffekseerEffect("Effect/Numb/Sibire.efk", 50.0f);//MV1LoadModel("image/痺れ.efk");
+
 	//c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
 	//Coefficient = 1.0f;
 	//c_MoveFlag = FALSE;
@@ -92,6 +95,8 @@ void ENEMY::init() {
 		Att[i].s_AttackStartKey = false;
 		Att[i].s_GetOneRot = false;
 		Att[i].s_Rang = 0.0f;
+
+		Damage[i].c_onePlayEffect = false;
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
@@ -757,9 +762,28 @@ bool ENEMY::CheckPara(int num) {
 
 void ENEMY::Enemy_Paralyze(int num) {
 	
+	// 定期的にエフェクトを再生する
+	if (Damage[num].c_onePlayEffect == false)
+	{
+		//エフェクトを再生＆格納
+		Damage[num].c_SlotEffect = PlayEffekseer3DEffect(c_EffDamageEnemy);
+		//c_SlotEffect = PlayEffekseer3DEffect(c_EffPara);
+
+		//エフェクトを一度だけ再生
+		Damage[num].c_onePlayEffect = true;
+	}
+
+	// 再生中のエフェクトを移動する。
+	SetPosPlayingEffekseer3DEffect(Damage[num].c_SlotEffect, c_ObjPos[num].x, c_ObjPos[num].y + 10, c_ObjPos[num].z);
+
+	// Effekseerにより再生中のエフェクトを描画する。
+	DrawEffekseer3D();
+
 	if (Damage[num].s_ParaTime++ == Damage[num].s_MaxTimeParalyze) {
 		Damage[num].s_paralyzeKey = false;
 		Damage[num].s_ParaTime = 0;
+		Damage[num].c_onePlayEffect = false;
+		StopEffekseer3DEffect(Damage[num].c_SlotEffect);
 	}
 }
 

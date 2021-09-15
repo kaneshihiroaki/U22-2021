@@ -21,7 +21,7 @@ void CHARACTER::Character_Init() {
 	}
 }
 
-int CHARACTER::StaminaCount(bool MoveFlag,int num) {
+int CHARACTER::StaminaCount(bool MoveFlag, int num) {
 	if (MoveFlag == false) {
 		if (Stamina.s_RecoveryCount[num] == 0 && Stamina.s_Count[num] < Stamina.s_StaminaMax) {
 			Stamina.s_Count[num]++;
@@ -42,47 +42,39 @@ int CHARACTER::StaminaCount(bool MoveFlag,int num) {
 	return Stamina.s_Count[num];
 }
 
-int CHARACTER::PlayerStaminaCount(bool SliderFlg,bool EnemyFlg/*,bool StmOver*/, int count, const int countMAX) {
-	//スタミナが切れているかどうか判定
-	//if (StmOver == true) {
-		//敵に振れているかどうか判定
-		if (EnemyFlg == false) {
-			//動いているかどうか判定
-			if (SliderFlg == false) {
-				if (count < countMAX) {
-					count++;
-				}
-			}
-			else {
-				if (count > 0) {
-					if (pattern_blue == 0 || pattern_blue == 2) {
-						count--;
-					}
-
-				}
-			}
-		}
-		else {
+int CHARACTER::PlayerStaminaCount(bool SliderFlg, bool EnemyFlg/*,bool StmOver*/, int count, const int countMAX) {
+	//敵に振れているかどうか判定
+	if (EnemyFlg == false) {
+		//動いているかどうか判定
+		if (SliderFlg == false) {
 			if (count < countMAX) {
 				count++;
 			}
 		}
-	//}
-	//else {
-	//	if (count < countMAX) {
-	//		count++;
-	//	}
-	//}
+		else {
+			if (count > 0) {
+				if (pattern_blue == 0 || pattern_blue == 2) {
+					count--;
+				}
+
+			}
+		}
+	}
+	else {
+		if (count < countMAX) {
+			count++;
+		}
+	}
 
 	return count;
 }
 
 int CHARACTER::AttackStaminaCount(int num) {
-	
+
 	if (pattern_blue == 0 || pattern_blue == 1) {
 		Stamina.s_Count[num] -= 45;
 	}
-	
+
 	Stamina.s_RecoveryCount[num] = 30;//移動などでスタミナを消費したら30フレーム回復しないようにする
 
 	return Stamina.s_Count[num];

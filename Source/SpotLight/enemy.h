@@ -76,13 +76,13 @@ public:
 	int c_AttackStm = 45;//攻撃による消費スタミナ
 	bool CheckPara(int num);//調べたいエネミーがしびれているかどうかの判定
 
-	//痺れ（ダメージ関連）
-	struct Damage
-	{
-		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
-		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
-		const int s_MaxTimeParalyze = 60;		//プレイヤーが痺れている時間
-	}; Damage Damage[ENEMY_MAX];
+	////痺れ（ダメージ関連）
+	//struct Damage
+	//{
+	//	int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
+	//	bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
+	//	const int s_MaxTimeParalyze = 60;		//プレイヤーが痺れている時間
+	//}; Damage Damage[ENEMY_MAX];
 
 	
 	void Ga_Attack(int num, PLAYER* player);//がっきーの攻撃関数
@@ -103,6 +103,7 @@ public:
 	void Bot_Normal(int num, PLAYER* player);//従来の敵ジャニーズ君
 
 private:
+
 	bool c_MoveFlag;//エネミーが移動しているのか判定
 	int c_StmCount[ENEMY_MAX];	//敵の体力
 	const int c_StmMax = 300;	//体力の最大値
@@ -115,6 +116,18 @@ private:
 	float Coefficient;//エネミーの移動係数（ななめ移動用）
 	bool Collision_Cube2(VECTOR MyCol, VECTOR MyRot, VECTOR YouCol, float MyScale_X, float MyScale_Z, float YouScale_X, float YouScale_Z);
 	
+	int c_EffDamageEnemy;		//ダメージ受けた時の痺れエフェクト取得変数
+
+	//痺れ（ダメージ関連）
+	struct Damage
+	{
+		bool c_onePlayEffect;				//エフェクトを一回だけ再生する変数
+		int c_SlotEffect;					//エフェクトを格納するための変数（移動のため）
+		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
+		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
+		const int s_MaxTimeParalyze = 60;		//プレイヤーが痺れている時間
+	}; Damage Damage[ENEMY_MAX];
+
 	struct Attack {
 		//攻撃を行うかどうか判定変数
 		bool s_AttackStartKey = false;

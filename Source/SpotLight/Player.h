@@ -81,7 +81,6 @@ private:
 	int c_StmMax;	//スタミナの最大値
 	bool c_Slide;	//プレイヤーを滑らせる判定変数
 	
-	int c_GearStm;	//スタミナが切れた後の処理を選択
 	bool c_StmStop;	//スタミナが切れたことを知らせる変数 true:切れてない false:切れた
 	bool c_EnemyTuchFlg;	//敵に当たったかどうかを知らせるフラグ
 
@@ -92,13 +91,15 @@ private:
 
 	bool c_Player_win = false;//プレイヤーがスポットライトに入っているときモデルを変更するようの変数
 
-	float c_movespeed = 5.0f;	//プレイヤー移動スピード
+	float c_movespeed;	//プレイヤー移動スピード
+	const float c_MoveMax = 7.0f;	//プレイヤーの基本移動速度
 	float c_Acc;	//加速を制御
 
 		//痺れ（ダメージ関連）
 	struct Damage
 	{
 		bool c_onePlayEffect;				//エフェクトを一回だけ再生する変数
+		int c_SlotEffect;					//エフェクトを格納するための変数（移動のため）
 		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
 		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
 		const int s_MaxTimeParalyze = 60;		//プレイヤーが痺れている時間
