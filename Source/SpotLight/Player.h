@@ -22,7 +22,6 @@ public:
 
 	int c_PlayerModel;	//プレイヤーのインポート用変数
 	int c_WinPlayerModel;	//プレイヤーのインポート用変数
-	int c_Sibi;
 	VECTOR c_AddPosPlay;	//プレイヤーの大きさ
 	VECTOR c_Rotation;		//プレイヤーの回転
 	VECTOR c_Position;	//プレイヤーの位置
@@ -72,6 +71,8 @@ public:
 private:
 	float c_PlayerAng;		//プレイヤーの角度
 
+	int c_EffPara;		//痺れエフェクト
+
 	int c_DrowYouCount = 90;//Youを表示非表示
 	bool c_RotFlag;		//プレイヤーが回転している
 	bool c_MoveFlag;	//プレイヤーが移動しているのか判定
@@ -97,6 +98,7 @@ private:
 		//痺れ（ダメージ関連）
 	struct Damage
 	{
+		bool c_onePlayEffect;				//エフェクトを一回だけ再生する変数
 		int s_ParaTime = 0;					//プレイヤーが痺れる時間をカウント
 		bool s_paralyzeKey = false;		//プレイヤーがしびれているか判定する（true:痺れてる false:痺れていない）
 		const int s_MaxTimeParalyze = 60;		//プレイヤーが痺れている時間

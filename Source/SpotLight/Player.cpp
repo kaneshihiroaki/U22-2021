@@ -8,6 +8,7 @@
 #include "Debug.h"
 #include "Light.h"
 #include "GameSound.h"
+#include "EffekseerForDXLib.h"
 
 int PLAYER_WIN_COUNT = 0;
 
@@ -29,11 +30,14 @@ PLAYER::PLAYER()
 
 	//c_Acc = 0.0f;
 
+	c_EffPara = LoadEffekseerEffect("Effect/Numb/para.efk", 50.0f);//MV1LoadModel("image/痺れ.efk");
+	Damage.c_onePlayEffect = false;
+	//int effectResourceHandle = LoadEffekseerEffect("image/電撃2.efkefc", 1.0f);
+
 	// ３Ｄモデルの読み込み
 	c_PlayerModel = MV1LoadModel("Model/Player3.mv1");
 	c_WinPlayerModel = MV1LoadModel("Model/Player4.mv1");
 
-	c_Sibi = MV1LoadModel("image/痺れ.efk");
 
 	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
 
@@ -108,12 +112,41 @@ void PLAYER::Player_Controller() {
 
 		}
 	}
+
+	//int PlayParaEff;
+
+	//// 定期的にエフェクトを再生する
+	//if (time_All % 120 == 3)
+	//{
+	//	int PlayParaEff;
+
+	//	PlayParaEff = PlayEffekseer3DEffect(c_EffPara);
+
+	//	// 再生中のエフェクトを移動する。
+	//	SetPosPlayingEffekseer3DEffect(PlayParaEff, c_Position.x, c_Position.y+10, c_Position.z);
+
+	//	// Effekseerにより再生中のエフェクトを描画する。
+	//	DrawEffekseer3D();
+
+	//	// エフェクトの位置をリセットする。
+	//	//position_x = 0.0f;
+	//}
+
+	//PlayParaEff = PlayEffekseer3DEffect(c_EffPara);
+
+	//// 再生中のエフェクトを移動する。
+	//SetPosPlayingEffekseer3DEffect(PlayParaEff, c_Position.x, c_Position.y, c_Position.z);
+
+	//// Effekseerにより再生中のエフェクトを描画する。
+	//DrawEffekseer3D();
+
+	//YOUを表示させる処理
 	SetFontSize(30);
 	c_StringPos = ConvWorldPosToScreenPos(c_Position);
 	if (c_DrowYouCount > 2) {
 		c_DrowYouCount--;
 		DrawFormatString(c_StringPos.x - 20, c_StringPos.y - 85, 0xFF0000, "YOU");
-	}//DrawFormatString(c_StringPos.x - 20, c_StringPos.y - 55, 0xFF0000, "YOU");
+	}
 }
 
 // プレイヤーとオブジェクトのあたり判定
@@ -173,8 +206,28 @@ void PLAYER::Player_Paralyze() {
 	c_MoveFlag = false;
 	c_Slide = false;
 
+	// 定期的にエフェクトを再生する
+	if (Damage.c_onePlayEffect == false)
+	{
+		int PlayParaEff;
+
+		PlayParaEff = PlayEffekseer3DEffect(c_EffPara);
+
+		// 再生中のエフェクトを移動する。
+		SetPosPlayingEffekseer3DEffect(PlayParaEff, c_Position.x, c_Position.y + 10, c_Position.z);
+
+		// Effekseerにより再生中のエフェクトを描画する。
+		DrawEffekseer3D();
+
+		Damage.c_onePlayEffect = true;
+
+		// エフェクトの位置をリセットする。
+		//position_x = 0.0f;
+	}
+
 	if (Damage.s_ParaTime++ == Damage.s_MaxTimeParalyze) {
 		Damage.s_paralyzeKey = false;
+		Damage.c_onePlayEffect = false;
 		Damage.s_ParaTime = 0;
 	}
 }

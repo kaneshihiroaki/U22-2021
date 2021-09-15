@@ -1064,24 +1064,24 @@ void MAIN::EffectSeekImport() {
 }
 
 void MAIN::Effect_Draw() {
-	// 定期的にエフェクトを再生する
-	if (time_All % 120 == 3)
-	{
-		// エフェクトを再生する。
-		playingEffectHandle[0] = PlayEffekseer3DEffect(effectResourceHandle[0]);
-		// 再生中のエフェクトを移動する。
-		SetPosPlayingEffekseer3DEffect(playingEffectHandle[0], 100, 100, 0);
+	//// 定期的にエフェクトを再生する
+	//if (time_All % 120 == 3)
+	//{
+	//	// エフェクトを再生する。
+	//	playingEffectHandle[0] = PlayEffekseer3DEffect(effectResourceHandle[0]);
+	//	// 再生中のエフェクトを移動する。
+	//	SetPosPlayingEffekseer3DEffect(playingEffectHandle[0], 100, 100, 0);
 
-		// エフェクトの位置をリセットする。
-		//position_x = 0.0f;
-	}
+	//	// エフェクトの位置をリセットする。
+	//	//position_x = 0.0f;
+	//}
 
-	
-	/*position_x += 0.2f; */
+	//
+	///*position_x += 0.2f; */
 
-	// Effekseerにより再生中のエフェクトを更新する。
-	UpdateEffekseer3D();
+	//// Effekseerにより再生中のエフェクトを更新する。
+	//UpdateEffekseer3D();
 
-	// Effekseerにより再生中のエフェクトを描画する。
-	DrawEffekseer3D();
+	//// Effekseerにより再生中のエフェクトを描画する。
+	//DrawEffekseer3D();
 }
