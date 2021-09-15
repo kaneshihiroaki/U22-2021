@@ -92,7 +92,7 @@ private:
 	bool c_Player_win = false;//プレイヤーがスポットライトに入っているときモデルを変更するようの変数
 
 	float c_movespeed;	//プレイヤー移動スピード
-	const float c_MoveMax = 7.0f;	//プレイヤーの基本移動速度
+	const float c_MoveMax = 5.0f;	//プレイヤーの基本移動速度
 	float c_Acc;	//加速を制御
 
 		//痺れ（ダメージ関連）
