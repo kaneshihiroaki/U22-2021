@@ -1,4 +1,7 @@
 ﻿#include "DxLib.h"
+// EffekseerForDXLib.hをインクルードします。
+#include "EffekseerForDXLib.h"
+
 #include <math.h>
 #include <list>
 #include"Camera.h"
@@ -10,6 +13,8 @@
 #include "Light.h"
 #include "Character.h"
 #include "GameSound.h"
+
+
 //ゲームの状態
 //int GameState = 0;
 
@@ -183,8 +188,32 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	ChangeWindowMode(TRUE);
 	SetGraphMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32);
 
+	// DirectX11を使用するようにする。(DirectX9も可、一部機能不可)
+	// Effekseerを使用するには必ず設定する。
+	SetUseDirect3DVersion(DX_DIRECT3D_11);
+
 
 	if (DxLib_Init() < 0) return -1;
+
+	// Effekseerを初期化する。
+	// 引数には画面に表示する最大パーティクル数を設定する。
+	if (Effekseer_Init(8000) == -1)
+	{
+		DxLib_End();
+		return -1;
+	}
+
+
+	// フルスクリーンウインドウの切り替えでリソースが消えるのを防ぐ。
+	// Effekseerを使用する場合は必ず設定する。
+	SetChangeScreenModeGraphicsSystemResetFlag(FALSE);
+
+	// DXライブラリのデバイスロストした時のコールバックを設定する。
+	// ウインドウとフルスクリーンの切り替えが発生する場合は必ず実行する。
+	// ただし、DirectX11を使用する場合は実行する必要はない。
+	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
+
+	
 
 	Light_SetUp();
 
@@ -200,6 +229,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetWriteZBuffer3D(TRUE);
 
 	MAIN* c_main = new MAIN();
+
+	// エフェクトリソースを読み込む。
+	// 読み込む時に大きさを指定する。
+	//int effectResourceHandle = LoadEffekseerEffect("Laser01.efkefc", 1.0f);
+	//下のEffectSeekImportで読み込みを行う
+	c_main->EffectSeekImport();
 
 	//ゲームステータスをタイトルへ
 	c_main->GameState = 0;
@@ -256,6 +291,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// キー入力待ちをする
 	//WaitKey();
 
+	// エフェクトリソースを削除する。(Effekseer終了時に破棄されるので削除しなくてもいい)
+	DeleteEffekseerEffect(c_main->effectResourceHandle[0]);
+
+	// Effekseerを終了する。
+	Effkseer_End();
+
 	// ＤＸライブラリの後始末
 	DxLib_End();
 
@@ -269,6 +310,12 @@ void MAIN::Game_Main() {
 	}
 	//オブジェクトの表示
 	c_camera->Camera_Control(c_stage);
+
+	// DXライブラリのカメラとEffekseerのカメラを同期する。
+	Effekseer_Sync3DSetting();
+
+	
+
 	c_stage->Stage_Make(c_enemy, c_player);
 	if (!Collision_Player)c_enemy->Enemy_Creat();
 	c_player->Player_Controller();
@@ -316,17 +363,17 @@ void MAIN::Game_Main() {
 
 		//サドンデスなら入る。主にタイムを固定する予定
 		if (Sadondes_flg && LightFlg == false && round_count > 0) {
-			time = 100;
+			time_All = 100;
 		}
 		//ここはドロー判定
-		if (LightFlg == false && time >= 598) {
+		if (LightFlg == false && time_All >= 598) {
 			if (DrawFlg == false) {
 				draw_count++;
 				DrawFlg = true;
 			}
 			if (draw_count >= 2) {
 				draw_timer = (draw_timer + 1) % 121;
-				time = 599;
+				time_All = 599;
 				if (draw_timer < 119) {
 					if (CheckSoundMem(draw_sound) == 0) {
 						PlaySoundMem(draw_sound, DX_PLAYTYPE_BACK);
@@ -336,7 +383,7 @@ void MAIN::Game_Main() {
 					DrawString(520, 140, "Draw", GetColor(0xff, 0xff, 0x00));
 				}
 				else if (draw_timer >= 120) {
-					time = 600;
+					time_All = 600;
 					draw_timer = 0;
 				}
 			}
@@ -357,7 +404,7 @@ void MAIN::Game_Main() {
 			player_win = true;
 		}
 
-		if (time <= 597) {
+		if (time_All <= 597) {
 			//スポットライトが止まっているなら勝敗判定を行う
 			if (LightFlg == false) {
 
@@ -404,14 +451,14 @@ void MAIN::Game_Main() {
 
 						win_timer = (win_timer + 1) % 121;
 						if (win_timer < 119) {
-							time = 496;
+							time_All = 496;
 							Key_Look = true;
 							SetFontSize(100);
 							DrawString(470, 120, "YOU_WIN", GetColor(0xff, 0x00, 0x00));
 						}
 						else if (win_timer >= 120) {
 							StopSoundMem(win_sound);
-							time = 600;
+							time_All = 600;
 							win_timer = 0;
 
 						}
@@ -433,7 +480,7 @@ void MAIN::Game_Main() {
 
 							win_timer = (win_timer + 1) % 121;
 							if (win_timer < 119) {
-								time = 496;
+								time_All = 496;
 								Key_Look = true;
 								SetFontSize(100);
 								DrawString(420, 120, "CPU1_WIN", GetColor(0x00, 0x00, 0xff));
@@ -449,7 +496,7 @@ void MAIN::Game_Main() {
 
 							win_timer = (win_timer + 1) % 121;
 							if (win_timer < 119) {
-								time = 496;
+								time_All = 496;
 								Key_Look = true;
 								SetFontSize(100);
 								DrawString(420, 120, "CPU2_WIN", GetColor(0x00, 0x00, 0xff));
@@ -465,7 +512,7 @@ void MAIN::Game_Main() {
 
 							win_timer = (win_timer + 1) % 121;
 							if (win_timer < 119) {
-								time = 496;
+								time_All = 496;
 								Key_Look = true;
 								SetFontSize(100);
 								DrawString(420, 120, "CPU3_WIN", GetColor(0x00, 0x00, 0xff));
@@ -473,7 +520,7 @@ void MAIN::Game_Main() {
 						}
 						if (win_timer >= 120) {
 							StopSoundMem(win_sound);
-							time = 600;
+							time_All = 600;
 							win_timer = 0;
 
 						}
@@ -552,6 +599,8 @@ void MAIN::Game_Main() {
 		c_ready = true;
 		c_dispTime = c_dispTimeMax;	//GOの表示時間を代入
 	}
+
+	Effect_Draw();
 }
 
 void MAIN::Game_Title() {
@@ -1003,4 +1052,36 @@ void MAIN::Sadondes_Init() {
 
 	//初期化したらゲームメインへ
 	//GameState = 2;
+}
+
+void MAIN::EffectSeekImport() {
+	if ((effectResourceHandle[0] = LoadEffekseerEffect("Effect/Laser01.efkefc", 10.0f)) == -1) {
+		int er = 0;
+		er = -1;
+	}
+	// 再生中のエフェクトのハンドルを初期化する。
+	playingEffectHandle[0] = -1;
+}
+
+void MAIN::Effect_Draw() {
+	// 定期的にエフェクトを再生する
+	if (time_All % 120 == 3)
+	{
+		// エフェクトを再生する。
+		playingEffectHandle[0] = PlayEffekseer3DEffect(effectResourceHandle[0]);
+		// 再生中のエフェクトを移動する。
+		SetPosPlayingEffekseer3DEffect(playingEffectHandle[0], 100, 100, 0);
+
+		// エフェクトの位置をリセットする。
+		//position_x = 0.0f;
+	}
+
+	
+	/*position_x += 0.2f; */
+
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer3D();
+
+	// Effekseerにより再生中のエフェクトを描画する。
+	DrawEffekseer3D();
 }

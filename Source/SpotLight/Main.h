@@ -60,6 +60,12 @@ public:
 	void Sadondes_check();
 	void Sadondes_Init();
 
+	//エフェクト読み込み
+	void EffectSeekImport();
+	void Effect_Draw();
+	int effectResourceHandle[10];
+	int playingEffectHandle[10];
+
 private:
 	bool c_ready;		//ボタンを押してメインを開始する変数
 	int c_dispTime;		//READYとGOの表示時間カウント

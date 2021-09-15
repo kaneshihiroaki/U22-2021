@@ -21,7 +21,7 @@ float DrawZ = 0.0f;
 float DrawX2 = 0.0f;
 float DrawZ2 = 0.0f;
 
-int time;
+int time_All;
 int time2;
 
 int count;       //移動するライトの予定位置
@@ -151,7 +151,7 @@ void Light_init() {
 	//時間初期化
 	time2 = 120;
 
-	time = 600;
+	time_All = 600;
 	WaitTime = 1;
 	cntFlg = 4;
 	rc = 4;
@@ -165,12 +165,12 @@ void Light()
 
 	//10カウント表示
 	SetFontSize(100);
-	if (g_DispTime == true)DrawFormatString(600, 100, 0xffff00, "%d", time / 60);
+	if (g_DispTime == true)DrawFormatString(600, 100, 0xffff00, "%d", time_All / 60);
 
 	if (Light_Gear == 1 || Light_Gear == 2) {
 		//10秒経過でラウンド次のラウンドへ
-		if (time < 600 && WaitTime == 1) {//最初の10秒
-			time++;
+		if (time_All < 600 && WaitTime == 1) {//最初の10秒
+			time_All++;
 			//2秒経過したら方向転換
 			if (time2 < 120) {
 				time2++;
@@ -193,20 +193,20 @@ void Light()
 				LightRotateAngle2 = 0.0f;
 			}
 		}
-		else if (time < 600 && WaitTime == 0) {//勝敗判定
-			time++;
+		else if (time_All < 600 && WaitTime == 0) {//勝敗判定
+			time_All++;
 			StopSoundMem(drum);
 		}
-		else if (time >= 600 && WaitTime == 1) {//ライトが止まる
-			time = 0;
+		else if (time_All >= 600 && WaitTime == 1) {//ライトが止まる
+			time_All = 0;
 			WaitTime = 0;
 			LightFlg = false;
 			g_DispTime = false;
 			judge_win = false;
 			PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
 		}
-		else if (time >= 600 && WaitTime == 0) {//次のラウンドに行く
-			time = 0;
+		else if (time_All >= 600 && WaitTime == 0) {//次のラウンドに行く
+			time_All = 0;
 			PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
 			LightFlg = true;
 			g_DispTime = true;
@@ -222,8 +222,8 @@ void Light()
 	else if (Light_Gear == 3)
 	{
 		//2秒経過でラウンド次のラウンドへ
-		if (time < 120 && WaitTime == 1) {//最初の2秒
-			time++;
+		if (time_All < 120 && WaitTime == 1) {//最初の2秒
+			time_All++;
 			//2秒経過したら方向転換
 			if (time2 < 120) {
 				time2++;
@@ -248,20 +248,20 @@ void Light()
 		}
 
 		//勝敗が決まるまでの猶予時間
-		else if (time < 600 && WaitTime == 0) {
-			time++;
+		else if (time_All < 600 && WaitTime == 0) {
+			time_All++;
 			StopSoundMem(drum);
 		}
-		else if (time >= 120 && WaitTime == 1) {//ライトが止まる
-			time = 0;
+		else if (time_All >= 120 && WaitTime == 1) {//ライトが止まる
+			time_All = 0;
 			WaitTime = 0;
 			LightFlg = false;
 			g_DispTime = false;
 			judge_win = false;
 			PlaySoundMem(drum_finish, DX_PLAYTYPE_BACK);
 		}
-		else if (time >= 600 && WaitTime == 0) {//次のラウンドに行く
-			time = 0;
+		else if (time_All >= 600 && WaitTime == 0) {//次のラウンドに行く
+			time_All = 0;
 			PlaySoundMem(drum, DX_PLAYTYPE_LOOP);
 			LightFlg = true;
 			g_DispTime = true;
@@ -342,7 +342,7 @@ void Light()
 	//案２
 	if (Light_Gear == 2) {
 		//前半4秒の動き
-		if (WaitTime == 1 && count < 6 && time <= 240) {
+		if (WaitTime == 1 && count < 6 && time_All <= 240) {
 
 			//上に移動
 			if (count == rc - 3) {
@@ -402,7 +402,7 @@ void Light()
 		}
 
 		//後半6秒の動き
-		if (WaitTime == 1 && count < 6 && time > 240 && Light_Gear == 2) {
+		if (WaitTime == 1 && count < 6 && time_All > 240 && Light_Gear == 2) {
 
 			//上に移動
 			if (count == rc - 3) {

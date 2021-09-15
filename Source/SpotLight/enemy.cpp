@@ -917,7 +917,7 @@ void ENEMY::Ga_Attack(int num, PLAYER* player) {
 }
 
 void ENEMY::Ga_Move(int num, PLAYER* player) {
-	if (WaitTime == 0 || time >= 480) {//スポットライトの動きが止まっているまたは、8秒以上になっている
+	if (WaitTime == 0 || time_All >= 480) {//スポットライトの動きが止まっているまたは、8秒以上になっている
 		if (c_StmCount[num] >= (int)(c_StmMax * 0.5)) {//スタミナが50%以上なら勝ちを取りに行こうと動く
 			c_EnemyState[num] = ENEMY_MOVE;
 		}
@@ -936,7 +936,7 @@ void ENEMY::Ga_Move(int num, PLAYER* player) {
 	
 }
 void ENEMY::A_Move(int num) {
-	if (WaitTime == 0 || time >= 480) {//スポットライトの動きが止まっているまたは、8秒以上になっている
+	if (WaitTime == 0 || time_All >= 480) {//スポットライトの動きが止まっているまたは、8秒以上になっている
 		if (c_StmCount[num] >= (int)(c_StmMax * 0.4)) {//スタミナが40%以上なら勝ちを取りに行こうと動く
 			//if (check_1 == 0 && check_2 == 0) {//敵と味方両方とも範囲にいない場合行動に移る
 				c_EnemyState[num] = ENEMY_MOVE;
@@ -1168,7 +1168,7 @@ void ENEMY::San_Attack(int num, PLAYER* player) {
 
 void ENEMY::San_Move(int num) {
 	
-	if (WaitTime == 0 || time >= 540) {//スポットライトの動きが止まっているまたは、9秒以上になっている
+	if (WaitTime == 0 || time_All >= 540) {//スポットライトの動きが止まっているまたは、9秒以上になっている
 		if (c_StmCount[num] >= (int)(c_StmMax*0.15)) {//スタミナが15%以上なら勝ちを取りに行こうと動く
 			c_EnemyState[num] = ENEMY_MOVE;
 		}
