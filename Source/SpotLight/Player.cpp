@@ -220,9 +220,6 @@ void PLAYER::Player_Paralyze() {
 		DrawEffekseer3D();
 
 		Damage.c_onePlayEffect = true;
-
-		// エフェクトの位置をリセットする。
-		//position_x = 0.0f;
 	}
 
 	if (Damage.s_ParaTime++ == Damage.s_MaxTimeParalyze) {

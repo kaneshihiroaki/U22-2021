@@ -1079,9 +1079,9 @@ void MAIN::Effect_Draw() {
 	//
 	///*position_x += 0.2f; */
 
-	//// Effekseerにより再生中のエフェクトを更新する。
-	//UpdateEffekseer3D();
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer3D();
 
-	//// Effekseerにより再生中のエフェクトを描画する。
-	//DrawEffekseer3D();
+	// Effekseerにより再生中のエフェクトを描画する。
+	DrawEffekseer3D();
 }
