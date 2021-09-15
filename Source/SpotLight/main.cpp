@@ -1055,7 +1055,7 @@ void MAIN::Sadondes_Init() {
 }
 
 void MAIN::EffectSeekImport() {
-	if ((effectResourceHandle[0] = LoadEffekseerEffect("Effect/Laser01.efkefc", 10.0f)) == -1) {
+	if ((effectResourceHandle[0] = LoadEffekseerEffect("Effect/Smook.efkefc", 10.0f)) == -1) {
 		int er = 0;
 		er = -1;
 	}
@@ -1065,16 +1065,16 @@ void MAIN::EffectSeekImport() {
 
 void MAIN::Effect_Draw() {
 	//// 定期的にエフェクトを再生する
-	//if (time_All % 120 == 3)
-	//{
-	//	// エフェクトを再生する。
-	//	playingEffectHandle[0] = PlayEffekseer3DEffect(effectResourceHandle[0]);
-	//	// 再生中のエフェクトを移動する。
-	//	SetPosPlayingEffekseer3DEffect(playingEffectHandle[0], 100, 100, 0);
+	if (time_All % 120 == 3)
+	{
+		// エフェクトを再生する。
+		//playingEffectHandle[0] = PlayEffekseer3DEffect(effectResourceHandle[0]);
+		//// 再生中のエフェクトを移動する。
+		//SetPosPlayingEffekseer3DEffect(playingEffectHandle[0], 100, 100, 0);
 
-	//	// エフェクトの位置をリセットする。
-	//	//position_x = 0.0f;
-	//}
+		// エフェクトの位置をリセットする。
+		//position_x = 0.0f;
+	}
 
 	//
 	///*position_x += 0.2f; */

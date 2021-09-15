@@ -72,6 +72,10 @@ private:
 	float c_PlayerAng;		//プレイヤーの角度
 
 	int c_EffPara;		//痺れエフェクト
+	int c_EffSmoke;		//移動時の煙エフェクト
+	int c_SlotEffSmoke[3] = { -1,-1,-1 };		//移動時の煙エフェクト格納用
+	int c_SmokeCount = 0;//煙のカウント用
+
 
 	int c_DrowYouCount = 90;//Youを表示非表示
 	bool c_RotFlag;		//プレイヤーが回転している

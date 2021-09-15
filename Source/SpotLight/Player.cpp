@@ -31,7 +31,10 @@ PLAYER::PLAYER()
 	//c_Acc = 0.0f;
 
 	c_EffPara = LoadEffekseerEffect("Effect/Numb/Sibire.efk", 50.0f);//MV1LoadModel("image/痺れ.efk");
-
+	if ((c_EffSmoke = LoadEffekseerEffect("Effect/Smook.efkefc", 10.0f)) == -1) {
+		int ff = 0;
+		ff++;
+	}
 	//int effectResourceHandle = LoadEffekseerEffect("image/電撃2.efkefc", 1.0f);
 
 	// ３Ｄモデルの読み込み
@@ -87,6 +90,11 @@ void PLAYER::init() {
 
 	//痺れエフェクトを一度だけ出現させる変数初期化
 	Damage.c_onePlayEffect = false;
+	//砂埃初期化
+	for (int i = 0; i < 3; i++) {
+		c_SlotEffSmoke[i] = -1;		//移動時の煙エフェクト格納用
+	}
+	c_SmokeCount = 0;//煙のカウント用
 
 	//モデルの大きさを設定
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
@@ -543,6 +551,16 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 		if (CheckSoundMem(breath_sound) == 0)PlaySoundMem(breath_sound, DX_PLAYTYPE_BACK);
 		//DrawBox(c_StringPos.x - 29, c_StringPos.y - 54, c_StringPos.x + 9 * c_StmCount / c_StmMax, c_StringPos.y - 41, 0xff4500, TRUE);
 		DrawBox(50, 70, 50 + 200 * c_StmCount / c_StmMax, 90, 0xff4500, TRUE);
+	}
+
+	c_SmokeCount++;
+	if (c_MoveFlag ) {//移動できるときにのみとおる.煙エフェクト
+		if (c_SmokeCount % 20 == 0) {//60フレームごとにはいる
+			// エフェクトを再生する。
+			c_SlotEffSmoke[(c_SmokeCount / 20)%3] = PlayEffekseer3DEffect(c_EffSmoke);
+			// 再生中のエフェクトを移動する。
+			SetPosPlayingEffekseer3DEffect(c_SlotEffSmoke[(c_SmokeCount / 20) % 3], c_Position.x, c_Position.y, c_Position.z);
+		}
 	}
 
 	if (Collision_Player) {
