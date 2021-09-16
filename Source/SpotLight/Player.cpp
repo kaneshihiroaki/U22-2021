@@ -19,7 +19,7 @@ PLAYER::PLAYER()
 	c_WinPlayerModel = MV1LoadModel("Model/Player4.mv1");
 
 	//プレイヤーの痺れエフェクト
-	c_EffPara = LoadEffekseerEffect("Effect/Numb/Sibire.efk", 30.0f);//MV1LoadModel("image/痺れ.efk");
+	c_EffPara = LoadEffekseerEffect("Effect/Numb/Sibire.efk", 30.0f);
 	if ((c_EffSmoke = LoadEffekseerEffect("Effect/Smook.efkefc", 5.0f)) == -1) {
 		int ff = 0;
 		ff++;

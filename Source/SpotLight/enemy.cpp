@@ -37,7 +37,7 @@ ENEMY::ENEMY()
 	}
 
 	//敵の痺れエフェクト
-	c_EffDamageEnemy = LoadEffekseerEffect("Effect/Numb/Sibire.efk", 50.0f);//MV1LoadModel("image/痺れ.efk");
+	c_EffDamageEnemy = LoadEffekseerEffect("Effect/Numb/Sibire.efk", 50.0f);
 
 	//敵の歩く時のエフェクト
 	if ((c_EffSmoke = LoadEffekseerEffect("Effect/Smook.efkefc", 5.0f)) == -1) {
