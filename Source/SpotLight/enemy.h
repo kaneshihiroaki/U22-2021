@@ -88,16 +88,16 @@ public:
 	void Ga_Attack(int num, PLAYER* player);//がっきーの攻撃関数
 	void Ga_Move(int num, PLAYER* player);//移動関数
 	int Ga_Interval[ENEMY_MAX] = { 0,0,0 };//攻撃のインターバル
-	int Ga_Debug_Interval = 90;//がっきーのインターバル数
+	int Ga_Debug_Interval = 120;//がっきーのインターバル数
 
 	void A_Move(int num);//アスカの移動関数
 	void A_Attack(int num, PLAYER* player);//アスカの攻撃関数
-	int A_Debug_Interval = 90;//アスカのインターバル数
+	int A_Debug_Interval = 120;//アスカのインターバル数
 	//攻撃のインターバルはがっきーのGa_Intervalを使います
 
 	void San_Move(int num);//サングラスの移動関数
 	void San_Attack(int num, PLAYER* player);//サングラスの攻撃関数
-	int San_Debug_Interval = 40;//サングラスのインターバル数
+	int San_Debug_Interval = 70;//サングラスのインターバル数
 	//攻撃のインターバルはがっきーのGa_Intervalを使います
 
 	void Bot_Normal(int num, PLAYER* player);//従来の敵ジャニーズ君
