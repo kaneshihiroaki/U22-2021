@@ -20,11 +20,6 @@ int ENEMY_WIN_COUNT3;//敵３の勝利数
 
 ENEMY::ENEMY()
 {
-	////オブジェクトの座標初期化
-	//c_ObjPos[0] = VGet(500.0f, 80.0f, 500.0f);
-	//c_ObjPos[1] = VGet(300.0f, 100.0f, 50.0f);
-	//c_ObjPos[2] = VGet(50.0f, 100.0f, 170.0f);
-
 	// ３Ｄモデルの読み込み
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (i == 0) {//赤
@@ -32,36 +27,19 @@ ENEMY::ENEMY()
 			c_WinEnemyModel[i] = MV1LoadModel("Model/EnMe4.mv1");
 		}
 		else if (i == 1) {//緑
-			//			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
 			c_EnemyModel[i] = MV1LoadModel("Model/EnMe5.mv1");
 			c_WinEnemyModel[i] = MV1LoadModel("Model/EnMe6.mv1");
 		}
 		else {//オレンジ
-			//			c_EnemyModel[i] = MV1LoadModel("Model/obj.mv1");
 			c_EnemyModel[i] = MV1LoadModel("Model/EnMe7.mv1");
 			c_WinEnemyModel[i] = MV1LoadModel("Model/EnMe8.mv1");
 		}
-		
-		//c_AddPosEnemy[i] = { 0.5f,0.5f,0.5f };
-		//c_MoveKey[i] = true;
-		//c_StmCount[i] = 300;	//エネミーの体力の最大
-		//c_Rotation[i] = VGet(0.0f, 0.0f /*(c_PlayerAng * (M_PI / 180))*/, 0.0f);//エネミーの回転
-		//c_Enemy_MoveAng[i] = 0;//エネミーの角度
-		//c_EnemySpeed[i] = 0.0f;//エネミーのスピード
-		//c_EnemyState[i] = ENEMY_IDLE;//エネミーの初期状態
-		//MV1SetScale(c_EnemyModel[i], c_AddPosEnemy[i]);//エネミーのスケールをいれている
-
-		//c_EnemyAddVect[i] = VGet(0.0f, 0.0f, 0.0f);//追い越す処理のときに加算するベクトルを保存
-		//c_EnemyFrameCount[i] = 0;//追い越す処理のときにフレを数える
 	}
 
+	//敵の痺れエフェクト
 	c_EffDamageEnemy = LoadEffekseerEffect("Effect/Numb/Sibire.efk", 50.0f);//MV1LoadModel("image/痺れ.efk");
 
-	//c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
-	//Coefficient = 1.0f;
-	//c_MoveFlag = FALSE;
-	//c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
-
+	//敵の歩く時のエフェクト
 	if ((c_EffSmoke = LoadEffekseerEffect("Effect/Smook.efkefc", 5.0f)) == -1) {
 		int ff = 0;
 		ff++;
@@ -130,8 +108,6 @@ void ENEMY::init() {
 }
 
 void ENEMY::Sadon_init() {
-	
-
 	// ３Ｄモデルの読み込み
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		if (c_AliveEnemy[i] == true) {
@@ -203,14 +179,6 @@ void ENEMY::Enemy_Creat() {
 			}
 		}
 	}
-	//オブジェクト描画
-	//DrawSphere3D(c_ObjPos[0], 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
-	//DrawCube3D(c_ObjPos[1], VAdd(c_ObjPos[1], VECTOR{ 50,50,50 }), GetColor(0, 0, 255), GetColor(255, 255, 255), TRUE);
-	//DrawCube3D(c_ObjPos[2], VAdd(c_ObjPos[2], VECTOR{ 50,50,50 }), GetColor(0, 255, 0), GetColor(255, 255, 255), TRUE);
-}
-
-void ENEMY::debug() {
-	//printfDx("%d\n", GetEnemyMoveKey(2));
 }
 
 void ENEMY::Enemy_State(int num, PLAYER* player, ENEMY* enemy) {
@@ -566,12 +534,6 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 			SetPosPlayingEffekseer3DEffect(c_SlotEffSmoke[(c_SmokeCount[num] / 20) % 3], c_ObjPos[num].x, 50.0f, c_ObjPos[num].z);
 		}
 	}
-	
-	//DrawSphere3D(c_SpotPos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
-	
-	//if (Collision_Player) {
-	//	Collision_Draw();//デバック用
-	//}
 }
 
 
@@ -588,12 +550,6 @@ bool ENEMY::Enemy_Push(int num, PLAYER* player, ENEMY* enemy, VECTOR PushVec, in
 	VECTOR r_MoveVector = PushVec;
 
 	float r_Coefficient = 1.0f;
-
-
-
-
-
-
 
 	//移動フラグがたってたら移動
 	if (r_MoveFlag == true)

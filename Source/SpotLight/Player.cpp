@@ -14,43 +14,22 @@ int PLAYER_WIN_COUNT = 0;
 
 PLAYER::PLAYER()
 {
-	//// プレイヤー座標初期化
-	//c_Position = VGet(100.0f, 100.0f, 0.0f);
-	//c_PlayerAng = 0;	//プレイヤーの角度
-	////プレイヤー回転（ラジアン変換）
-	//c_Rotation = VGet(0.0f, (c_PlayerAng *(M_PI/180)), 0.0f);
-	////プレイヤーの大きさ初期化
-	//c_AddPosPlay = { 0.5f,0.5f,0.5f };
+	// ３Ｄモデルの読み込み
+	c_PlayerModel = MV1LoadModel("Model/Player3.mv1");
+	c_WinPlayerModel = MV1LoadModel("Model/Player4.mv1");
 
-	//c_MoveFlag = FALSE;	//プレイヤーが移動しているのか判定
-
-	//c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
-
-	//c_StmCount = 300;		//プレイヤーの体力
-
-	//c_Acc = 0.0f;
-
+	//プレイヤーの痺れエフェクト
 	c_EffPara = LoadEffekseerEffect("Effect/Numb/Sibire.efk", 30.0f);//MV1LoadModel("image/痺れ.efk");
 	if ((c_EffSmoke = LoadEffekseerEffect("Effect/Smook.efkefc", 5.0f)) == -1) {
 		int ff = 0;
 		ff++;
 	}
-	//int effectResourceHandle = LoadEffekseerEffect("image/電撃2.efkefc", 1.0f);
-
-	// ３Ｄモデルの読み込み
-	c_PlayerModel = MV1LoadModel("Model/Player3.mv1");
-	c_WinPlayerModel = MV1LoadModel("Model/Player4.mv1");
-
 
 	//攻撃エフェクト
 	Att.s_AttackPara = LoadEffekseerEffect("Effect/kougeki.efkefc", 50.0f);
 
 	//攻撃エフェクトflg
 	Att.c_onePlayAttackEffect = false;
-
-	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
-
-	//c_enemyCol = new ENEMY();
 }
 
 PLAYER::~PLAYER()
@@ -128,33 +107,6 @@ void PLAYER::Player_Controller() {
 
 		}
 	}
-
-	//int PlayParaEff;
-
-	//// 定期的にエフェクトを再生する
-	//if (time_All % 120 == 3)
-	//{
-	//	int PlayParaEff;
-
-	//	PlayParaEff = PlayEffekseer3DEffect(c_EffPara);
-
-	//	// 再生中のエフェクトを移動する。
-	//	SetPosPlayingEffekseer3DEffect(PlayParaEff, c_Position.x, c_Position.y+10, c_Position.z);
-
-	//	// Effekseerにより再生中のエフェクトを描画する。
-	//	DrawEffekseer3D();
-
-	//	// エフェクトの位置をリセットする。
-	//	//position_x = 0.0f;
-	//}
-
-	//PlayParaEff = PlayEffekseer3DEffect(c_EffPara);
-
-	//// 再生中のエフェクトを移動する。
-	//SetPosPlayingEffekseer3DEffect(PlayParaEff, c_Position.x, c_Position.y, c_Position.z);
-
-	//// Effekseerにより再生中のエフェクトを描画する。
-	//DrawEffekseer3D();
 
 	//YOUを表示させる処理
 	SetFontSize(30);

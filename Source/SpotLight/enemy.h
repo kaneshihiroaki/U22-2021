@@ -68,7 +68,6 @@ public:
 	void Enemy_State(int num, PLAYER* player, ENEMY* enemy);//敵の状態を制御関数
 	int EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos);//enemyの判定
 
-	void debug();		//デバッグ用、用がなくなったら消します
 	void init();		//初期化
 	void Sadon_init();//サドンデス化
 
