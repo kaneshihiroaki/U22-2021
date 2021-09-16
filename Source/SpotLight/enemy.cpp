@@ -861,7 +861,7 @@ int ENEMY::EnemyCheckHit(VECTOR c_ObjPos[ENEMY_MAX], VECTOR LightPos) {
 		float ez = LightPos.z - c_ObjPos[i].z;
 		if (c_AliveEnemy[i] == false)continue;//ë∂ç›ÇµÇƒÇ¢Ç»Ç¢
 		float er = (ex * ex) + (ez * ez);
-		float elr = ( 70.0f);
+		float elr = ( 60.0f);
 		float elr2 = (elr * elr);
 		//DrawSphere3D(c_ObjPos[i], 10.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 		// enemyÇ∆lightÇÃìñÇΩÇËîªíË
