@@ -85,6 +85,9 @@ void PLAYER::init() {
 	MV1SetScale(c_PlayerModel, c_AddPosPlay);
 	MV1SetScale(c_WinPlayerModel, c_AddPosPlay);
 
+	//痺れエフェクト変数を初期化
+	Damage.c_SlotEffect = -1;
+
 	if (Sadondes_flg == false)c_DrowYouCount = 180;
 
 }
@@ -288,10 +291,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 
 	if (Att.c_onePlayAttackEffect == false)
 	{
-
-
 		Att.s_PlayAttackEff = PlayEffekseer3DEffect(Att.s_AttackPara);
-
 		SetColorPlayingEffekseer3DEffect(Att.s_PlayAttackEff, 255, 255, 255, 124);//攻撃の色
 		SetRotationPlayingEffekseer3DEffect(Att.s_PlayAttackEff, 0, Player_rot.y, 0);
 		// Effekseerにより再生中のエフェクトを描画する。

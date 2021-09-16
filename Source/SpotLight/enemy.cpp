@@ -87,6 +87,8 @@ void ENEMY::init() {
 		//攻撃エフェクトflg
 		Att[i].c_onePlayAttackEffect = false;
 
+		//痺れエフェクトの変数初期化
+		Damage[i].c_SlotEffect = -1;
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
