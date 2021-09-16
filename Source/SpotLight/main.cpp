@@ -79,6 +79,7 @@ int g_exit = false;
 int state = 0;
 
 bool g_loopFlg = false;
+bool g_judgeEffe = false;
 
 MAIN::MAIN()
 {
@@ -213,7 +214,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ただし、DirectX11を使用する場合は実行する必要はない。
 	Effekseer_SetGraphicsDeviceLostCallbackFunctions();
 
-	
+
 
 	Light_SetUp();
 
@@ -314,7 +315,7 @@ void MAIN::Game_Main() {
 	// DXライブラリのカメラとEffekseerのカメラを同期する。
 	Effekseer_Sync3DSetting();
 
-	
+
 
 	c_stage->Stage_Make(c_enemy, c_player);
 	if (!Collision_Player)c_enemy->Enemy_Creat();
@@ -355,7 +356,7 @@ void MAIN::Game_Main() {
 			DrawFlg = false;
 			Time_IN_count = 0;//1人がスポットライトに何秒入っているかどうか
 			Win_NameOld = NO_NAME;
-			
+
 		}
 
 		player_win = false;//プレイヤーがスポットライトに入っているかどうか
@@ -447,6 +448,7 @@ void MAIN::Game_Main() {
 						{
 							PLAYER_WIN_COUNT++;
 							judge_win = true;
+							g_judgeEffe = false;
 						}
 
 						win_timer = (win_timer + 1) % 121;
@@ -455,6 +457,11 @@ void MAIN::Game_Main() {
 							Key_Look = true;
 							SetFontSize(100);
 							DrawString(470, 120, "YOU_WIN", GetColor(0xff, 0x00, 0x00));
+							if (g_judgeEffe == false) {
+								playingEffectHandle[1] = PlayEffekseer3DEffect(effectResourceHandle[1]);
+								SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], DrawX, 150.0f, DrawZ);
+								g_judgeEffe = true;
+							}
 						}
 						else if (win_timer >= 120) {
 							StopSoundMem(win_sound);
@@ -476,6 +483,7 @@ void MAIN::Game_Main() {
 							{
 								ENEMY_WIN_COUNT1++;
 								judge_win = true;
+								g_judgeEffe = false;
 							}
 
 							win_timer = (win_timer + 1) % 121;
@@ -484,6 +492,11 @@ void MAIN::Game_Main() {
 								Key_Look = true;
 								SetFontSize(100);
 								DrawString(420, 120, "CPU1_WIN", GetColor(0x00, 0x00, 0xff));
+								if (g_judgeEffe == false) {
+									playingEffectHandle[1] = PlayEffekseer3DEffect(effectResourceHandle[1]);
+									SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], DrawX, 150.0f, DrawZ);
+									g_judgeEffe = true;
+								}
 							}
 						}
 						if (ENEMY_WIN == 2) {
@@ -492,6 +505,7 @@ void MAIN::Game_Main() {
 							{
 								ENEMY_WIN_COUNT2++;
 								judge_win = true;
+								g_judgeEffe = false;
 							}
 
 							win_timer = (win_timer + 1) % 121;
@@ -500,6 +514,11 @@ void MAIN::Game_Main() {
 								Key_Look = true;
 								SetFontSize(100);
 								DrawString(420, 120, "CPU2_WIN", GetColor(0x00, 0x00, 0xff));
+								if (g_judgeEffe == false) {
+									playingEffectHandle[1] = PlayEffekseer3DEffect(effectResourceHandle[1]);
+									SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], DrawX, 150.0f, DrawZ);
+									g_judgeEffe = true;
+								}
 							}
 						}
 						if (ENEMY_WIN == 3) {
@@ -508,6 +527,7 @@ void MAIN::Game_Main() {
 							{
 								ENEMY_WIN_COUNT3++;
 								judge_win = true;
+								g_judgeEffe = false;
 							}
 
 							win_timer = (win_timer + 1) % 121;
@@ -516,6 +536,11 @@ void MAIN::Game_Main() {
 								Key_Look = true;
 								SetFontSize(100);
 								DrawString(420, 120, "CPU3_WIN", GetColor(0x00, 0x00, 0xff));
+								if (g_judgeEffe == false) {
+									playingEffectHandle[1] = PlayEffekseer3DEffect(effectResourceHandle[1]);
+									SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], DrawX, 150.0f, DrawZ);
+									g_judgeEffe = true;
+								}
 							}
 						}
 						if (win_timer >= 120) {
@@ -540,7 +565,7 @@ void MAIN::Game_Main() {
 			else {
 				GameState = 3;	//決着ついたらリザルト画面へ
 			}
-			
+
 		}
 
 		//if (!Collision_Player) {
@@ -568,13 +593,13 @@ void MAIN::Game_Main() {
 		Light();
 
 		//ラウンド表示
-		if (Sadondes_flg==false) {
+		if (Sadondes_flg == false) {
 			DrawFormatString(500, 10, 0xffff00, "ROUND %d", round_count);
 		}
 		else {
 			DrawFormatString(410, 10, 0xffff00, "EXTRA ROUND");
 		}
-		
+
 		//開始時にGO!を表示
 		if (--c_dispTime >= 0)DrawFormatString(580, 230, 0x0000FF, "GO!");
 
@@ -668,7 +693,7 @@ void MAIN::Game_Title() {
 }
 
 void MAIN::Game_Result(MAIN* main) {
-	
+
 	StopSoundMem(drum);
 	StopSoundMem(bgm_main);
 	StopSoundMem(damage_sound);
@@ -682,14 +707,14 @@ void MAIN::Game_Result(MAIN* main) {
 	if (PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT1 &&
 		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT2 &&
 		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT3) {
-				if (CheckSoundMem(player_win_sound) == 0) {
-					if (BGM_flg == false) {
-						PlaySoundMem(player_win_sound, DX_PLAYTYPE_BACK);
-						BGM_flg = true;
-					}
-				}
-			
-		
+		if (CheckSoundMem(player_win_sound) == 0) {
+			if (BGM_flg == false) {
+				PlaySoundMem(player_win_sound, DX_PLAYTYPE_BACK);
+				BGM_flg = true;
+			}
+		}
+
+
 	}
 	else {
 		if (CheckSoundMem(enemy_win_sound) == 0) {
@@ -882,19 +907,19 @@ int MAIN::CountMaxPoint(int* point)
 
 void WIN_Text() {
 	int teto = 130;
-	DrawBox(955+teto, 30, 1265, 210, 0xFFFFFF, false);
+	DrawBox(955 + teto, 30, 1265, 210, 0xFFFFFF, false);
 
-	DrawCircle(990+teto, 61, 15, 0xffffff, true);//player
-	DrawCircle(990+teto, 101, 15, 0xec1c24, true);//enemy1
-	DrawCircle(990+teto, 141, 15, 0x0ed145, true);//enemy2
-	DrawCircle(990+teto, 181, 15, 0xfff200, true);//enemy3
+	DrawCircle(990 + teto, 61, 15, 0xffffff, true);//player
+	DrawCircle(990 + teto, 101, 15, 0xec1c24, true);//enemy1
+	DrawCircle(990 + teto, 141, 15, 0x0ed145, true);//enemy2
+	DrawCircle(990 + teto, 181, 15, 0xfff200, true);//enemy3
 	SetFontSize(40);
-	DrawFormatString(1020+teto, 40, 0xFFFFFF,  "YOU　 :%d", PLAYER_WIN_COUNT);
-	DrawFormatString(1020+teto, 80, 0xFFFFFF,  "CPU1  :%d", ENEMY_WIN_COUNT1);
-	DrawFormatString(1020+teto, 120, 0xFFFFFF, "CPU2 :%d", ENEMY_WIN_COUNT2);
-	DrawFormatString(1020+teto, 160, 0xFFFFFF, "CPU3 :%d", ENEMY_WIN_COUNT3);
-	
-	
+	DrawFormatString(1020 + teto, 40, 0xFFFFFF, "YOU　 :%d", PLAYER_WIN_COUNT);
+	DrawFormatString(1020 + teto, 80, 0xFFFFFF, "CPU1  :%d", ENEMY_WIN_COUNT1);
+	DrawFormatString(1020 + teto, 120, 0xFFFFFF, "CPU2 :%d", ENEMY_WIN_COUNT2);
+	DrawFormatString(1020 + teto, 160, 0xFFFFFF, "CPU3 :%d", ENEMY_WIN_COUNT3);
+
+
 }
 
 int MAIN::LoadSound() {
@@ -915,7 +940,7 @@ int MAIN::LoadSound() {
 	if ((cursor_sound = LoadSoundMem("GameSound/cursor.mp3")) == -1)return-1;
 	if ((draw_sound = LoadSoundMem("GameSound/draw.mp3")) == -1)return-1;
 	if ((breath_sound = LoadSoundMem("GameSound/ikigire.m4a")) == -1)return-1;
-	
+
 	//音量調整
 	// BGM
 	ChangeVolumeSoundMem(100, bgm_title);
@@ -959,10 +984,10 @@ void MAIN::Sadondes_check() {
 	/*ここはデバッグ用です。*/
 	//return;
 	/*ここはデバッグ用です。*/
-	
-	//プレイヤーと敵の点数を調べて、プレイヤーの点数が敵の点数以上ならはいる。
-	if (PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT1 && 
-		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT2 && 
+
+//プレイヤーと敵の点数を調べて、プレイヤーの点数が敵の点数以上ならはいる。
+	if (PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT1 &&
+		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT2 &&
 		PLAYER_WIN_COUNT >= ENEMY_WIN_COUNT3) {
 
 		//その後敵の点数とプレイヤーの点数が同じならサドンデス
@@ -988,8 +1013,8 @@ void MAIN::Sadondes_check() {
 			c_enemy->c_AliveEnemy[2] = false;
 		}
 	}
-	
-	
+
+
 }
 
 
@@ -1059,8 +1084,13 @@ void MAIN::EffectSeekImport() {
 		int er = 0;
 		er = -1;
 	}
+	if ((effectResourceHandle[1] = LoadEffekseerEffect("Effect/Inlight.efk", 25.0f)) == -1) {
+		int er = 0;
+		er = -1;
+	}
 	// 再生中のエフェクトのハンドルを初期化する。
 	playingEffectHandle[0] = -1;
+	playingEffectHandle[1] = -1;
 }
 
 void MAIN::Effect_Draw() {
