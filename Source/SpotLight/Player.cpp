@@ -42,6 +42,12 @@ PLAYER::PLAYER()
 	c_WinPlayerModel = MV1LoadModel("Model/Player4.mv1");
 
 
+	//攻撃エフェクト
+	Att.s_AttackPara = LoadEffekseerEffect("Effect/kougeki.efkefc", 50.0f);
+
+	//攻撃エフェクトflg
+	Att.c_onePlayAttackEffect = false;
+
 	//c_PlayerModel = MV1LoadModel("Model/player_debug.mv1");
 
 	//c_enemyCol = new ENEMY();
@@ -327,6 +333,23 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 
 		}
 	}
+
+	if (Att.c_onePlayAttackEffect == false)
+	{
+
+
+		Att.s_PlayAttackEff = PlayEffekseer3DEffect(Att.s_AttackPara);
+
+
+		SetRotationPlayingEffekseer3DEffect(Att.s_PlayAttackEff, 0, Player_rot.y, 0);
+		// Effekseerにより再生中のエフェクトを描画する。
+		DrawEffekseer3D();
+
+		Att.c_onePlayAttackEffect = true;
+	}
+
+	// 再生中のエフェクトを移動する。
+	SetPosPlayingEffekseer3DEffect(Att.s_PlayAttackEff, x, c_Position.y + 90, z);
 }
 
 void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
@@ -517,7 +540,7 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 			PlaySoundMem(player_attack_sound, DX_PLAYTYPE_BACK);
 		}
 		Att.s_AttackStartKey = true;
-
+		Att.c_onePlayAttackEffect = false;
 	}
 	else if (((g_KeyFlg & PAD_INPUT_2) != 0 && Key_Look == false &&
 		Att.s_AttackStartKey == false && c_StmCount < Att.s_AttackCons && Damage.s_paralyzeKey == false)) {

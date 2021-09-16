@@ -150,6 +150,13 @@ private:
 		bool s_ParaKey[ENEMY_MAX];
 		int s_TimePara = 0;
 		const int s_TimeMaxPara = 50;
+
+		int s_AttackPara;		//攻撃エフェクト
+
+		int s_PlayAttackEff;     //読み込み格納場所
+
+		bool c_onePlayAttackEffect;	//エフェクトを一回だけ再生する変数
+
 	}; 
 	Attack Att[ENEMY_MAX];
 

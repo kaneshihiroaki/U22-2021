@@ -97,6 +97,13 @@ void ENEMY::init() {
 		Att[i].s_Rang = 0.0f;
 
 		Damage[i].c_onePlayEffect = false;
+
+		//攻撃エフェクト
+		Att[i].s_AttackPara = LoadEffekseerEffect("Effect/kougeki.efkefc", 50.0f);
+
+		//攻撃エフェクトflg
+		Att[i].c_onePlayAttackEffect = false;
+
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
@@ -140,6 +147,13 @@ void ENEMY::Sadon_init() {
 		Att[i].s_AttackStartKey = false;
 		Att[i].s_GetOneRot = false;
 		Att[i].s_Rang = 0.0f;
+
+		//攻撃エフェクト
+		Att[i].s_AttackPara = LoadEffekseerEffect("Effect/kougeki.efkefc", 50.0f);
+
+		//攻撃エフェクトflg
+		Att[i].c_onePlayAttackEffect = false;
+
 	}
 
 	c_SpotPos = VGet(100.0f, 0.0f, 800.0f);//スポットライトの座標
@@ -672,6 +686,7 @@ void ENEMY::Enemy_Attack(PLAYER* player, int num) {
 		Att[num].s_Posx = c_ObjPos[num].x;
 		Att[num].s_Posz = c_ObjPos[num].z;
 		Att[num].s_GetOneRot = true;
+		Att[num].c_onePlayAttackEffect = false;
 	}
 
 	//エネミーの前方方向取得
@@ -729,6 +744,26 @@ void ENEMY::Enemy_Attack(PLAYER* player, int num) {
 		player->c_Position, num, c_Rotation[num].y) == true) {
 		player->SetPlayerParalyze();
 		
+	}
+
+	//エネミーの攻撃エフェクト
+	for (int i = 0; i < ENEMY_MAX; i++) {
+		if (Att[i].c_onePlayAttackEffect == false)
+		{
+
+
+			Att[i].s_PlayAttackEff = PlayEffekseer3DEffect(Att[i].s_AttackPara);
+
+
+			SetRotationPlayingEffekseer3DEffect(Att[i].s_PlayAttackEff, 0, c_Rotation[num].y, 0);
+			// Effekseerにより再生中のエフェクトを描画する。
+			DrawEffekseer3D();
+
+			Att[i].c_onePlayAttackEffect = true;
+		}
+
+		// 再生中のエフェクトを移動する。
+		SetPosPlayingEffekseer3DEffect(Att[i].s_PlayAttackEff, x, c_ObjPos[i].y + 90, z);
 	}
 }
 
