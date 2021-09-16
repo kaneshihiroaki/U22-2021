@@ -26,7 +26,7 @@ PLAYER::PLAYER()
 	}
 
 	//攻撃エフェクト
-	Att.s_AttackPara = LoadEffekseerEffect("Effect/kougeki.efkefc", 50.0f);
+	Att.s_AttackPara = LoadEffekseerEffect("Effect/kougeki.efkefc", 30.0f);
 
 	//攻撃エフェクトflg
 	Att.c_onePlayAttackEffect = false;
@@ -292,7 +292,7 @@ void PLAYER::Player_Attack(ENEMY* ene, VECTOR Player_rot) {
 
 		Att.s_PlayAttackEff = PlayEffekseer3DEffect(Att.s_AttackPara);
 
-
+		SetColorPlayingEffekseer3DEffect(Att.s_PlayAttackEff, 255, 255, 255, 124);//攻撃の色
 		SetRotationPlayingEffekseer3DEffect(Att.s_PlayAttackEff, 0, Player_rot.y, 0);
 		// Effekseerにより再生中のエフェクトを描画する。
 		DrawEffekseer3D();

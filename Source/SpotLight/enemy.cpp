@@ -82,7 +82,7 @@ void ENEMY::init() {
 		Damage[i].c_onePlayEffect = false;
 
 		//攻撃エフェクト
-		Att[i].s_AttackPara = LoadEffekseerEffect("Effect/kougeki.efkefc", 50.0f);
+		Att[i].s_AttackPara = LoadEffekseerEffect("Effect/kougeki.efkefc", 30.0f);
 
 		//攻撃エフェクトflg
 		Att[i].c_onePlayAttackEffect = false;
@@ -739,7 +739,7 @@ void ENEMY::Enemy_Attack(PLAYER* player, int num) {
 
 			Att[i].s_PlayAttackEff = PlayEffekseer3DEffect(Att[i].s_AttackPara);
 
-			SetColorPlayingEffekseer3DEffect(Att[i].s_PlayAttackEff,255,0,0,255);//攻撃の色
+			SetColorPlayingEffekseer3DEffect(Att[i].s_PlayAttackEff,255,0,0,124);//攻撃の色
 			SetRotationPlayingEffekseer3DEffect(Att[i].s_PlayAttackEff, 0, c_Rotation[num].y, 0);
 			// Effekseerにより再生中のエフェクトを描画する。
 			DrawEffekseer3D();
