@@ -12,7 +12,7 @@ STAGE::STAGE()
 	//c_StageScale = { 0.5f,0.5f,0.5f };
 
 	// ‚R‚cƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
-	c_StageModel = MV1LoadModel("Model/StageSecond.mv1");
+	c_StageModel = MV1LoadModel("Model/StageThird.mv1");
 
 	//MV1SetPosition(c_StageModel, c_StagePosition);
 	//MV1SetScale(c_StageModel, c_StageScale);
@@ -46,12 +46,12 @@ void STAGE::init() {
 	c_StageScale = { 1.0f,1.0f,1.0f };
 
 	//‰¡•‚Æ‰œs‚«
-	c_width = 1400;
-	c_depth = 740;
+	c_width = 1550;
+	c_depth = 900;
 
 	for (int i = 0; i < SphereAmount; i++) {
 		// À•W‰Šú‰»
-		c_SpherePosition[i] = VGet(-700.0f + i * 50, 50.0f, -470.0f);
+		c_SpherePosition[i] = VGet(-800.0f + i * 50, 50.0f, -510.0f);
 		//‘å‚«‚³‰Šú‰»
 		c_SphereScale = { 0.1f,0.1f,0.1f };
 
