@@ -404,7 +404,7 @@ void MAIN::Game_Main() {
 			Number_count++;
 			player_win = true;
 		}
-
+		
 		if (time_All <= 597) {
 			//スポットライトが止まっているなら勝敗判定を行う
 			if (LightFlg == false) {
@@ -459,7 +459,7 @@ void MAIN::Game_Main() {
 							DrawString(470, 120, "YOU_WIN", GetColor(0xff, 0x00, 0x00));
 							if (g_judgeEffe == false) {
 								playingEffectHandle[1] = PlayEffekseer3DEffect(effectResourceHandle[1]);
-								SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], DrawX, 150.0f, DrawZ);
+								SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], c_player->c_Position.x, 150.0f, c_player->c_Position.z);
 								g_judgeEffe = true;
 							}
 						}
@@ -494,7 +494,7 @@ void MAIN::Game_Main() {
 								DrawString(420, 120, "CPU1_WIN", GetColor(0x00, 0x00, 0xff));
 								if (g_judgeEffe == false) {
 									playingEffectHandle[1] = PlayEffekseer3DEffect(effectResourceHandle[1]);
-									SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], DrawX, 150.0f, DrawZ);
+									SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], c_enemy->c_ObjPos[0].x, 150.0f, c_enemy->c_ObjPos[0].z);
 									g_judgeEffe = true;
 								}
 							}
@@ -516,7 +516,7 @@ void MAIN::Game_Main() {
 								DrawString(420, 120, "CPU2_WIN", GetColor(0x00, 0x00, 0xff));
 								if (g_judgeEffe == false) {
 									playingEffectHandle[1] = PlayEffekseer3DEffect(effectResourceHandle[1]);
-									SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], DrawX, 150.0f, DrawZ);
+									SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], c_enemy->c_ObjPos[1].x, 150.0f, c_enemy->c_ObjPos[1].z);
 									g_judgeEffe = true;
 								}
 							}
@@ -538,7 +538,7 @@ void MAIN::Game_Main() {
 								DrawString(420, 120, "CPU3_WIN", GetColor(0x00, 0x00, 0xff));
 								if (g_judgeEffe == false) {
 									playingEffectHandle[1] = PlayEffekseer3DEffect(effectResourceHandle[1]);
-									SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], DrawX, 150.0f, DrawZ);
+									SetPosPlayingEffekseer3DEffect(playingEffectHandle[1], c_enemy->c_ObjPos[2].x, 150.0f, c_enemy->c_ObjPos[2].z);
 									g_judgeEffe = true;
 								}
 							}
