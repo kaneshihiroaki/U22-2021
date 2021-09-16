@@ -61,6 +61,11 @@ ENEMY::ENEMY()
 	//Coefficient = 1.0f;
 	//c_MoveFlag = FALSE;
 	//c_MoveVector = VGet(0.0f, 0.0f, 0.0f);
+
+	if ((c_EffSmoke = LoadEffekseerEffect("Effect/Smook.efkefc", 5.0f)) == -1) {
+		int ff = 0;
+		ff++;
+	}
 }
 
 ENEMY::~ENEMY()
@@ -114,6 +119,14 @@ void ENEMY::init() {
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		c_TempMoveVector[i] = VGet(0.0f, 0.0f, 0.0f);
 	}
+
+	//砂埃初期化
+	for (int i = 0; i < 9; i++) {
+		c_SlotEffSmoke[i] = -1;		//移動時の煙エフェクト格納用
+	}
+	for (int i = 0; i < 3; i++) {
+		c_SmokeCount[i] = 0;//煙のカウント用
+	}
 }
 
 void ENEMY::Sadon_init() {
@@ -163,6 +176,14 @@ void ENEMY::Sadon_init() {
 	Character_Init();
 	for (int i = 0; i < ENEMY_MAX; i++) {
 		c_TempMoveVector[i] = VGet(0.0f, 0.0f, 0.0f);
+	}
+
+	//砂埃初期化
+	for (int i = 0; i < 9; i++) {
+		c_SlotEffSmoke[i] = -1;		//移動時の煙エフェクト格納用
+	}
+	for (int i = 0; i < 3; i++) {
+		c_SmokeCount[i] = 0;//煙のカウント用
 	}
 }
 
@@ -536,7 +557,15 @@ void ENEMY::Enemy_Move(int num, PLAYER* player, ENEMY* enemy)
 	}
 	c_StmCount[num] = StaminaCount(c_MoveFlag,num);		//スタミナ管理
 
-
+	c_SmokeCount[num]++;
+	if (c_MoveFlag) {//移動できるときにのみとおる.煙エフェクト
+		if (c_SmokeCount[num] % 20 == 0) {//60フレームごとにはいる
+			// エフェクトを再生する。
+			c_SlotEffSmoke[((c_SmokeCount[num] / 20) % 3)*num] = PlayEffekseer3DEffect(c_EffSmoke);
+			// 再生中のエフェクトを移動する。
+			SetPosPlayingEffekseer3DEffect(c_SlotEffSmoke[(c_SmokeCount[num] / 20) % 3], c_ObjPos[num].x, 50.0f, c_ObjPos[num].z);
+		}
+	}
 	
 	//DrawSphere3D(c_SpotPos, 50.0f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), TRUE);
 	
