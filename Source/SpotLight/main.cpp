@@ -1084,7 +1084,7 @@ void MAIN::EffectSeekImport() {
 		int er = 0;
 		er = -1;
 	}
-	if ((effectResourceHandle[1] = LoadEffekseerEffect("Effect/Inlight.efk", 25.0f)) == -1) {
+	if ((effectResourceHandle[1] = LoadEffekseerEffect("Effect/Inlight.efk", 50.0f)) == -1) {
 		int er = 0;
 		er = -1;
 	}
