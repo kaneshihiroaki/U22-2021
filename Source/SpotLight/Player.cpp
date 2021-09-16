@@ -31,7 +31,7 @@ PLAYER::PLAYER()
 	//c_Acc = 0.0f;
 
 	c_EffPara = LoadEffekseerEffect("Effect/Numb/Sibire.efk", 50.0f);//MV1LoadModel("image/痺れ.efk");
-	if ((c_EffSmoke = LoadEffekseerEffect("Effect/Smook.efkefc", 10.0f)) == -1) {
+	if ((c_EffSmoke = LoadEffekseerEffect("Effect/Smook.efkefc", 5.0f)) == -1) {
 		int ff = 0;
 		ff++;
 	}
@@ -577,12 +577,12 @@ void PLAYER::Player_Move(PLAYER* player, ENEMY* ene)
 	}
 
 	c_SmokeCount++;
-	if (c_MoveFlag ) {//移動できるときにのみとおる.煙エフェクト
+	if (c_MoveFlag) {//移動できるときにのみとおる.煙エフェクト
 		if (c_SmokeCount % 20 == 0) {//60フレームごとにはいる
 			// エフェクトを再生する。
-			c_SlotEffSmoke[(c_SmokeCount / 20)%3] = PlayEffekseer3DEffect(c_EffSmoke);
+			c_SlotEffSmoke[(c_SmokeCount / 20) % 3] = PlayEffekseer3DEffect(c_EffSmoke);
 			// 再生中のエフェクトを移動する。
-			SetPosPlayingEffekseer3DEffect(c_SlotEffSmoke[(c_SmokeCount / 20) % 3], c_Position.x, c_Position.y, c_Position.z);
+			SetPosPlayingEffekseer3DEffect(c_SlotEffSmoke[(c_SmokeCount / 20) % 3], c_Position.x, 50.0f, c_Position.z);
 		}
 	}
 

@@ -117,6 +117,9 @@ private:
 	bool Collision_Cube2(VECTOR MyCol, VECTOR MyRot, VECTOR YouCol, float MyScale_X, float MyScale_Z, float YouScale_X, float YouScale_Z);
 	
 	int c_EffDamageEnemy;		//ダメージ受けた時の痺れエフェクト取得変数
+	int c_EffSmoke;		//移動時の煙エフェクト
+	int c_SlotEffSmoke[9] = { -1,-1,-1,-1,-1,-1,-1,-1,-1 };		//移動時の煙エフェクト格納用
+	int c_SmokeCount[3] = { 0,0,0 };//煙のカウント用
 
 	//痺れ（ダメージ関連）
 	struct Damage
